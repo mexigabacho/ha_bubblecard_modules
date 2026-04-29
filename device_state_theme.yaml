@@ -1,0 +1,328 @@
+device_state_theme:
+  name: Device State Theme
+  version: '0.8'
+  creator: Christopher Young
+  supported:
+    - button
+    - climate
+    - cover
+    - select
+    - calendar
+  description: |
+    Applies state-driven background gradients, icon colours, and
+    animations to button cards based on device type presets.
+
+    Each preset maps entity states to a subtle left-to-right
+    gradient wash, optional icon colour changes, and a looping
+    animation effect — all driven by the card's own entity state.
+
+    Media player cards are excluded to preserve Bubble Card's
+    native cover_background behaviour.
+
+    Configure via the editor below, or directly in YAML:
+
+    <code-block><pre>
+    device_state_theme:
+        device_type: vacuum
+        enable_gradient: true
+        animations_enabled: true
+        animation_speed: 1.0
+    </pre></code-block>
+  code: |-
+    /* ── Static CSS — keyframes defined once, never re-emitted ── */
+    /* All animation names prefixed dst- to avoid collisions       */
+
+    @keyframes dst-pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.05); }
+    }
+    @keyframes dst-rotation {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(5deg); }
+      75%  { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes dst-glow {
+      0%, 100% { filter: drop-shadow(0 0 0px transparent); }
+      50%      { filter: drop-shadow(0 0 6px var(--dst-glow-color, rgba(255,255,255,0.6))); }
+    }
+    @keyframes dst-shake {
+      0%, 100% { transform: translateX(0); }
+      25%      { transform: translateX(-3px); }
+      75%      { transform: translateX(3px); }
+    }
+    @keyframes dst-float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+    @keyframes dst-zoom {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    @keyframes dst-heartbeat {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(1.07); }
+      40%  { transform: scale(1); }
+      60%  { transform: scale(1.07); }
+      100% { transform: scale(1); }
+    }
+    @keyframes dst-spin360 {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes dst-flip {
+      0%   { transform: rotateY(0deg); }
+      50%  { transform: rotateY(180deg); }
+      100% { transform: rotateY(360deg); }
+    }
+    @keyframes dst-vibrate {
+      0%   { transform: translate(0, 0); }
+      20%  { transform: translate(-1px, 0); }
+      40%  { transform: translate(1px, 0); }
+      60%  { transform: translate(-1px, 0); }
+      80%  { transform: translate(1px, 0); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* ── JS template — runs on state change, returns scoped CSS only ── */
+    ${(() => {
+      /* ── Config ───────────────────────────────────────────── */
+      const cfg      = this.config?.device_state_theme ?? {};
+      const dtype    = cfg.device_type ?? 'none';
+      const gradient = cfg.enable_gradient !== false;
+      const animate  = cfg.animations_enabled !== false;
+      const speed    = cfg.animation_speed ?? 1.0;
+
+      /* ── Colour palette (rgba strings) ───────────────────── */
+      const C = {
+        blue:   'rgba(59,130,246,0.32)',
+        red:    'rgba(239,68,68,0.32)',
+        yellow: 'rgba(234,179,8,0.30)',
+        grey:   'rgba(156,163,175,0.28)',
+        orange: 'rgba(249,115,22,0.30)',
+        green:  'rgba(34,197,94,0.30)',
+        pink:   'rgba(244,114,182,0.32)',
+        lgreen: 'rgba(74,222,128,0.32)',
+        lblue:  'rgba(125,211,252,0.32)',
+      };
+
+      /* ── Gradient builder ────────────────────────────────── */
+      const grad = (color) => {
+        if (!gradient) return color;
+        const zeroAlpha = color.replace(/,([\.\d]+)\)$/, ',0)');
+        return `linear-gradient(to right,${color},${zeroAlpha} 85%)`;
+      };
+
+      /* ── Glow colours per hue ────────────────────────────── */
+      const GLOW = {
+        blue:   'rgba(59,130,246,0.5)',
+        orange: 'rgba(249,115,22,0.5)',
+      };
+
+      /* ── Animation durations (seconds, before speed mult) ── */
+      const DUR = {
+        pulse:     2,
+        rotation:  3,
+        glow:      2,
+        shake:     0.5,
+        float:     2,
+        zoom:      1,
+        heartbeat: 0.8,
+        'spin-360':1,
+        flip:      1.5,
+        vibrate:   0.3,
+      };
+
+      const ANIM = {
+        pulse:     'dst-pulse',
+        rotation:  'dst-rotation',
+        glow:      'dst-glow',
+        shake:     'dst-shake',
+        float:     'dst-float',
+        zoom:      'dst-zoom',
+        heartbeat: 'dst-heartbeat',
+        'spin-360':'dst-spin360',
+        flip:      'dst-flip',
+        vibrate:   'dst-vibrate',
+      };
+
+      /* ── Preset definitions ───────────────────────────────── */
+      const PRESETS = {
+
+        vacuum: {
+          cleaning:  { bg:'blue',   effect:'rotation' },
+          returning: { bg:'yellow', effect:'float'    },
+          paused:    { bg:'grey',   effect:null        },
+          error:     { bg:'red',    effect:'shake',    iconColor:'rgb(239,68,68)' },
+        },
+
+        mop: {
+          cleaning:  { bg:'blue',   effect:'pulse' },
+          returning: { bg:'yellow', effect:'float' },
+          paused:    { bg:'grey',   effect:null     },
+          error:     { bg:'red',    effect:'shake',    iconColor:'rgb(239,68,68)' },
+        },
+
+        washer_dryer: {
+          Running:  { bg:'lblue',  effect:'shake', iconColor:'skyblue',         containerBg:'rgba(0,0,0,0.8)'         },
+          Starting: { bg:'lgreen', effect:'pulse', iconColor:'rgb(74,222,128)', containerBg:'rgba(0,0,0,0.8)'         },
+          Finished: { bg:'pink',   effect:null,    iconColor:'rgb(239,68,68)'                                         },
+          Off:      { bg:null,     effect:null,    iconColor:'white'                                                   },
+          Unknown:  { bg:null,     effect:null,    iconColor:'grey',            containerBg:'rgba(156,163,175,0.3)'   },
+        },
+
+        ceiling_fan: {
+          on:  { bg:'blue', effect:'spin-360' },
+          off: null,
+        },
+
+        coffee_maker: {
+          Cleaning: { bg:'blue',   effect:'glow', glowColor:'blue'   },
+          Brewing:  { bg:'orange', effect:'glow', glowColor:'orange' },
+          Ready:    null,
+          Off:      null,
+        },
+
+        light: {
+          on:  { bgOverride:'linear-gradient(to right,rgba(255,253,230,0.12),rgba(255,253,230,0) 85%)', effect:null },
+          off: null,
+        },
+
+        light_warm: {
+          on:  { bgOverride:'linear-gradient(85deg,rgba(255,255,255,0.4) 20% 40%,rgba(255,255,255,0.3) 45% 50%,rgba(251,146,60,0.3))', opacity:0.4, effect:null },
+          off: null,
+        },
+
+        network_connection: {
+          on:          { bg:'green',  effect:null    },
+          primary:     { bg:'green',  effect:null    },
+          backup:      { bg:'orange', effect:'pulse' },
+          off:         { bg:'red',    effect:null    },
+          unavailable: { bg:'red',    effect:null    },
+          unknown:     { bg:'red',    effect:null    },
+        },
+      };
+
+      /* ── Bail out if disabled or unknown preset ───────────── */
+      if (dtype === 'none') return '';
+      const preset = PRESETS[dtype];
+      if (!preset) return '';
+
+      /* ── Resolve state entry ─────────────────────────────── */
+      let entry = preset[state];
+
+      /* Special case: coffee_maker 'Starting up X...' */
+      if (!entry && dtype === 'coffee_maker' && typeof state === 'string' && state.startsWith('Starting up')) {
+        entry = { bg:null, effect:'pulse' };
+      }
+
+      /* Unmapped state → return nothing, Bubble Card defaults take over */
+      if (!entry) return '';
+
+      /* ── Build scoped CSS output ─────────────────────────── */
+      const out = [];
+
+      /* 1. Card background
+            .bubble-button-background is absolutely positioned inside
+            .bubble-button-card-container — already unique per card,
+            no further scoping needed */
+      if (entry.bgOverride) {
+        const opRule = entry.opacity ? `opacity:${entry.opacity} !important;` : '';
+        out.push(`.bubble-button-background{background:${entry.bgOverride} !important;${opRule}}`);
+      } else if (entry.bg && C[entry.bg]) {
+        out.push(`.bubble-button-background{background:${grad(C[entry.bg])} !important;}`);
+      }
+
+      /* 2. Icon container background (washer_dryer only)
+            Scoped via .bubble-button-card to target only the main
+            icon container, not sub-button containers */
+      if (entry.containerBg) {
+        out.push(`.bubble-button-card > .bubble-icon-container{background-color:${entry.containerBg} !important;opacity:0.8 !important;}`);
+      }
+
+      /* 3. Icon colour
+            Scoped to main icon only — excludes sub-button icons
+            which live inside .bubble-sub-button, not direct children
+            of .bubble-button-card */
+      if (entry.iconColor) {
+        /* Scoped selector for standard button cards */
+        out.push(`.bubble-button-card > .bubble-icon-container .bubble-icon{color:${entry.iconColor} !important;opacity:1 !important;}`);
+        /* Unscoped fallback for slider and other card types */
+        out.push(`.bubble-icon{color:${entry.iconColor} !important;opacity:1 !important;}`);
+        /* Cancel on sub-button icons to prevent bleed */
+        out.push(`.bubble-sub-button .bubble-icon{color:unset !important;opacity:unset !important;}`);
+      }
+
+      /* 4. Animation
+            Two rules emitted:
+            a) Scoped — works on button_type: state via grid structure
+            b) Unscoped fallback — catches slider and other card types
+               where the scoped selector cannot reach the main icon.
+               Immediately followed by a sub-button cancel rule to
+               prevent the unscoped rule from animating sub-button
+               icons on any card type. */
+      if (animate && entry.effect) {
+        const name = ANIM[entry.effect];
+        const dur  = (DUR[entry.effect] * speed).toFixed(2);
+        const ease = entry.effect === 'spin-360' ? 'linear' : 'ease-in-out';
+        const glowVar = entry.glowColor && GLOW[entry.glowColor]
+          ? `--dst-glow-color:${GLOW[entry.glowColor]};`
+          : '';
+        /* a) Scoped selector for standard button cards */
+        out.push(`.bubble-button-card > .bubble-icon-container .bubble-icon{${glowVar}animation:${name} ${dur}s ${ease} infinite;}`);
+        /* b) Unscoped fallback for slider/other card types */
+        out.push(`.bubble-icon{${glowVar}animation:${name} ${dur}s ${ease} infinite;}`);
+        /* Cancel on sub-button icons to prevent bleed */
+        out.push(`.bubble-sub-button .bubble-icon{animation:none !important;}`);
+      }
+
+      return out.join('\n');
+    })()}
+  editor:
+    - name: device_type
+      label: Device type
+      default: none
+      selector:
+        select:
+          mode: dropdown
+          custom_value: false
+          options:
+            - label: ⬜ None (disabled)
+              value: none
+            - label: 🤖 Vacuum (Roomba-style)
+              value: vacuum
+            - label: 🫧 Mop (Braava-style)
+              value: mop
+            - label: 👕 Washer / Dryer
+              value: washer_dryer
+            - label: 💨 Ceiling Fan
+              value: ceiling_fan
+            - label: ☕ Coffee Maker
+              value: coffee_maker
+            - label: 💡 Light (generic)
+              value: light
+            - label: 🌿 Light (warm / plant)
+              value: light_warm
+            - label: 🌐 Network Connection
+              value: network_connection
+    - name: enable_gradient
+      label: Enable gradient background
+      default: false
+      selector:
+        boolean: {}
+    - name: animations_enabled
+      label: Enable animations
+      default: true
+      selector:
+        boolean: {}
+    - name: animation_speed
+      label: Animation speed multiplier
+      default: 1
+      selector:
+        number:
+          min: 0.25
+          max: 3
+          step: 0.25
+          mode: slider
+          unit_of_measurement: x

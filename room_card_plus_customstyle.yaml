@@ -1,0 +1,56 @@
+room_card_plus_customstyle:
+  name: Room Card Plus Styling
+  version: '1.0'
+  creator: Christopher Young
+  supported:
+    - button
+  description: Add custom styling to Room Card Plus cards.
+  code: |-
+    .bubble-name {
+      font-weight: bold;
+      text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    }
+
+    .bubble-button-background {
+        --fill-rgb: ${hass.states[entity]?.attributes?.rgb_color?.join(',') || '255, 255, 255'};
+        --glow-color: 255, 255, 255;
+        --brightness-raw: ${hass.states[entity]?.attributes?.brightness || 0};
+        --has-rgb: ${hass.states[entity]?.attributes?.rgb_color ? 1 : 0};
+        --fill-range: ${hass.states[entity]?.attributes?.rgb_color
+          ? `calc((${hass.states[entity]?.attributes?.brightness || 0} / 255) * 90)`
+          : state === 'on' ? '90' : '0'};
+        --glow-band: 0;
+        --fill-offset: 0;
+        --status-text-size: 20px;
+        background: ${state === 'on' 
+          ? `linear-gradient(
+              0deg, 
+              rgba(var(--fill-rgb), 0.2) calc(var(--fill-offset) * 1%), 
+              rgba(var(--fill-rgb), 0.4) calc(var(--fill-range) * 1% - var(--glow-band) * 1%), 
+              rgba(var(--fill-rgb), 0.4) calc(var(--fill-range) * 1% - var(--glow-band) * 1%), 
+              rgba(var(--glow-color), 0.4) calc(var(--fill-range) * 1%), 
+              transparent calc(var(--fill-range) * 1%)
+            )` 
+          : '' 
+        } !important;
+        transition: background 0.4s ease-out !important;
+      }
+
+    .bubble-button-background::after {
+        content: '${hass.states[entity]?.attributes?.brightness 
+          ? Math.round(hass.states[entity].attributes.brightness / 255 * 100) + "%" 
+          : ""}';
+        position: absolute;
+        top: 38%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+        font-size: var(--status-text-size);
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.15);
+        pointer-events: none;
+      }
+  editor: ''
