@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '1.7'
+  version: '1.9'
   creator: Christopher Young
   supported:
     - media-player
@@ -35,6 +35,7 @@ media_app_background:
       /* ── Active-state gate ───────────────────────────────── */
       const activeStates = ['playing'];
       if (cfg.show_when_paused !== false) activeStates.push('paused');
+      if (cfg.show_when_idle === true) activeStates.push('idle');
       if (!activeStates.includes(state)) return '';
 
       /* ── Read configured source attribute ────────────────── */
@@ -78,6 +79,22 @@ media_app_background:
         fandango: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAuMjcgMC4wMiAyOC4wNiAyNy45NiI+CjxwYXRoIGQ9Ik0yNC41MTM3IDcuODY0MTFMMjIuNDA0IDAuMDE5Mjg3MUwwLjI2OTUzMSA1LjkyODI1TDIuMzc5MTkgMTMuNzc3OVYxMy43ODI3QzMuNzAxOTUgMTQuMDUzMSA0LjgyNjc3IDE1LjAzNzkgNS4yMDMzMiAxNi40MjgzQzUuNTc1MDUgMTcuODE4NiA1LjA5NzEyIDE5LjIzMzEgNC4wODgxNSAyMC4xMjYyVjIwLjEzMUw2LjE5NzgxIDI3Ljk4MDdMMjguMzMyMyAyMi4wNzE3TDI2LjIyMjYgMTQuMjIyQzI0Ljg5MDIgMTMuOTU2NSAyMy43NjA2IDEyLjk2NjkgMjMuMzg0IDExLjU3MTdDMjMuMDEyMyAxMC4xODE0IDIzLjQ5NSA4Ljc1NzIyIDI0LjUxMzcgNy44NjQxMVoiIGZpbGw9IiNGRjczMDAiLz4KPHBhdGggZD0iTTE2LjI1ODQgOC4xMzkyM0w5LjY2ODc2IDkuODk2NDdMMTAuOTkxNSAxNC44MjA2TDE3LjU4MTIgMTMuMDYzNEwxOC45MDM5IDE3Ljk4NzVMMTIuMzE5MSAxOS43NDQ3TDEzLjY0MTkgMjQuNjY4OUw3LjA1MjIxIDI2LjQyNjFMNS40NTQyOCAyMC40Njg5QzYuNDE0OTcgMTkuMjkxIDYuODE1NjYgMTcuNjg4MiA2LjM5MDgzIDE2LjEwOTZDNS45NjYgMTQuNTMxIDQuODEyMjEgMTMuMzQzNCAzLjM4ODA3IDEyLjgwMjdMMS43NTYzNSA2LjczNDRMMTQuOTMwOCAzLjIxNTA5TDE2LjI1ODQgOC4xMzkyM1oiIGZpbGw9IiMzNDc4QzEiLz4KPHBhdGggZD0iTTE2LjI5NzMgOC4xOTcyTDkuNzE3MjcgOS45NTQ0NEwxMS4wNCAxNC44Njg5TDE3LjYyIDEzLjExMTdMMTguOTQyOCAxOC4wMjYyTDEyLjM2MjggMTkuNzgzNEwxMy42ODU1IDI0LjY5NzlMNy4xMDU1NCAyNi40Nkw1LjUwNzYxIDIwLjUxMjRDNi40NjgzIDE5LjMzOTMgNi44Njg5OSAxNy43MzY1IDYuNDQ0MTYgMTYuMTU3OUM2LjAxOTM0IDE0LjU4NDEgNC44NzAzNyAxMy4zOTE3IDMuNDQ2MjMgMTIuODU1OEwxLjgxOTM0IDYuNzkyMzdMMTQuOTc0NSAzLjI4MjcxTDE2LjI5NzMgOC4xOTcyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==',
       };
 
+      /* ── Brand icon colours (applied to main icon when playing) */
+      const ICON_COLORS = {
+        netflix:  '#F07075',
+        prime:    '#66CCEE',
+        disney:   '#7089E2',
+        max:      '#9B6BC4',
+        appletv:  '#DDDDDD',
+        hulu:     '#76EEB5',
+        peacock:  '#66E4F5',
+        espn:     '#E06666',
+        nba:      '#7499C4',
+        nfl:      '#E56C6C',
+        plex:     '#F0C46C',
+        fandango: '#FFA36B',
+      };
+
       /* ── App keyword → service mapping ───────────────────── */
       const APPS = [
         { keys: ['netflix'],                       id: 'netflix',  field: 'netflix_image',  toggle: 'netflix_enabled'  },
@@ -106,14 +123,20 @@ media_app_background:
         }
       }
 
-      /* ── Recognized app: show our background directly.
-         Bubble Card's crossfade system layers real art on top when
-         cover_background: true — no conflict with our background.     */
+      /* ── Render background via ::before on the card wrapper.
+         .bubble-background has filter:blur(50px);opacity:0.5 applied by
+         Bubble Card's cover art system — setting background-image on it
+         directly makes our gradient look dark and washed out. ::before
+         sits outside that blur scope and renders at full fidelity.
+         Bubble Card's crossfade layers sit on top via .bubble-background
+         when cover_background:true, so real art still takes over cleanly. */
       const bgCss = (bgUrl, logoUrl) => {
-        let css = '.bubble-background{background-image:url(\'' + bgUrl + '\') !important;' +
-          'background-size:cover !important;background-position:center !important;}';
+        let css = '.bubble-media-player::before{content:\'\' !important;position:absolute !important;' +
+          'inset:0 !important;background-image:url(\'' + bgUrl + '\') !important;' +
+          'background-size:cover !important;background-position:center !important;' +
+          'z-index:0 !important;pointer-events:none !important;}';
         if (logoUrl) {
-          /* Logo lives on ::after — outside .bubble-background's blur scope */
+          /* Logo ::after — also outside .bubble-background's blur scope */
           css += '.bubble-media-player::after{content:\'\' !important;position:absolute !important;' +
             'inset:0 !important;background-image:url(\'' + logoUrl + '\') !important;' +
             'background-size:auto 70% !important;background-position:center !important;' +
@@ -122,7 +145,17 @@ media_app_background:
         return css;
       };
 
-      if (imageUrl) return bgCss(imageUrl, LOGOS[matchedId] || '');
+      if (imageUrl) {
+        let css = bgCss(imageUrl, LOGOS[matchedId] || '');
+        if (state === 'playing' && cfg.icon_color_enabled !== false) {
+          const iconColor = ICON_COLORS[matchedId];
+          if (iconColor) {
+            css += '.bubble-media-player .bubble-icon-container .bubble-icon{color:' + iconColor + ' !important;opacity:1 !important;}';
+            css += '.bubble-sub-button .bubble-icon{color:unset !important;opacity:unset !important;}';
+          }
+        }
+        return css;
+      }
 
       /* ── Unrecognized app: step aside when native art is present ─── */
       const entityAttrs = hass.states[entity]?.attributes ?? {};
@@ -153,6 +186,16 @@ media_app_background:
               value: source
     - name: show_when_paused
       label: Show background when paused
+      default: true
+      selector:
+        boolean: {}
+    - name: show_when_idle
+      label: Show background when idle
+      default: false
+      selector:
+        boolean: {}
+    - name: icon_color_enabled
+      label: Colour icon with service brand colour (playing only)
       default: true
       selector:
         boolean: {}

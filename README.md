@@ -110,7 +110,12 @@ Adds bold text-shadow styling to the card name and a dynamic background fill on 
 
 **Supported:** button
 
-No configurable options — edit the YAML directly to adjust colours or thresholds.
+| Option | Default | Range | Description |
+|--------|---------|-------|-------------|
+| `max_fill` | 90 % | 20–100 | Maximum fill height as a percentage of card height |
+| `fill_opacity` | 0.4 | 0.05–1.0 | Intensity of the colour fill |
+| `show_brightness_text` | `true` | — | Show brightness percentage overlaid on the card |
+| `brightness_text_opacity` | 0.15 | 0.05–1.0 | Opacity of the brightness percentage text |
 
 ---
 
@@ -144,6 +149,8 @@ All backgrounds and logos are embedded as SVG data URIs — zero file deployment
 | `source_entity` | _(card entity)_ | Entity to read the app attribute from |
 | `source_attribute` | `app_id` | Attribute to match — `app_id` (package name, most reliable), `app_name`, or `source` |
 | `show_when_paused` | `true` | Also show the background when the player is paused |
+| `show_when_idle` | `false` | Also show the background when the player is idle (only useful if `app_id` remains populated in idle state) |
+| `icon_color_enabled` | `true` | Tint the card icon with the service's brand colour when the player is actively playing |
 | `<service>_enabled` | `true` | Per-service toggle — set to `false` to disable a specific service's background |
 | `default_image` | — | Background path shown for any unrecognized app (e.g. `/local/bg/fallback.jpg`) |
 
