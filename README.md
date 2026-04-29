@@ -118,21 +118,36 @@ No configurable options — edit the YAML directly to adjust colours or threshol
 
 **File:** [media_app_background.yaml](media_app_background.yaml)
 
-Shows a branded ambient background on a media player card when the integration cannot provide cover art — typically DRM-protected content on an Android TV / Nvidia Shield where the ADB integration can't capture a screenshot. When the entity does have a live `entity_picture` (e.g. YouTube), the module steps aside automatically and Bubble Card's native cover-art system takes over.
+Shows a branded ambient background on a media player card when the integration cannot provide cover art — typically DRM-protected content on an Android TV / Nvidia Shield where the ADB integration can't capture a screenshot. When the entity has a live `entity_picture` (e.g. YouTube), the module steps aside automatically and Bubble Card's native cover-art system takes over.
 
-Built-in brand-coloured gradient backgrounds (SVG, zero deployment) are included for Netflix, Prime Video, Disney+, Max, Apple TV+, Hulu, Peacock, ESPN, NBA, and Plex. Any service can be overridden with a custom local image path.
+All backgrounds and logos are embedded as SVG data URIs — zero file deployment required. Built-in support for 12 services:
+
+| Service | Match keywords |
+|---------|---------------|
+| Netflix | `netflix` |
+| Prime Video | `amazon`, `avod`, `primevideo`, `prime` |
+| Disney+ | `disney` |
+| HBO / Max | `hbo`, `wbd.max` |
+| Apple TV+ | `apple`, `atve` |
+| Hulu | `hulu` |
+| Peacock | `peacock`, `nbcuni` |
+| ESPN | `espn` |
+| NBA | `nba`, `nbaimd` |
+| NFL Network | `nfl`, `nflnetwork` |
+| Plex | `plex` |
+| Fandango at Home (Vudu) | `fandango`, `vudu` |
 
 **Supported:** media-player
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `source_entity` | _(card entity)_ | Entity to read the app name from |
-| `source_attribute` | `app_id` | Attribute to match against — `app_id` (package name), `app_name`, or `source` |
+| `source_entity` | _(card entity)_ | Entity to read the app attribute from |
+| `source_attribute` | `app_id` | Attribute to match — `app_id` (package name, most reliable), `app_name`, or `source` |
 | `show_when_paused` | `true` | Also show the background when the player is paused |
-| `netflix_image` … `plex_image` | _(built-in)_ | Override path for a specific service (e.g. `/local/bubble_media_bg/netflix.jpg`) |
-| `default_image` | — | Shown for any unrecognized app while in an active state |
+| `<service>_enabled` | `true` | Per-service toggle — set to `false` to disable a specific service's background |
+| `default_image` | — | Background path shown for any unrecognized app (e.g. `/local/bg/fallback.jpg`) |
 
-> **Tip:** Enable `cover_background: true` on the card for best results. When real cover art arrives it overlays the module background automatically, then fades back to the module background when art disappears.
+> **Tip:** Enable `cover_background: true` on the card for best results. When real cover art arrives it overlays the module background automatically, then fades back when art disappears.
 
 ```yaml
 type: custom:bubble-card
@@ -143,9 +158,10 @@ modules:
   media_app_background:
     source_attribute: app_id
     show_when_paused: true
+    peacock_enabled: false   # disable Peacock if you don't use it
 ```
 
-**SVG source files** (for custom editing or separate HA deployment) are in [device_state_media_images/](device_state_media_images/). To use them as external files instead of the built-in data URIs, copy them to `/config/www/bubble_media_bg/` on your HA host and reference them as `/local/bubble_media_bg/netflix.svg` in the override fields.
+**SVG source files** are in [device_state_media_images/](device_state_media_images/) — gradient backgrounds (`<service>.svg`), logo overlays (`<service>_logo.svg`), and combined previews (`<service>_combined.svg`). See [CLAUDE.md](CLAUDE.md) for the full workflow to add new services or update logos.
 
 ---
 

@@ -10,7 +10,11 @@
       "Bash(.venv/bin/ecs-daemon-update list-images *)",
       "Bash(.venv/bin/ecs-daemon-update status *)",
       "Bash(.venv/bin/ecs-daemon-update describe-service *)",
-      "Bash(.venv/bin/ecs-daemon-update list-updates *)"
+      "Bash(.venv/bin/ecs-daemon-update list-updates *)",
+      "WebSearch",
+      "WebFetch(domain:logosdown.com)",
+      "Bash(python3 scripts/build_media_assets.py --service peacock --blur 0.3)",
+      "Bash(open device_state_media_images/peacock_combined.svg)"
     ]
   }
 }

@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '1.2'
+  version: '1.7'
   creator: Christopher Young
   supported:
     - media-player
@@ -12,9 +12,9 @@ media_app_background:
     When the entity has a live entity_picture (e.g. YouTube), the module
     steps aside and Bubble Card's native cover-art system takes over.
 
-    Built-in gradient backgrounds are included for: Netflix, Prime Video,
-    Disney+, Max, Apple TV+, Hulu, Peacock, ESPN, NBA, and Plex.
-    Any service can be overridden with a custom image path.
+    Built-in gradient backgrounds and logos are included for: Netflix,
+    Prime Video, Disney+, HBO/Max, Apple TV+, Hulu, Peacock, ESPN, NBA,
+    NFL, Plex, and Fandango at Home (Vudu).
 
     Configure via the editor below, or directly in YAML:
 
@@ -22,7 +22,7 @@ media_app_background:
     media_app_background:
         source_attribute: app_id
         show_when_paused: true
-        netflix_image: /local/bubble_media_bg/netflix.jpg
+        default_image: /local/bubble_media_bg/fallback.jpg
     </pre></code-block>
 
     Note: enable cover_background on the media player card for best
@@ -50,34 +50,48 @@ media_app_background:
         netflix: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzE0MTQxNCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNTA5MTQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0MTQxNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         prime:   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBGMTExMSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMEE4RTEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBGMTExMSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         disney:  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzA0MDcxNCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMTNDQ0YiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzA0MDcxNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
-        max:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMTAyMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM1MjAwRkYiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMTAyMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        max:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBBMEEwQSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM0QjAwODIiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBBMEEwQSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         appletv: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMDAwMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDQ0NDQ0MiIHN0b3Atb3BhY2l0eT0iLjUiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         hulu:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBEMEQwRCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxQ0U3ODMiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBEMEQwRCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         peacock: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMDUwNSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMEQ3RjEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDUwNSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         espn:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFBMDAwMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDQzAwMDAiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFBMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         nba:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBBMEYxQSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iYiIgY3g9IjMwJSIgY3k9IjUwJSIgcj0iNjAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxNzQwOEIiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBBMEYxQSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNiKSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iciIgY3g9IjcwJSIgY3k9IjUwJSIgcj0iNjAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDOTA4MkEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBBMEYxQSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNyKSIvPgo8L3N2Zz4K',
         plex:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFGMUYxRiIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNUEwMEQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFGMUYxRiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        nfl:      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAxMzM2OSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNENTBBMEEiIHN0b3Atb3BhY2l0eT0iLjgiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAxMzM2OSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        fandango: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBEMEQwRCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjY2MDAiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBEMEQwRCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
       };
 
-      /* ── Logo-only SVGs (transparent bg, white icon, tight viewBox)
-         Applied via ::after on .bubble-media-player so they render
-         sharp and unblurred, outside cover_background's blur scope. */
+      /* ── Logo-only SVGs (transparent bg, applied via ::after on
+         .bubble-media-player — outside cover_background's blur scope) */
       const LOGOS = {
-        netflix: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjYuNSAyIDExIDIwIj48cGF0aCBkPSJNNi41LDJIMTAuNUwxMy40NCwxMC44M0wxMy41LDJIMTcuNVYyMkMxNi4yNSwyMS43OCAxNC44NywyMS42NCAxMy40MSwyMS41OEwxMC41LDEzTDEwLjQzLDIxLjU5QzkuMDMsMjEuNjUgNy43LDIxLjc5IDYuNSwyMlYyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=',
+        netflix: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjYuNSAyIDExIDIwIj48cGF0aCBkPSJNNi41LDJIMTAuNUwxMy40NCwxMC44M0wxMy41LDJIMTcuNVYyMkMxNi4yNSwyMS43OCAxNC44NywyMS42NCAxMy40MSwyMS41OEwxMC41LDEzTDEwLjQzLDIxLjU5QzkuMDMsMjEuNjUgNy43LDIxLjc5IDYuNSwyMlYyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4K',
+        prime:   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTS4wNDUgMTguMDJjLjA3Mi0uMTE2LjE4Ny0uMTI0LjM0OC0uMDIyIDMuNjM2IDIuMTEgNy41OTQgMy4xNjYgMTEuODcgMy4xNjYgMi44NTIgMCA1LjY2OC0uNTMzIDguNDQ3LTEuNTk1bC4zMTUtLjE0Yy4xMzgtLjA2LjIzNC0uMS4yOTMtLjEzLjIyNi0uMDg4LjM5LS4wNDYuNTI1LjEzLjEyLjE3NC4wOS4zMzYtLjEyLjQ4LS4yNTYuMTktLjYuNDEtMS4wMDYuNjU0LTEuMjQ0Ljc0My0yLjY0IDEuMzE2LTQuMTg1IDEuNzI2YTE3LjYxNyAxNy42MTcgMCAwMS0xMC45NTEtLjU3NyAxNy44OCAxNy44OCAwIDAxLTUuNDMtMy4zNWMtLjEtLjA3NC0uMTUxLS4xNS0uMTUxLS4yMiAwLS4wNDcuMDIxLS4wOS4wNTEtLjEzem02LjU2NS02LjIxOGMwLTEuMDA1LjI0Ny0xLjg2My43NDMtMi41NzcuNDk1LS43MSAxLjE3LTEuMjUgMi4wNC0xLjYxNS43OTYtLjMzNSAxLjc1Ni0uNTc1IDIuOTEyLS43Mi4zOS0uMDQ2IDEuMDMzLS4xMDMgMS45Mi0uMTc0di0uMzdjMC0uOTMtLjEwNS0xLjU1OC0uMy0xLjg3NS0uMzAyLS40My0uNzgtLjY1LTEuNDQtLjY1aC0uMTgyYy0uNDguMDQ2LS44OTYuMTk2LTEuMjQ2LjQ2LS4zNS4yNy0uNTc1LjYzLS42NzUgMS4wOTYtLjA2LjMtLjIwNi40NjUtLjQzNS41MWwtMi41Mi0uMzE1Yy0uMjQ4LS4wNi0uMzcyLS4xOC0uMzcyLS4zOSAwLS4wNDYuMDA3LS4wOS4wMjItLjE1LjI0Ny0xLjI5Ljg1NS0yLjI1IDEuODItMi44OC45NzYtLjYxNiAyLjEtLjk3NSAzLjM5LTEuMDVoLjU0YzEuNjUgMCAyLjk1Ny40MzQgMy44ODggMS4yOS4xMzUuMTUuMjcuMy40MDUuNDguMTIuMTY1LjIyNC4zMTQuMjgzLjQ1LjA3NS4xMzQuMTUuMzMuMTk1LjU3LjA2LjI1NC4xMDUuNDIuMTM1LjUxLjAzLjEwNC4wNjIuMy4wNzYuNjE1LjAxLjMxMy4wMi40OTMuMDIuNTUzdjUuMjhjMCAuMzc2LjA2LjcyLjE2NSAxLjAzNi4xMDUuMzEzLjIxLjU0LjMxNS42NzRsLjUxLjY3NGMuMDkuMTM2LjEzNi4yNTYuMTM2LjM2IDAgLjEyLS4wNi4yMjYtLjE4LjMxNC0xLjIgMS4wNS0xLjg2IDEuNjItMS45NjMgMS43MS0uMTY1LjEzNS0uMzc1LjE1LS42My4wNDVhNi4wNjIgNi4wNjIgMCAwMS0uNTI2LS40OTZsLS4zMS0uMzQ3YTkuMzkxIDkuMzkxIDAgMDEtLjMxNy0uNDJsLS4zLS40MzVjLS44MS44ODYtMS42MDMgMS40NC0yLjQgMS42NjUtLjQ5NC4xNS0xLjA5My4yMjctMS44My4yMjctMS4xMSAwLTIuMDQtLjM0My0yLjc2LTEuMDM0LS43Mi0uNjktMS4wOC0xLjY2NS0xLjA4LTIuOTRsLS4wNS0uMDc2em0zLjc1My0uNDM4YzAgLjU2Ni4xNCAxLjAyLjQyNSAxLjM2NC4yODUuMzQuNjc1LjUxMiAxLjE1NS41MTIuMDQ1IDAgLjEwNi0uMDA3LjE5NS0uMDIuMDktLjAxNi4xMzQtLjAyMy4xNjYtLjAyMy42MTQtLjE2IDEuMDgtLjU1MyAxLjQyNC0xLjE3OC4xNjUtLjI4LjI4NS0uNTguMzYtLjkxLjA5LS4zMi4xMi0uNTkuMTM1LS44LjAxNS0uMTk1LjAxNS0uNTQuMDE1LTEuMDA1di0uNTRjLS44NCAwLTEuNDg0LjA2LTEuOTIuMTgtMS4yNzUuMzYtMS45MiAxLjE3LTEuOTIgMi40M2wtLjAzNS0uMDJ6bTkuMTYyIDcuMDI3Yy4wMy0uMDYuMDc1LS4xMS4xMzItLjE3LjM2Mi0uMjQzLjcxNC0uNDEgMS4wNS0uNWE4LjA5NCA4LjA5NCAwIDAxMS42MTItLjI0Yy4xNC0uMDEyLjI4IDAgLjQxLjAzLjY1LjA2IDEuMDUuMTY4IDEuMTcyLjMzLjA2My4wOS4wOTkuMjI4LjA5OS4zOXYuMTVjMCAuNTEtLjE0OSAxLjExLS40MjQgMS44LS4yNzguNjktLjY2NCAxLjI0OC0xLjE1NiAxLjY4LS4wNzMuMDYtLjE0LjA5LS4xOTcuMDktLjAzIDAtLjA2IDAtLjA5LS4wMTItLjA5LS4wNDQtLjEwNy0uMTItLjA2NC0uMjQuNTQtMS4yNi44MDYtMi4xNDMuODA2LTIuNjQgMC0uMTUtLjAzLS4yNy0uMDg3LS4zNDQtLjE0NS0uMTY2LS41NS0uMjU3LTEuMjI0LS4yNTctLjI0MyAwLS41MzMuMDE2LS44Ny4wNDYtLjM2My4wNDUtLjcuMDktMSAuMTM1LS4wOSAwLS4xNDgtLjAxNC0uMTgtLjA0NC0uMDMtLjAzLS4wMzYtLjA0Ny0uMDItLjA3NyAwLS4wMTcuMDA2LS4wMy4wMi0uMDYzdi0uMDZ6IiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPgo=',
+        appletv: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTE4LjcxLDE5LjVDMTcuODgsMjAuNzQgMTcsMjEuOTUgMTUuNjYsMjEuOTdDMTQuMzIsMjIgMTMuODksMjEuMTggMTIuMzcsMjEuMThDMTAuODQsMjEuMTggMTAuMzcsMjEuOTUgOS4xLDIyQzcuNzksMjIuMDUgNi44LDIwLjY4IDUuOTYsMTkuNDdDNC4yNSwxNyAyLjk0LDEyLjQ1IDQuNyw5LjM5QzUuNTcsNy44NyA3LjEzLDYuOTEgOC44Miw2Ljg4QzEwLjEsNi44NiAxMS4zMiw3Ljc1IDEyLjExLDcuNzVDMTIuODksNy43NSAxNC4zNyw2LjY4IDE1LjkyLDYuODRDMTYuNTcsNi44NyAxOC4zOSw3LjEgMTkuNTYsOC44MkMxOS40Nyw4Ljg4IDE3LjM5LDEwLjEgMTcuNDEsMTIuNjNDMTcuNDQsMTUuNjUgMjAuMDYsMTYuNjYgMjAuMDksMTYuNjdDMjAuMDYsMTYuNzQgMTkuNjcsMTguMTEgMTguNzEsMTkuNU0xMywzLjVDMTMuNzMsMi42NyAxNC45NCwyLjA0IDE1Ljk0LDJDMTYuMDcsMy4xNyAxNS42LDQuMzUgMTQuOSw1LjE5QzE0LjIxLDYuMDQgMTMuMDcsNi43IDExLjk1LDYuNjFDMTEuOCw1LjQ2IDEyLjM2LDQuMjYgMTMsMy41WiIgZmlsbD0id2hpdGUiLz48L3N2Zz4K',
+        hulu:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTE5LjUsMTIuOFYyMkgxNC43VjEzLjlDMTQuNywxMy4yIDE0LjEsMTIuNiAxMy40LDEyLjZIMTAuNUM5LjgsMTIuNiA5LjIsMTMuMiA5LjIsMTMuOVYyMkg0LjVWMkg5LjNWOC40QzkuNiw4LjMgOS45LDguMiAxMC4yLDguMkgxNUMxNy41LDguMiAxOS41LDEwLjMgMTkuNSwxMi44WiIgZmlsbD0id2hpdGUiLz48L3N2Zz4K',
+        max:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CjxwYXRoIGQ9Ik03LjA0MiAxNi44OTZINC40MTR2LTMuNzU0SDIuNzA4djMuNzU0SC4wMUwwIDcuMjJoMi43MDh2My42aDEuNzA2di0zLjZoMi42Mjh6bTEyLjA0My4wNDZDMjEuNzk1IDE2Ljk0IDI0IDE0LjY4OSAyNCAxMS45NzhhNC44OSA0Ljg5IDAgMCAwLTQuOTE1LTQuOTJjLTIuNzA3LS4wMDItNC4wOSAxLjk5MS00LjQzMiAyLjc5NS4wMDMtMS4yMDctMS4xODctMi42MzItMi41OC0yLjYzNEg3LjU5djkuNjc0bDQuMTgxLjAwMWMxLjY4NiAwIDIuODg2LTEuNDYgMi44ODgtMi43MTMuMzg1Ljc4OCAxLjcyIDIuNzYyIDQuNDI3IDIuNzZ6bS03LjY2NS0zLjkzNmMuMzg3IDAgLjY5Mi4zODIuNjkyLjgxNyAwIC40MzUtLjMwNS44MTctLjY5Mi44MTdoLTEuMzN2LTEuNjM0em0uMDA1LTMuNjMzYy4zODcgMCAuNjkyLjM4Mi42OTIuODE3IDAgLjQzNi0uMzA1LjgxOC0uNjkyLjgxOGgtMS4zM1Y5LjM3M3ptMS43NyAyLjYwN2MuMzA1LS4wMzkuODEzLS4zODcuOTkyLS42MS0uMDYzLjI3Ni0uMDY4IDEuMDc0LjAwNiAxLjM1LS4yMDQtLjMxNC0uNjg4LS43MDEtLjk5OC0uNzR6bTMuNDMgMGEyLjQ2MiAyLjQ2MiAwIDEgMSA0LjkyNCAwIDIuNDYyIDIuNDYyIDAgMCAxLTQuOTI1IDB6bTIuNDYyIDEuOTM2YTEuOTM2IDEuOTM2IDAgMSAwIDAtMy44NzIgMS45MzYgMS45MzYgMCAwIDAgMCAzLjg3MloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=',
+        disney:  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxNSIgcj0iNyIgZmlsbD0id2hpdGUiLz4KICA8Y2lyY2xlIGN4PSI3LjUiIGN5PSI4LjUiIHI9IjQiIGZpbGw9IndoaXRlIi8+CiAgPGNpcmNsZSBjeD0iMTYuNSIgY3k9IjguNSIgcj0iNCIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==',
+        espn:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMTU0IDI4NS40Ij4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAwLDc0LjIpIj4KPHBhdGggZD0iTTE4MS4wNjQuMzQ4Yy0yMC42MDgtLjAyNy0zNC4yNTYgMTAuODM2LTM2LjE3NiAyNy4wNzlhMTYwMC4wNjUgMTYwMC4wNjUgMCAwIDEtMS4zODQgMTEuMjU3SDQxMS42NHMuNTA0LTMuOTU3Ljg5Ni03LjEzM0M0MTQuNTUyIDE1LjE4OCA0MDcuNi4zNSAzODIuMzEyLjM1di4wMDJTMTkxLjkyOC4zNiAxODEuMDY0LjM0OHpNMTcuNDI0LjM1M2wtNC43MDYgMzguMzMxaDEyMS42bDQuNjg4LTM4LjMzSDE3LjQyMmguMDAyem00MDguMTg0IDBsLTQuNjk2IDM4LjMzMWgxMzEuODI0cy4xNi0xLjM4Ni43NDQtNS44OThDNTU2LjY4OCA3LjYyNiA1NDAuNDU2LjM1MyA1MjQuNzg0LjM1M2gtOTkuMTc2em0tNi41MTIgNTIuOTI2bC0xMC4yNzIgODMuNjU2IDQ1LjQ4LS4wMTYgMTAuMjgtODMuNjI0LTQ1LjQ4OC0uMDE4di4wMDJ6bTg2LjQgMGwtMTAuMjg4IDgzLjY1NiA0NS40OC0uMDE2IDEwLjI4LTgzLjYyNC00NS40NzItLjAxOHYuMDAyem0tNDk0LjU1Mi4wMTJMLjY1NCAxMzYuOTM5aDEyMS41OTJsNC40OC0zNi4yODgtNzYuMTM4LS4wMDggMS45MjYtMTUuNjQ4aDc2LjEwOGwzLjg5Ni0zMS43MDJIMTAuOTVsLS4wMDYtLjAwMnptMTMwLjc3NiAwYy0zLjMzNiAyMS44MzIgNy41OTIgMzEuNzAxIDIzLjA4IDMxLjcwMSA4LjQyNCAwIDYxLjUyLS4wMjQgNjEuNTItLjAyNGwtMS45MiAxNS42NzItODguNDg4LjAwOC00LjQ1NiAzNi4yODhzOTYuMzM2LjAzMiAxMDAuMjQgMGMzLjIyNC0uMjMyIDI1Ljc2LS44NDggMzMuNDMyLTE5LjI4IDIuNDg4LTUuOTg0IDQuNjg4LTI3LjQ0IDUuMzA0LTMxLjk0NCAzLjU0NC0yNi4xNi0xNC41NjgtMzIuMzk3LTI4LjgzMi0zMi4zOTctNy44NjQgMC04NC4zNTItLjAyNC05OS44OC0uMDI0em0xNDEuNTUyIDBMMjczIDEzNi45MzloNDUuNDU2bDYuNC01MS45NDRoNTcuMDk2YzE2LjE5MiAwIDI0Ljg5Ni04LjcwNiAyNi41MTItMjAuMzk3YTQzMC45NyA0MzAuOTcgMCAwIDAgMS40LTExLjMwNUgyODMuMjcydi0uMDAyeiIgZmlsbD0id2hpdGUiLz4KPC9nPgo8L3N2Zz4K',
+        nba:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik0xMiAyIEMxNC41IDUgMTUuNSA5IDE1IDEyIEMxNC41IDE1IDEzLjUgMTkgMTIgMjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPHBhdGggZD0iTTEyIDIgQzkuNSA1IDguNSA5IDkgMTIgQzkuNSAxNSAxMC41IDE5IDEyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxwYXRoIGQ9Ik0yIDEyIEM1IDEwIDggOSAxMiA5IEMxNiA5IDE5IDEwIDIyIDEyIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxwYXRoIGQ9Ik0yIDEyIEM1IDE0IDggMTUgMTIgMTUgQzE2IDE1IDE5IDE0IDIyIDEyIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4K',
+        peacock: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTUuODQwNTUgMTI0Ljk2NjQ3Ij4KPGcgdHJhbnNmb3JtPSJtYXRyaXgoMS4wMTk3ODkzIDAgMCAxLjAxOTc4OTMgLjExODA5OCAtMTIuNDM5Mjk4KSI+CjxwYXRoIGQ9Im0xMzEuMjk4NDUgMTIuMTk3OTFjLTguODg1MTMgMC0xNy4yNTg3NCA1LjAxNTI0NS0yMC4yOTI4MiAxMy4wMjI0NjEtMS4yMDY4NyAzLjE4NTAzMS0xLjcwODA2IDYuMzY5MjYtMS40NTcyOCA5Ljc2NDc3OWg5LjIxNjVjMy44MTUzNyAwIDYuMTMyNDQgMS45NzMyMyA2LjEzMjQ0IDMuMzA2MjU4LTkuNjU2NDMgMy43NzQxMS0xMy41MTk5OCA4Ljg4NjQzLTEyLjk1NDY5IDEyLjkwNzIyMmw4LjU0ODI0IDYwLjgwMTk3IDMwLjE3NTkzLTY5LjQ5MzQyOWMyLjAyODU3LTQuNjU4ODgyIDIuNDQ3ODktOC41NzI2NzguOTkxNjctMTQuMjYzNzI5LTEuMzcxODUtNS4zNjEyOTktNC42NDM3NC0xMC42MTM4NzEtMTEuODgxNDQtMTQuMTAyNDk4LTIuNTMyMjItMS4xNTAwNzUtNS43MjYzMi0xLjk0MzAzNC04LjQ3ODU1LTEuOTQzMDM0eiIgZmlsbD0iIzZlNTVkYyIvPgo8cGF0aCBkPSJtODAuMDg4OTIzIDEyLjE5NzkxYy0yLjc1MjIzNyAwLTUuOTQ2Mzg5LjYyOTM5Ni04LjQ3ODYwNCAxLjc3OTQ3Mi03LjIzNzcwOSAzLjQ4ODYzMS0xMC42NzMxNjcgOC45MDQ5MzktMTIuMDQ1MDE0IDE0LjI2NjI0NC0xLjQ1NjIyMyA1LjY5MTA1Ni0uNTE2MzgxIDEwLjU5NzQ0OSAxLjE1NTE2MyAxNC40MjczMzZsMzAuMjU4Nzk0IDY5LjMyOTc2OCAxMC44NDkzNTgtNzUuNTU0NTA2Yy41NDA4MS0zLjc2NjE3MS4xMDUwNy03LjY4OTI3NC0xLjI5Nzk1LTExLjIyNTk0NC0zLjE1NzU0LTcuOTU5MzUzLTEwLjk5NDM3Ny0xMy4wMjIzNy0yMC40NDE3NDctMTMuMDIyMzd6IiBmaWxsPSIjZWYxNTQxIi8+CjxwYXRoIGQ9Im0yNy4xMjgwODkgNDYuMTMxNzc5Yy0yLjM1NjQ4MyAxLjQyMTktNC43MzA0MzggMy42ODI2NzEtNi4yMTc1OSA2LjAzMjgxMi00LjEzODU0MiA2LjU0MDEyMi00LjQ1NjYzMiAxNC4wNjI1ODktMi44OTQyOCAxOC44OTEwOTkgMS42NjIwMDkgNS4xMzY1MDcgNC45MzE3OTggOC43Mjg3MDUgOS4wMTI5NDMgMTEuNDY0NDY4bDYxLjI1MzMxNCA0MS4wNTAzMDItMjkuNzU4ODYzLTY3Ljc0OTc3M2MtMS41MzAxNDItMy40ODM1NTgtNC4yMTMxNy02LjYxNDAzOS03LjMxODA3OC04LjgxMzEzOC02Ljg2ODk4NS00Ljg2NTA2NC0xNi43MDMyMDYtNS4zMjUzODEtMjQuMDc3NDQ2LS44NzU3N3oiIGZpbGw9IiNmZjcxMTIiLz4KPHBhdGggZD0ibTEuNjk2NTcyMSAxMDQuNDUwMTJjLTEuMjIwMDM3MDYgMi40NjcwNi0xLjg3OTczODA4IDUuNjkyNTktMS44MDY5MjkyOCA4LjQ3Mjc4LjIwMjYxNDQgNy43MzY5MSAyLjg1OTczMTg4IDEzLjAyNDY3IDguMTExNjIzODggMTcuMTY0MTIgMy4yMTI4MzEzIDIuNTMyMyA4Ljk1NTk5MTMgNC42NDcwMiAxMy44NjkyNTMzIDQuNjQ3MzZsNzEuMzg4NTQ2LjAwNS01OS40MTA2NjYtMzkuNzg2OTI5Yy0yLjAzNDAwNy0xLjM2MjE2MS02LjQxNjA2OS0zLjc0MzM4Ni0xMi4xODYyOTItMy43ODU3MjctNC44NTIwODktLjAzNTYtOS4xODU3NDYgMS41OTE0NDMtMTIuNjM1MjQ1MyA0LjI1NjE5My00LjQ2NzU5NzMgMy40NTEyMzUtNi4wMTQ4Mzg1IDYuMzY3MjAzLTcuMzMwMjkwNiA5LjAyNzIwM3oiIGZpbGw9IiNmY2NjMTIiLz4KPHBhdGggZD0ibTE4NC4yMzMwNCA0Ni4xMzE3NzljMi4zNTY0OCAxLjQyMTkgNC43MzA0NCAzLjY4MjY3MSA2LjIxNzU5IDYuMDMyODEyIDQuMTM4NTQgNi41NDAxMjIgNC40NTY2MyAxNC4wNjI1ODkgMi44OTQyOCAxOC44OTEwOTktMS42NjIwMSA1LjEzNjUwNy00LjkzMTggOC43Mjg3MDUtOS4wMTI5NCAxMS40NjQ0NjhsLTYxLjI1MzMyIDQxLjA1MDMwMiAyOS43NTg4Ny02Ny43NDk3NzNjMS41MzAxNC0zLjQ4MzU1OCA0LjIxMzE3LTYuNjE0MDM5IDcuMzE4MDgtOC44MTMxMzggNi44Njg5OC00Ljg2NTA2NCAxNi43MDMyLTUuMzI1MzgxIDI0LjA3NzQ0LS44NzU3N3oiIGZpbGw9IiMwNjlkZTAiLz4KPHBhdGggZD0ibTIwOS43MjM5MSAxMDQuNDUwMTJjMS4yMjAwNCAyLjQ2NzA2IDEuODc5NzQgNS42OTI1OSAxLjgwNjkzIDguNDcyNzgtLjIwMjYyIDcuNzM2OTEtMi44NTk3MyAxMy4wMjQ2Ny04LjExMTYzIDE3LjE2NDEyLTMuMjEyODMgMi41MzIzLTguOTU1OTkgNC42NDcwMi0xMy44NjkyNSA0LjY0NzM2bC03MS41NTM5MS4wMDUgNTkuNDkzMzUtMzkuNzg2OTI5YzIuMDM0ODktMS4zNjA4NTUgNi40NjU0MS0zLjc4NTcyNyAxMi41MzM1NS0zLjc4NTcyNyA0Ljg1MjIzIDAgOS4xMDMwNyAxLjU5MTQ0MyAxMi41NTI1NyA0LjI1NjE5MyA0LjQ2NzYgMy40NTEyMzUgNS44MzI5NCA2LjM2NzIwMyA3LjE0ODM5IDkuMDI3MjAzeiIgZmlsbD0iIzA1YWMzZiIvPgo8L2c+Cjwvc3ZnPgo=',
+        nfl:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPGVsbGlwc2UgY3g9IjEyIiBjeT0iMTIiIHJ4PSI5IiByeT0iNiIgZmlsbD0id2hpdGUiLz4KICA8bGluZSB4MT0iMyIgeTE9IjEyIiB4Mj0iMjEiIHkyPSIxMiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuOCIvPgogIDxsaW5lIHgxPSIxMiIgeTE9IjYuMiIgeDI9IjEyIiB5Mj0iMTcuOCIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNyIvPgogIDxsaW5lIHgxPSI5IiB5MT0iOC44IiB4Mj0iOSIgeTI9IjE1LjIiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICA8bGluZSB4MT0iMTUiIHkxPSI4LjgiIHgyPSIxNSIgeTI9IjE1LjIiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICA8bGluZSB4MT0iOSIgeTE9IjEwLjUiIHgyPSIxNSIgeTI9IjEwLjUiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KICA8bGluZSB4MT0iOSIgeTE9IjEyIiB4Mj0iMTUiIHkyPSIxMiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogIDxsaW5lIHgxPSI5IiB5MT0iMTMuNSIgeDI9IjE1IiB5Mj0iMTMuNSIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8L3N2Zz4K',
+        plex:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTQsMkMyLjg5LDIgMiwyLjg5IDIsNFYyMEMyLDIxLjExIDIuODksMjIgNCwyMkgyMEMyMS4xMSwyMiAyMiwyMS4xMSAyMiwyMFY0QzIyLDIuODkgMjEuMTEsMiAyMCwySDRNOC41Niw2SDEyLjA2TDE1LjUsMTJMMTIuMDYsMThIOC41NkwxMiwxMkw4LjU2LDZaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPgo=',
+        fandango: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAuMjcgMC4wMiAyOC4wNiAyNy45NiI+CjxwYXRoIGQ9Ik0yNC41MTM3IDcuODY0MTFMMjIuNDA0IDAuMDE5Mjg3MUwwLjI2OTUzMSA1LjkyODI1TDIuMzc5MTkgMTMuNzc3OVYxMy43ODI3QzMuNzAxOTUgMTQuMDUzMSA0LjgyNjc3IDE1LjAzNzkgNS4yMDMzMiAxNi40MjgzQzUuNTc1MDUgMTcuODE4NiA1LjA5NzEyIDE5LjIzMzEgNC4wODgxNSAyMC4xMjYyVjIwLjEzMUw2LjE5NzgxIDI3Ljk4MDdMMjguMzMyMyAyMi4wNzE3TDI2LjIyMjYgMTQuMjIyQzI0Ljg5MDIgMTMuOTU2NSAyMy43NjA2IDEyLjk2NjkgMjMuMzg0IDExLjU3MTdDMjMuMDEyMyAxMC4xODE0IDIzLjQ5NSA4Ljc1NzIyIDI0LjUxMzcgNy44NjQxMVoiIGZpbGw9IiNGRjczMDAiLz4KPHBhdGggZD0iTTE2LjI1ODQgOC4xMzkyM0w5LjY2ODc2IDkuODk2NDdMMTAuOTkxNSAxNC44MjA2TDE3LjU4MTIgMTMuMDYzNEwxOC45MDM5IDE3Ljk4NzVMMTIuMzE5MSAxOS43NDQ3TDEzLjY0MTkgMjQuNjY4OUw3LjA1MjIxIDI2LjQyNjFMNS40NTQyOCAyMC40Njg5QzYuNDE0OTcgMTkuMjkxIDYuODE1NjYgMTcuNjg4MiA2LjM5MDgzIDE2LjEwOTZDNS45NjYgMTQuNTMxIDQuODEyMjEgMTMuMzQzNCAzLjM4ODA3IDEyLjgwMjdMMS43NTYzNSA2LjczNDRMMTQuOTMwOCAzLjIxNTA5TDE2LjI1ODQgOC4xMzkyM1oiIGZpbGw9IiMzNDc4QzEiLz4KPHBhdGggZD0iTTE2LjI5NzMgOC4xOTcyTDkuNzE3MjcgOS45NTQ0NEwxMS4wNCAxNC44Njg5TDE3LjYyIDEzLjExMTdMMTguOTQyOCAxOC4wMjYyTDEyLjM2MjggMTkuNzgzNEwxMy42ODU1IDI0LjY5NzlMNy4xMDU1NCAyNi40Nkw1LjUwNzYxIDIwLjUxMjRDNi40NjgzIDE5LjMzOTMgNi44Njg5OSAxNy43MzY1IDYuNDQ0MTYgMTYuMTU3OUM2LjAxOTM0IDE0LjU4NDEgNC44NzAzNyAxMy4zOTE3IDMuNDQ2MjMgMTIuODU1OEwxLjgxOTM0IDYuNzkyMzdMMTQuOTc0NSAzLjI4MjcxTDE2LjI5NzMgOC4xOTcyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==',
       };
 
       /* ── App keyword → service mapping ───────────────────── */
       const APPS = [
-        { keys: ['netflix'],                        id: 'netflix',  field: 'netflix_image'  },
-        { keys: ['amazon', 'primevideo', 'prime'],  id: 'prime',    field: 'prime_image'    },
-        { keys: ['disney'],                         id: 'disney',   field: 'disney_image'   },
-        { keys: ['hbo', 'wbd.max'],                 id: 'max',      field: 'max_image'      },
-        { keys: ['apple', 'atve'],                  id: 'appletv',  field: 'appletv_image'  },
-        { keys: ['hulu'],                           id: 'hulu',     field: 'hulu_image'     },
-        { keys: ['peacock', 'nbcuni'],              id: 'peacock',  field: 'peacock_image'  },
-        { keys: ['espn'],                           id: 'espn',     field: 'espn_image'     },
-        { keys: ['nbaimd'],                         id: 'nba',      field: 'nba_image'      },
-        { keys: ['plex'],                           id: 'plex',     field: 'plex_image'     },
+        { keys: ['netflix'],                       id: 'netflix',  field: 'netflix_image',  toggle: 'netflix_enabled'  },
+        { keys: ['amazon', 'avod', 'primevideo', 'prime'], id: 'prime', field: 'prime_image', toggle: 'prime_enabled' },
+        { keys: ['disney'],                        id: 'disney',   field: 'disney_image',   toggle: 'disney_enabled'   },
+        { keys: ['hbo', 'wbd.max'],                id: 'max',      field: 'max_image',      toggle: 'max_enabled'      },
+        { keys: ['apple', 'atve'],                 id: 'appletv',  field: 'appletv_image',  toggle: 'appletv_enabled'  },
+        { keys: ['hulu'],                          id: 'hulu',     field: 'hulu_image',     toggle: 'hulu_enabled'     },
+        { keys: ['peacock', 'nbcuni'],             id: 'peacock',  field: 'peacock_image',  toggle: 'peacock_enabled'  },
+        { keys: ['espn'],                          id: 'espn',     field: 'espn_image',     toggle: 'espn_enabled'     },
+        { keys: ['nba', 'nbaimd'],                 id: 'nba',      field: 'nba_image',      toggle: 'nba_enabled'      },
+        { keys: ['plex'],                          id: 'plex',     field: 'plex_image',     toggle: 'plex_enabled'     },
+        { keys: ['nfl', 'nflnetwork'],             id: 'nfl',      field: 'nfl_image',      toggle: 'nfl_enabled'      },
+        { keys: ['fandango', 'vudu'],              id: 'fandango', field: 'fandango_image', toggle: 'fandango_enabled' },
       ];
 
       /* ── Match source value against keywords ─────────────── */
@@ -85,6 +99,7 @@ media_app_background:
       let matchedId = '';
       for (const app of APPS) {
         if (app.keys.some(function(k) { return srcValue.indexOf(k) !== -1; })) {
+          if (cfg[app.toggle] === false) continue;
           imageUrl = cfg[app.field] || BUILTIN[app.id] || '';
           matchedId = app.id;
           break;
@@ -142,52 +157,73 @@ media_app_background:
       selector:
         boolean: {}
     - type: expandable
-      title: Custom image overrides
-      icon: mdi:image
+      title: Enabled services
+      icon: mdi:toggle-switch
       schema:
         - type: grid
+          column_min_width: 140px
           schema:
-            - name: netflix_image
+            - name: netflix_enabled
               label: Netflix
+              default: true
               selector:
-                text: {}
-            - name: prime_image
+                boolean: {}
+            - name: prime_enabled
               label: Prime Video
+              default: true
               selector:
-                text: {}
-            - name: disney_image
+                boolean: {}
+            - name: disney_enabled
               label: Disney+
+              default: true
               selector:
-                text: {}
-            - name: max_image
-              label: Max
+                boolean: {}
+            - name: max_enabled
+              label: HBO / Max
+              default: true
               selector:
-                text: {}
-            - name: appletv_image
+                boolean: {}
+            - name: appletv_enabled
               label: Apple TV+
+              default: true
               selector:
-                text: {}
-            - name: hulu_image
+                boolean: {}
+            - name: hulu_enabled
               label: Hulu
+              default: true
               selector:
-                text: {}
-            - name: peacock_image
+                boolean: {}
+            - name: peacock_enabled
               label: Peacock
+              default: true
               selector:
-                text: {}
-            - name: espn_image
+                boolean: {}
+            - name: espn_enabled
               label: ESPN
+              default: true
               selector:
-                text: {}
-            - name: nba_image
+                boolean: {}
+            - name: nba_enabled
               label: NBA
+              default: true
               selector:
-                text: {}
-            - name: plex_image
+                boolean: {}
+            - name: plex_enabled
               label: Plex
+              default: true
               selector:
-                text: {}
-        - name: default_image
-          label: Default (unrecognized apps)
-          selector:
-            text: {}
+                boolean: {}
+            - name: nfl_enabled
+              label: NFL Network
+              default: true
+              selector:
+                boolean: {}
+            - name: fandango_enabled
+              label: Fandango at Home
+              default: true
+              selector:
+                boolean: {}
+    - name: default_image
+      label: Default background (unrecognized apps)
+      selector:
+        text: {}
