@@ -698,7 +698,17 @@ Rules:
    ```js
    { keys: ['keyword1', 'keyword2'], id: '<service>', field: '<service>_image', toggle: '<service>_enabled' },
    ```
-6. **Add editor fields** — one boolean toggle in the "Enabled services" grid, one text field in the "Custom image overrides" grid
+   - `keys` — substrings matched (case-insensitive) against the source attribute value. Use `app_id` package name fragments as primary keys.
+   - `field` — allows YAML-level override of the background image (`cfg[field]` is checked before `BUILTIN`). No editor UI exposed for this; it's a power-user escape hatch.
+   - `toggle` — maps to a boolean editor field; `=== false` skips the service (unset = enabled by default).
+6. **Add one boolean toggle** to the "Enabled services" expandable grid in the editor:
+   ```yaml
+   - name: <service>_enabled
+     label: Service Name
+     default: true
+     selector:
+       boolean: {}
+   ```
 7. **Update the description** string at the top of the module to mention the new service
 8. **Bump the version** string (e.g. `'1.6'` → `'1.7'`)
 9. **Run verify** to confirm everything is in sync:
