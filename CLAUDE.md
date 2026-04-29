@@ -4,6 +4,124 @@ Authoritative development reference for this repository. All modules are YAML fi
 
 ---
 
+## ⚠ Rule: Always use the reference files — never guess class names
+
+Before writing any CSS selector, DOM-targeting code, or module suggestion, **read the relevant `bubble-card-reference/` file first**. Do not rely on memory for Bubble Card class names, state classes, or DOM structure — they are verified against source code and must be treated as the single source of truth.
+
+This applies to AI suggestions too: if proposing CSS for a card type, open and cite the reference file. Do not guess or infer selectors.
+
+When a Bubble Card update changes the DOM, the reference files are updated first — and everything else (diagrams, modules) follows from them.
+
+---
+
+## Reference documents in this repo
+
+**[bubble-card-reference/](bubble-card-reference/)** — source-verified per-card-type reference directory. One file per card type, plus SVG layout diagrams in `layouts/`. **This is the primary reference for all DOM work.**
+
+| File | What's inside |
+|------|--------------|
+| [00-index.md](bubble-card-reference/00-index.md) | Directory index, which cards share base structure, universal dev rules |
+| [01-base-structure.md](bubble-card-reference/01-base-structure.md) | Shared base DOM, CSS variables, state classes, sub-button v3.1+ full DOM |
+| [02-button.md](bubble-card-reference/02-button.md) | button — all types (switch/state/name/slider), grid layout, icon stability |
+| [03-media-player.md](bubble-card-reference/03-media-player.md) | media-player — controls, volume slider, cover art crossfade system |
+| [04-climate.md](bubble-card-reference/04-climate.md) | climate — temperature controls, HVAC colors, dual-target mode |
+| [05-cover.md](bubble-card-reference/05-cover.md) | cover — open/stop/close, disabled state, device_class variants |
+| [06-select.md](bubble-card-reference/06-select.md) | select — dropdown selector, overflow differences |
+| [07-separator.md](bubble-card-reference/07-separator.md) | separator — direct icon/name/line DOM (no base elements) |
+| [08-calendar.md](bubble-card-reference/08-calendar.md) | calendar — event list, day chips, scroll masking |
+| [09-pop-up.md](bubble-card-reference/09-pop-up.md) | pop-up — panel structure, backdrop shadow DOM, transitions |
+| [10-horizontal-buttons-stack.md](bubble-card-reference/10-horizontal-buttons-stack.md) | HBS — fixed nav bar, absolute button positioning, scroll masking |
+| [layouts/](bubble-card-reference/layouts/) | SVG layout diagrams for each card type + sub-button system |
+
+**[bubble-card-reference.md](bubble-card-reference.md)** — an older single-file reference focused on the `button` card type only. Still useful for:
+- Quick CSS cheat sheet (section 9)
+- Grid layout explanation for normal/large/large-2-rows
+- Icon stability / reflow analysis (section 5)
+
+Do not use it for DOM class names of other card types, sub-button structure, or module YAML format — all superseded by the `bubble-card-reference/` directory above.
+
+---
+
+## Sub-button schema — always use v3.1+ sectioned format
+
+**Never write the old flat sub-button array.** Always use the sectioned schema:
+
+```yaml
+# ✅ Correct — v3.1+ sectioned schema
+sub_button:
+  main_layout: inline        # inline | rows
+  bottom_layout: inline      # inline | rows
+  main:
+    - entity: light.desk
+      name: Desk
+    - group:
+        - entity: light.a
+        - entity: light.b
+      buttons_layout: inline
+  bottom:
+    - entity: sensor.temp
+      justify_content: center
+
+# ❌ Wrong — legacy flat array (do not use)
+sub_button:
+  - entity: light.desk
+    name: Desk
+```
+
+The sectioned schema is cleaner, supports top/bottom positioning, alignment lanes, and explicit groups. It is the only format that supports all v3.1+ layout features. See [bubble-card-reference/01-base-structure.md](bubble-card-reference/01-base-structure.md) for the full DOM structure this produces.
+
+---
+
+## Scripts
+
+Two Python scripts in `scripts/` maintain generated files. Both require only the Python standard library — no `pip install` needed.
+
+### `scripts/generate_layout_diagrams.py` — SVG layout diagrams
+
+Generates the SVG card layout diagrams in `bubble-card-reference/layouts/`. The diagrams are derived from the reference docs in `bubble-card-reference/` and show the spatial 2D layout of each card type with color-coded element regions and DOM trees.
+
+**When to run:**
+- After updating any `bubble-card-reference/*.md` file to reflect Bubble Card DOM changes
+- After editing the diagram script itself (color palette, layout tweaks, new annotations)
+
+```bash
+# Regenerate all 10 diagrams
+python3 scripts/generate_layout_diagrams.py
+
+# Regenerate one card only (faster for iterating on a single diagram)
+python3 scripts/generate_layout_diagrams.py --card button
+python3 scripts/generate_layout_diagrams.py --card media-player
+
+# List all valid card keys
+python3 scripts/generate_layout_diagrams.py --list
+```
+
+**Valid card keys:** `button`, `media-player`, `climate`, `cover`, `select`, `separator`, `calendar`, `pop-up`, `horizontal-buttons-stack`, `sub-buttons`
+
+**Updating for Bubble Card changes:**
+
+1. Update the relevant `bubble-card-reference/<NN>-<card>.md` file to match the new Bubble Card DOM (verify against Bubble Card source code).
+2. Find the corresponding `diagram_<card>()` function in the script and apply the same changes.
+3. Regenerate: `python3 scripts/generate_layout_diagrams.py --card <name>`
+4. Verify the output SVG renders correctly in a browser or VSCode preview.
+
+Reference doc → diagram function mapping is in the script docstring at the top of the file.
+
+---
+
+### `scripts/build_media_assets.py` — media_app_background assets
+
+Generates combined preview SVGs and regenerates the base64 data URI strings embedded in `media_app_background.yaml`. Full CLI reference and workflow checklists are in the **SVG assets and base64 encoding** section below.
+
+```bash
+# Quick reference
+python3 scripts/build_media_assets.py              # rebuild all + print YAML blocks to paste
+python3 scripts/build_media_assets.py --verify     # check YAML is in sync with files on disk
+python3 scripts/build_media_assets.py --service netflix  # process one service only
+```
+
+---
+
 ## Project layout
 
 ```
@@ -96,415 +214,46 @@ hass.states[entity]?.attributes?.rgb_color?.join(',')
 
 ---
 
-## CSS DOM structure by card type
+## CSS DOM — quick reference
 
-All card types are built on a shared **base structure** plus type-specific additions. These are the actual class names assigned by the source code.
+> **Read the reference file for the card type you are targeting before writing any selectors.**
+> The tables below are a navigation aid only — not a substitute for the reference files.
 
-### Shared base structure
+### Which cards use the shared base structure?
 
-Used by: button, climate, cover, media-player, select (calendar and separator use it partially; pop-up and HBS do not use it at all).
+| Card type | Base structure | Key scoping selector | Reference |
+|-----------|---------------|---------------------|-----------|
+| button | ✅ full | `.bubble-button-card` | [02-button.md](bubble-card-reference/02-button.md) |
+| media-player | ✅ full | `.bubble-media-player` | [03-media-player.md](bubble-card-reference/03-media-player.md) |
+| climate | ✅ full | `.bubble-climate` | [04-climate.md](bubble-card-reference/04-climate.md) |
+| cover | ✅ full | `.bubble-cover` | [05-cover.md](bubble-card-reference/05-cover.md) |
+| select | ✅ full | `.bubble-select` | [06-select.md](bubble-card-reference/06-select.md) |
+| separator | ⚠ partial (no base elements) | `.bubble-separator` | [07-separator.md](bubble-card-reference/07-separator.md) |
+| calendar | ⚠ partial (no base elements) | `.bubble-calendar-container` | [08-calendar.md](bubble-card-reference/08-calendar.md) |
+| pop-up | ❌ none | `.bubble-pop-up` | [09-pop-up.md](bubble-card-reference/09-pop-up.md) |
+| horizontal-buttons-stack | ❌ none | `.horizontal-buttons-stack-card` | [10-horizontal-buttons-stack.md](bubble-card-reference/10-horizontal-buttons-stack.md) |
 
-```
-.bubble-<type>-container  .bubble-container          ← mainContainer
-[.with-bottom-buttons]                               ← added when bottom sub-buttons or main_buttons_position: bottom
-└── .bubble-<type>  .bubble-wrapper                  ← cardWrapper
-    ├── .bubble-background                           ← background (prepended)
-    ├── .bubble-content-container                    ← contentContainer
-    │   ├── .bubble-main-icon-container
-    │   │   .bubble-icon-container  .icon-container  ← iconContainer
-    │   │   ├── ha-icon.bubble-main-icon
-    │   │   │         .bubble-icon  .icon            ← icon element
-    │   │   ├── div.bubble-entity-picture            ← entity picture (optional)
-    │   │   │      .entity-picture
-    │   │   └── .bubble-icon-feedback-container      ← only when icon has a tap action
-    │   │       .bubble-feedback-container
-    │   │       └── .bubble-icon-feedback
-    │   │           .bubble-feedback-element
-    │   │           .feedback-element
-    │   └── .bubble-name-container  .name-container  ← nameContainer
-    │       ├── .bubble-name  .name
-    │       └── .bubble-state  .state                ← state text (optional)
-    ├── .bubble-feedback-container                   ← only when card background has a tap action
-    │   .feedback-container
-    │   └── .bubble-feedback-element  .feedback-element
-    └── .bubble-buttons-container                    ← buttonsContainer
-        └── [card-type-specific content]
-```
+The shared base structure (icon container, name container, background, buttons container) is documented in [01-base-structure.md](bubble-card-reference/01-base-structure.md).
 
-Sub-buttons are appended inside `.bubble-<type>.bubble-wrapper` (after the buttons container). See the **sub-buttons** section for full detail.
+### Critical facts to keep in mind
+
+- **State classes** (`.is-on`, `.is-off`, `.is-unavailable`, `.with-bottom-buttons`) live on the **mainContainer** (`.bubble-<type>-container`), not the wrapper.
+- **Background class** varies by card: `.bubble-button-background` (button), `.bubble-color-background` (climate, added alongside `.bubble-background`), `.bubble-cover-background` (media-player alias).
+- **Sub-button icon bleed**: any unscoped `.bubble-icon` rule hits sub-button icons too. Always follow with `.bubble-sub-button .bubble-icon { <cancel rule> !important; }`.
+- **pop-up backdrop** is in shadow DOM — style it via CSS variables (`--bubble-backdrop-background-color`, `--bubble-backdrop-filter`), not direct selectors.
+- **HBS buttons** are absolutely positioned, not flexbox — do not apply flex/grid layout rules to the container.
 
 ---
 
-### button
+## Sub-buttons — quick reference
 
-Extra classes on top of the base structure:
+Always use the **v3.1+ sectioned schema** (see the rule above). Key points for CSS targeting:
 
-| Element | Additional classes |
-|---------|--------------------|
-| mainContainer | `bubble-button-card-container` (also `bubble-button-slider-container` when type=slider) |
-| cardWrapper | `bubble-button-card` |
-| background | `bubble-button-background` |
+- Individual buttons get a class from their `name` field: lowercased, spaces → `-`, accents stripped. E.g. `name: "Desk Light"` → `.desk-light`. Use this to target specific sub-buttons.
+- Auto-grouping: individual `main` items are wrapped in `g_main_auto` when `main_layout: rows`, explicit groups exist, or any `bottom` items exist. Individual `bottom` items share `g_bottom_auto` unless mixed with explicit groups.
+- Bottom alignment lanes: `.lane-start` (order 1), `.lane-center` (order 2), `.lane-fill` (order 3), `.lane-end` (order 4) — driven by `justify_content` on the group.
 
-State classes added to cardWrapper at runtime: `active`, `inactive`.
-
-Full hierarchy example:
-
-```
-.bubble-button-container  .bubble-container  .bubble-button-card-container
-└── .bubble-button  .bubble-wrapper  .bubble-button-card
-    ├── .bubble-background  .bubble-button-background
-    ├── .bubble-content-container
-    │   ├── .bubble-main-icon-container  .bubble-icon-container  .icon-container
-    │   │   └── ha-icon.bubble-main-icon  .bubble-icon  .icon
-    │   └── .bubble-name-container  .name-container
-    │       ├── .bubble-name  .name
-    │       └── .bubble-state  .state
-    └── .bubble-buttons-container
-```
-
----
-
-### media-player
-
-Built on the base structure with these additions:
-
-| Element | Classes |
-|---------|---------|
-| background | also gets `bubble-cover-background` (backward-compat alias) |
-| buttonsContainer | also gets `bubble-button-container` (backward-compat alias) |
-
-Extra elements created inside the card:
-
-```
-.bubble-icon-container
-└── .bubble-media-button  .bubble-mute-button  [.is-hidden]   ← inside icon container
-
-.bubble-content-container
-└── .bubble-media-info-container                              ← appended after nameContainer
-    ├── .bubble-title
-    └── .bubble-artist
-
-.bubble-buttons-container  .bubble-button-container           ← media control buttons
-├── .bubble-media-button  .bubble-power-button
-│   ├── .bubble-feedback-container
-│   │   └── .bubble-feedback-element  .feedback-element
-│   ├── ha-icon.bubble-media-button-icon
-│   └── ha-ripple
-├── .bubble-media-button  .bubble-previous-button             ← same structure
-├── .bubble-media-button  .bubble-next-button
-├── .bubble-media-button  .bubble-volume-button
-└── .bubble-media-button  .bubble-play-pause-button
-
-.bubble-volume-slider-wrapper  [.is-hidden]                   ← appended to cardWrapper
-├── .bubble-media-button  .bubble-volume-slider-mute-button
-├── .bubble-volume-slider                                      ← slider container
-└── .bubble-media-button  .bubble-volume-slider-close-button
-```
-
-Layout modifier classes (added at runtime to cardWrapper): `large`, `full-width`, `bottom-fixed`, `fixed-top`.
-
-#### Cover art / album art background system
-
-The media player has a dedicated crossfade system for showing album art in two places simultaneously. This is driven by `changeMediaIcon()` and `changeBackground()` in `changes.js`.
-
-**Image source.** `getImage()` reads `entity_picture_local` then `entity_picture` from the HA entity state and calls `hass.hassUrl()` to get a full URL. Returns `''` when `force_icon: true` or an explicit `icon:` is configured. A cache-busting query param (`?v=<hash>`) is appended based on `media_content_id + media_title + media_artist` to handle proxy URLs that serve different art at the same URL (e.g. Apple TV).
-
-**Two scopes.** Album art can appear in two places, each managed independently:
-
-| Scope | Container element | Config required | Visual treatment |
-|-------|------------------|-----------------|-----------------|
-| `icon` | `.bubble-entity-picture` (inside `.bubble-icon-container`) | always active when art is available | full opacity, `cover`/`center` |
-| `background` | `.bubble-background.bubble-cover-background` | `cover_background: true` | `filter: blur(50px); opacity: 0.5` (whole element) |
-
-**Crossfade DOM mutation.** The first time art appears for a given scope, `ensureCoverLayers()` permanently transforms the container element:
-
-1. Clears all children of the container.
-2. Adds class `bubble-cover-icon-crossfade` (icon scope) or `bubble-cover-background-crossfade` (background scope) to the container.
-3. Inserts two absolutely-positioned layer divs inside it:
-
-```
-.bubble-entity-picture  (or .bubble-background.bubble-cover-background)
-  [.bubble-cover-icon-crossfade | .bubble-cover-background-crossfade]   ← added to container
-  ├── .bubble-cover-crossfade-layer
-  │   .bubble-cover-crossfade-layer--icon  (or --background)
-  │   .is-visible                          ← active layer, opacity: 1
-  └── .bubble-cover-crossfade-layer
-      .bubble-cover-crossfade-layer--icon  (or --background)
-                                           ← inactive layer, opacity: 0
-```
-
-**Crossfade transition.** `crossfadeTo()` swaps which layer is visible:
-- Preloads the new image via `new Image()` to avoid a blank flash.
-- On load: sets `background-image: url(...)` on the *inactive* layer, adds `.is-visible` to it.
-- 50 ms later (via `requestAnimationFrame`): removes `.is-visible` from the *current* layer.
-- CSS `transition: opacity 2s ease` does the 2-second blend.
-- On image load error: marks the layer `.is-empty` (stays at opacity 0).
-- Fading *out* (imageUrl = `''`): sets `background-image: ''`, adds `.is-empty`, then swaps.
-
-**State machine.** `evaluateCoverState()` on every render update:
-- `MEDIA_COVER_RESET_STATES` = `off`, `unavailable`, `unknown`, `standby` — clear art immediately.
-- `idle` — start a 2000 ms timeout, then fade out (art is preserved briefly to avoid flicker on track change).
-- The last known URL is cached in `_mediaCoverState.cachedUrl` and survives idle transitions until the timeout fires.
-
-**CSS for the crossfade layers** (from `media-player/styles.css`):
-
-```css
-.bubble-cover-icon-crossfade,
-.bubble-cover-background-crossfade {
-    position: absolute; inset: 0; overflow: hidden;
-}
-.bubble-cover-crossfade-layer {
-    position: absolute; inset: 0;
-    background-size: cover; background-position: center;
-    opacity: 0; transition: opacity 2s ease; pointer-events: none;
-}
-.bubble-cover-crossfade-layer.is-visible { opacity: 1; }
-.bubble-cover-crossfade-layer.is-empty   { opacity: 0; }
-.bubble-cover-crossfade-layer--icon      { z-index: 0; }
-
-/* Background scope: blur applied to the whole container, layers inside inherit it */
-.bubble-background {
-    background-size: cover; background-position: center;
-    filter: blur(50px); opacity: 0.5;
-}
-```
-
-**Important for module CSS targeting the media player background:**
-- Once cover art has appeared, `.bubble-background.bubble-cover-background` no longer has a `background-image` set directly on it — the image lives in the child crossfade layers.
-- The `filter: blur(50px)` is on the container, so it blurs everything inside including the layers.
-- The `.bubble-entity-picture` element switches from a simple `background-image` div to a crossfade host — do not set `background-image` directly on it once the system has initialized.
-
----
-
-### cover
-
-Extra on buttonsContainer: `bubble-buttons  buttons-container`
-
-```
-.bubble-buttons-container  .bubble-buttons  .buttons-container
-├── .bubble-cover-button  .bubble-button  .bubble-open  .button  .open
-│   ├── .bubble-feedback-container
-│   │   └── .bubble-feedback-element  .feedback-element
-│   ├── ha-icon.bubble-cover-button-icon  .bubble-icon-open
-│   └── ha-ripple
-├── .bubble-cover-button  .bubble-button  .bubble-stop  .button  .stop
-│   └── [same — icon class: .bubble-icon-stop]
-└── .bubble-cover-button  .bubble-button  .bubble-close  .button  .close
-    └── [same — icon class: .bubble-icon-close]
-```
-
-Disabled state: `.bubble-button.disabled` (opacity 0.3, pointer-events none).
-
----
-
-### climate
-
-Extra on background: `bubble-color-background`
-
-The `.bubble-buttons-container` holds temperature controls:
-
-```
-.bubble-buttons-container
-├── .bubble-temperature-container                    ← single target temperature
-│   ├── .bubble-climate-minus-button
-│   │   ├── ha-icon.bubble-climate-minus-button-icon
-│   │   └── ha-ripple
-│   ├── .bubble-temperature-display  .bubble-climate-temp-display
-│   └── .bubble-climate-plus-button
-│       ├── ha-icon.bubble-climate-plus-button-icon
-│       └── ha-ripple
-└── .bubble-target-temperature-container             ← only when entity has low/high range
-    ├── .bubble-low-temp-container
-    │   └── [minus / .bubble-low-temperature-display.bubble-climate-temp-display / plus]
-    └── .bubble-high-temp-container
-        └── [minus / .bubble-high-temperature-display.bubble-climate-temp-display / plus]
-```
-
-Animation class applied at runtime to mainContainer: `tap-warning` (when user taps at temp limit).
-
----
-
-### select
-
-Base structure only, plus one extra class on mainContainer: `bubble-select-card-container`.
-
-`.bubble-background` gets `cursor: pointer`.
-
----
-
-### separator
-
-Does **not** use the standard base content elements (`withBaseElements: false`). Custom structure:
-
-```
-.bubble-container  .bubble-separator  .separator-container   ← mainContainer (custom)
-├── ha-icon.bubble-icon
-├── h4.bubble-name
-└── .bubble-line
-```
-
-Sub-buttons are still supported and are appended via `createSubButtonStructure`.
-
----
-
-### calendar
-
-Uses `withBaseElements: false` — no icon, name, or state elements. Only:
-
-```
-.bubble-calendar-container  .bubble-container               ← mainContainer
-└── .bubble-calendar-content                                ← prepended
-```
-
-Sub-buttons supported.
-
----
-
-### pop-up
-
-Completely different structure — does **not** use the base structure. The card modifies an existing `#root` element inside a vertical-stack:
-
-```
-document.body
-└── .bubble-backdrop-host                                    ← shadow DOM host, one global instance
-    └── (shadow root)
-        ├── .bubble-backdrop  .backdrop  [.is-hidden | .is-visible]
-        │   [.has-blur]                                      ← when backdrop_blur > 0
-        ├── <style>                                          ← backdrop styles
-        └── <style data-bubble-target="backdrop">            ← custom backdrop styles
-
-#root (vertical-stack's root element)
-  becomes: .bubble-pop-up  .pop-up
-  state classes: .is-popup-closed | .is-popup-opened | .is-opening | .is-closing
-  modifier classes: .no-header, .large (when applicable)
-  ├── .bubble-pop-up-background
-  ├── .bubble-header-container
-  │   ├── .bubble-header
-  │   │   └── .bubble-button-container                      ← header entity button renders here
-  │   └── .bubble-close-button  .close-pop-up
-  │       ├── .bubble-feedback-container
-  │       │   └── .bubble-feedback-element  .feedback-element
-  │       ├── ha-icon.bubble-close-icon
-  │       └── ha-ripple
-  └── .bubble-pop-up-container                              ← scrollable, holds child cards
-      └── [child cards]
-```
-
----
-
-### horizontal-buttons-stack
-
-Does **not** use the base structure at all:
-
-```
-context.card (the HA card element)
-  gets: .horizontal-buttons-stack-card
-  [.has-gradient]                                           ← unless hide_gradient: true
-
-.card-content (HA's built-in scroll wrapper)
-  scroll state classes: .is-scrolled, .is-maxed-scroll
-
-.bubble-horizontal-buttons-stack-card-container
-.horizontal-buttons-stack-container                         ← cardContainer, inside card-content
-├── .bubble-button  .bubble-button-1  .button  .<link-hash> ← per button (1-indexed)
-│   [.highlight]                                            ← when current view matches link
-│   ├── ha-icon.bubble-icon  .icon
-│   ├── .bubble-name  .name
-│   ├── .bubble-background-color  .background-color
-│   ├── .bubble-background  .background
-│   └── ha-ripple
-└── .bubble-button  .bubble-button-2  ...
-```
-
----
-
-## Sub-buttons
-
-Sub-buttons have a rich layout system added in v3.1+. The sectioned YAML schema separates top (`main`) and bottom (`bottom`) button areas, each supporting explicit groups.
-
-### YAML schema (sectioned, current)
-
-```yaml
-sub_button:
-  main_layout: inline          # or rows — how groups stack vertically in the top area
-  bottom_layout: inline        # or rows — same for the bottom area
-  main:
-    - entity: light.desk       # individual button (auto-grouped internally)
-      name: Desk
-    - group:                   # explicit group
-        - entity: light.a
-          name: A
-        - entity: light.b
-          name: B
-      buttons_layout: inline   # or column — how buttons stack within this group
-      name: Group label
-  bottom:
-    - entity: sensor.temp      # individual button
-    - group:
-        - entity: light.c
-      buttons_layout: inline
-      justify_content: center  # only valid on bottom groups:
-                               #   fill (default), start, center, end
-                               #   space-between / space-around / space-evenly → mapped to fill
-```
-
-**Auto-grouping rules:**
-- Individual `main` buttons are wrapped in a single auto group (`g_main_auto`) whenever `main_layout: rows`, when explicit groups also exist, or when there are any `bottom` items.
-- Individual `bottom` buttons: if mixed with explicit bottom groups, each gets its own individual auto group to preserve YAML order; otherwise they share one auto group (`g_bottom_auto`).
-
-### Sub-button DOM structure
-
-```
-.bubble-<type>  .bubble-wrapper
-│
-├── [base card content — contentContainer, buttonsContainer, etc.]
-│
-├── .bubble-sub-button-container                    ← top area
-│   [.groups-layout-inline | .groups-layout-rows]
-│   └── .bubble-sub-button-group
-│       .position-top
-│       .display-<inline|column>
-│       .group-layout-<inline|rows>
-│       [data-group-id="g_main_0 | g_main_auto | ..."]
-│       └── .bubble-sub-button  .bubble-sub-button-<n>  [.<name-class>]
-│           [.is-select]  [.fill-width]  [.content-<layout>]  [.hidden]
-│           ├── .bubble-feedback-container
-│           │   └── .bubble-feedback-element  .feedback-element
-│           └── .bubble-sub-button-name-container
-│
-└── .bubble-sub-button-bottom-container             ← bottom area (only when bottom items exist)
-    [.groups-layout-inline | .groups-layout-rows]
-    [.alignment-lanes-active]                       ← present when inline layout with alignment lanes
-    │
-    ├── .bubble-sub-button-alignment-lane            ← one per alignment zone (inline layout only)
-    │   .lane-<start|center|fill|end>
-    │   [.lane-expand]                              ← when lane needs to flex-grow
-    │   └── .bubble-sub-button-group
-    │       .position-bottom
-    │       .display-<inline|column>
-    │       .group-layout-<inline|rows>
-    │       .alignment-<start|center|fill|end>       ← from justify_content
-    │       [.alignment-fill-auto]                  ← added when fill-width child forces lane fill
-    │       └── .bubble-sub-button  ...             ← same as top area
-    │
-    └── [more alignment lanes]
-```
-
-**Alignment lane order** (CSS `order` property): start=1, center=2, fill=3, end=4.
-
-**`justify_content` → alignment class mapping:**
-
-| YAML value | Class |
-|------------|-------|
-| `fill` (default) | `alignment-fill` |
-| `start` / `flex-start` / `left` | `alignment-start` |
-| `center` | `alignment-center` |
-| `end` / `flex-end` / `right` | `alignment-end` |
-| `space-between` / `space-around` / `space-evenly` / `stretch` | `alignment-fill` |
-
-### Name-based CSS class
-
-Each sub-button gets a class derived from its `name` field: lowercased, accent-stripped, non-alphanumeric runs replaced with `-`, leading/trailing `-` stripped. E.g. `name: "My Button"` → class `my-button`. Use this to target specific sub-buttons in CSS.
+**For the complete sub-button DOM tree, group classes, alignment lane structure, and auto-grouping rules, read [bubble-card-reference/01-base-structure.md](bubble-card-reference/01-base-structure.md).**
 
 ---
 
@@ -605,7 +354,7 @@ Other selectors (`time`, `date`, `action`, `condition`, `theme`, etc.) exist but
 - **Module IDs** are `snake_case`. The YAML top-level key, config access path (`this.config.<id>`), and filename (`<id>.yaml`) must all match.
 - **Always use `!important`** on CSS overrides — Bubble Card's own styles use it throughout.
 - **Always use optional chaining and a default**: `this.config.my_module?.field ?? defaultValue`. The config object is `undefined` until the user saves settings.
-- **Scope by card-type class** when a rule must not leak across card types. Key discriminators:
+- **Scope by card-type class** when a rule must not leak across card types. Key discriminators (verify exact names in the reference files):
   - `.bubble-button-card` — only on button/state cards (not on slider, not on media player)
   - `.bubble-button-card > .bubble-icon-container` — main icon container on button cards only
   - `.bubble-sub-button .bubble-icon` — sub-button icons specifically (use to cancel rules that bleed)
@@ -670,7 +419,6 @@ Any viewBox is fine — the build script scales to fit. The logo must be **trans
 
 Rules:
 - Single trailing newline at end of file.
-- For wide wordmark logos (ESPN, etc.) pad the viewBox with whitespace so the logo occupies ~50% of the canvas width when rendered in the combined. Do this by wrapping content in a `<g transform="translate(pad_x, pad_y)">` and expanding the viewBox accordingly — see ESPN as the reference example.
 - Multi-colour logos (Peacock, Fandango F-mark) keep their original colours — they render attractively at 25% opacity on a dark background.
 
 **Where to get logo paths:**
@@ -685,10 +433,101 @@ Rules:
 
 ---
 
+### Logo sizing and viewBox padding
+
+The build script scales each logo SVG by **height**: `scale = logo_height_px / viewBox_height`. This means a wide wordmark logo scaled to 90px tall will be rendered proportionally wide — potentially overflowing or dominating the 400×225 background canvas.
+
+**When to add padding:**
+A logo needs viewBox padding if, at the default `--logo-height 90`, the rendered content would be wider than roughly 50–55% of the 400px canvas (i.e., wider than ~200px). Rule of thumb: if the logo's width-to-height aspect ratio exceeds about 2.5:1, you need padding.
+
+**How the scaling works (so you can reason about it):**
+
+```
+scale            = logo_height_px / viewBox_height
+rendered_width   = viewBox_width  * scale
+rendered_height  = viewBox_height * scale   (= logo_height_px, by definition)
+content_on_canvas = actual path content * scale
+```
+
+Adding padding *expands the viewBox without moving the paths*, which lowers the scale factor, making the rendered content smaller.
+
+**Step-by-step: how to add padding to a downloaded SVG logo**
+
+1. **Download the raw SVG** and open it in a text editor.
+
+2. **Find the viewBox** — note the current values `min_x min_y width height`.
+
+3. **Estimate the path content bounds** — open in a browser or Inkscape. Look for the approximate bounding box of the visible content. For a simple wordmark, this is usually close to the full viewBox, but verify.
+
+4. **Decide the target rendered width** on the 400×225 canvas. A good target is 40–50% of 400px = 160–200px.
+
+5. **Calculate the required padding:**
+
+   ```
+   # Target: rendered content width = target_px (e.g. 175px)
+   # content_width = measured path width in SVG units
+   # content_height = measured path height in SVG units
+
+   scale = target_content_width / content_width
+   padded_canvas_height = logo_height_px / scale          # e.g. 90 / scale
+   padded_canvas_width  = padded_canvas_height * (content_width / content_height)
+   # or just make it wide enough: padded_canvas_width = padded_canvas_height * canvas_aspect_ratio
+
+   pad_x = (padded_canvas_width  - content_width)  / 2   # equal left/right padding
+   pad_y = (padded_canvas_height - content_height) / 2   # equal top/bottom padding
+   ```
+
+6. **Edit the SVG file:**
+   - Change the `viewBox` to `"0 0 {padded_canvas_width} {padded_canvas_height}"`
+   - Wrap all existing content in `<g transform="translate({pad_x},{pad_y})"> ... </g>`
+   - Keep a `fill` on the paths (usually `fill="white"`)
+
+7. **Verify** with the build script: `python3 scripts/build_media_assets.py --service <name>` and open the resulting `_combined.svg` in a browser.
+
+**Worked example — ESPN:**
+
+The original ESPN wordmark SVG (from Wikimedia Commons) had content approximately 554×137 SVG units.
+
+Without padding — at `--logo-height 90`:
+```
+scale = 90 / 137 = 0.657
+rendered width = 554 * 0.657 = 364px   → 91% of the 400px canvas — way too wide
+```
+
+Target: ~175px rendered width (44% of canvas). Working backwards:
+```
+scale_target = 175 / 554 = 0.316
+padded_canvas_height = 90 / 0.316 = 285px  → rounded to 285.4 to preserve aspect ratio
+pad_y = (285.4 - 137) / 2 = 74.2
+padded_canvas_width = 1154   (chosen to give equal horizontal padding: 300px each side)
+pad_x = (1154 - 554) / 2 = 300
+```
+
+Result — `espn_logo.svg`:
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1154 285.4">
+<g transform="translate(300,74.2)">
+  <path d="M181.064..." fill="white"/>
+</g>
+</svg>
+```
+
+With the padded viewBox, at `--logo-height 90`:
+```
+scale = 90 / 285.4 = 0.315
+rendered wordmark = 554 * 0.315 = 174.5px wide  → 44% of canvas ✓
+```
+
+This same technique applies to any wide wordmark. The numbers change; the method is the same.
+
+---
+
 ### Adding a new service — complete checklist
 
 1. **Create gradient SVG** → `device_state_media_images/<service>.svg` (400×225 format above)
 2. **Create logo SVG** → `device_state_media_images/<service>_logo.svg`
+   - Transparent background, white or brand-coloured fill, no background rect.
+   - **If the logo is a wide wordmark** (aspect ratio > ~2.5:1), add viewBox padding before saving — see **Logo sizing and viewBox padding** above for the step-by-step and the ESPN worked example.
 3. **Run the build script** to generate the combined preview and print updated YAML blocks:
    ```bash
    python3 scripts/build_media_assets.py --service <service>
@@ -721,7 +560,7 @@ Rules:
 
 ### Updating an existing logo — complete checklist
 
-1. **Replace** `device_state_media_images/<service>_logo.svg` with the new file
+1. **Replace** `device_state_media_images/<service>_logo.svg` with the new file. Apply viewBox padding if it is a wide wordmark — see **Logo sizing and viewBox padding** above.
 2. **Regenerate** combined and get the updated base64:
    ```bash
    python3 scripts/build_media_assets.py --service <service>

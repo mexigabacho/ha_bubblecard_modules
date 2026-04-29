@@ -168,3 +168,29 @@ modules:
 ## Contributing
 
 Each module lives in its own YAML file. See [CLAUDE.md](CLAUDE.md) for the full module format, CSS DOM reference for every card type (including complete sub-button group structure), editor schema options, and coding conventions.
+
+The [bubble-card-reference/](bubble-card-reference/) directory contains source-verified DOM reference files for every card type (button, media-player, climate, cover, select, separator, calendar, pop-up, horizontal-buttons-stack) plus SVG layout diagrams in `layouts/`. Start there when building a new module.
+
+[bubble-card-reference.md](bubble-card-reference.md) is an older single-file reference for the `button` card type only — still handy for the CSS cheat sheet and grid layout explanation, but superseded by the directory above for everything else.
+
+### Build scripts
+
+Both scripts require only the Python standard library.
+
+**`scripts/generate_layout_diagrams.py`** — regenerates the SVG layout diagrams in `bubble-card-reference/layouts/` from the reference docs. Run this after updating the reference docs to reflect Bubble Card DOM changes, or after editing the script itself.
+
+```bash
+python3 scripts/generate_layout_diagrams.py          # all diagrams
+python3 scripts/generate_layout_diagrams.py --card button  # one card
+python3 scripts/generate_layout_diagrams.py --list   # show card keys
+```
+
+**`scripts/build_media_assets.py`** — regenerates combined preview SVGs and the base64 data URIs embedded in `media_app_background.yaml`. Run after adding or updating a service logo.
+
+```bash
+python3 scripts/build_media_assets.py                # rebuild all + print YAML blocks
+python3 scripts/build_media_assets.py --verify       # check YAML is in sync with files on disk
+python3 scripts/build_media_assets.py --service netflix  # one service only
+```
+
+Full workflow details for both scripts are in [CLAUDE.md](CLAUDE.md).

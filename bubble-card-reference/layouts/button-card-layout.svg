@@ -1,0 +1,105 @@
+<svg width="680" viewBox="0 0 680 860" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Button Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Button card — Normal layout</text>
+<text font-size="12" font-weight="normal" fill="#666" x="260" y="32" text-anchor="start" font-family="sans-serif">(card_layout: normal)</text>
+<rect x="40" y="44" width="380" height="160" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#5f5e5a" x="52" y="60" text-anchor="start" font-family="sans-serif">ha-card</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="52" y="74" text-anchor="start" font-family="sans-serif">.bubble-button-card-container  [.is-on / .is-off / .is-unavailable]</text>
+<rect x="52" y="66" width="356" height="128" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5" opacity="0.25"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="62" y="80" text-anchor="start" font-family="sans-serif">.bubble-background  (absolute fill)</text>
+<rect x="52" y="66" width="356" height="128" rx="8" fill="none" stroke="#a89fd8" stroke-width="1.5"/>
+<rect x="64" y="80" width="72" height="100" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="100" y="96" text-anchor="middle" font-family="sans-serif">grid area i</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="100" y="110" text-anchor="middle" font-family="sans-serif">.bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="100" y="124" text-anchor="middle" font-family="sans-serif">.icon-with-state</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="100" y="138" text-anchor="middle" font-family="sans-serif">.bubble-icon</text>
+<rect x="144" y="80" width="154" height="44" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="221" y="96" text-anchor="middle" font-family="sans-serif">grid area n</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="221" y="110" text-anchor="middle" font-family="sans-serif">.bubble-name-container</text>
+<rect x="144" y="132" width="154" height="48" rx="6" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="221" y="148" text-anchor="middle" font-family="sans-serif">.bubble-state</text>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="221" y="162" text-anchor="middle" font-family="sans-serif">.bubble-name</text>
+<rect x="306" y="80" width="90" height="100" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="351" y="96" text-anchor="middle" font-family="sans-serif">grid area a</text>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="351" y="110" text-anchor="middle" font-family="sans-serif">.bubble-sub-</text>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="351" y="124" text-anchor="middle" font-family="sans-serif">button-container</text>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="351" y="138" text-anchor="middle" font-family="sans-serif">(right side)</text>
+<line x1="64" y1="192" x2="64" y2="208" stroke="#888" stroke-width="0.5"/>
+<line x1="136" y1="192" x2="136" y2="208" stroke="#888" stroke-width="0.5"/>
+<line x1="144" y1="192" x2="144" y2="208" stroke="#888" stroke-width="0.5"/>
+<line x1="298" y1="192" x2="298" y2="208" stroke="#888" stroke-width="0.5"/>
+<line x1="306" y1="192" x2="306" y2="208" stroke="#888" stroke-width="0.5"/>
+<line x1="408" y1="192" x2="408" y2="208" stroke="#888" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="100" y="220" text-anchor="middle" font-family="sans-serif">auto</text>
+<text font-size="10" font-weight="normal" fill="#666" x="100" y="234" text-anchor="middle" font-family="sans-serif">(icon col)</text>
+<text font-size="11" font-weight="normal" fill="#333" x="221" y="220" text-anchor="middle" font-family="sans-serif">1fr</text>
+<text font-size="10" font-weight="normal" fill="#666" x="221" y="234" text-anchor="middle" font-family="sans-serif">(name col)</text>
+<text font-size="11" font-weight="normal" fill="#333" x="357" y="220" text-anchor="middle" font-family="sans-serif">auto</text>
+<text font-size="10" font-weight="normal" fill="#666" x="357" y="234" text-anchor="middle" font-family="sans-serif">(sub-btn col)</text>
+<text font-size="11" font-weight="normal" fill="#444" x="40" y="250" text-anchor="start" font-family="sans-serif">Grid template (normal):  grid-template-areas: "i n a"   ·   grid-template-columns: auto 1fr auto</text>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="452" y="60" text-anchor="start" font-family="sans-serif">Key classes</text>
+<rect x="452" y="68" width="12" height="12" rx="2" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="468" y="78" text-anchor="start" font-family="sans-serif">.bubble-icon-container</text>
+<rect x="452" y="86" width="12" height="12" rx="2" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="468" y="96" text-anchor="start" font-family="sans-serif">.bubble-name-container</text>
+<rect x="452" y="104" width="12" height="12" rx="2" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="468" y="114" text-anchor="start" font-family="sans-serif">.bubble-sub-button-container</text>
+<rect x="452" y="122" width="12" height="12" rx="2" fill="#f3f0fb" stroke="#a89fd8" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="468" y="132" text-anchor="start" font-family="sans-serif">.bubble-button-card (grid root)</text>
+<rect x="452" y="140" width="12" height="12" rx="2" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="468" y="150" text-anchor="start" font-family="sans-serif">.bubble-button-background</text>
+<text font-size="11" font-weight="normal" fill="#333" x="452" y="162" text-anchor="start" font-family="sans-serif">.bubble-icon  (icon element)</text>
+<text font-size="11" font-weight="normal" fill="#333" x="452" y="178" text-anchor="start" font-family="sans-serif">.icon-with-state  (icon bg circle)</text>
+<line x1="40" y1="270" x2="680" y2="270" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="296" text-anchor="start" font-family="sans-serif">Large layout</text>
+<text font-size="12" font-weight="normal" fill="#666" x="140" y="296" text-anchor="start" font-family="sans-serif">(card_layout: large  — default in section view)</text>
+<rect x="40" y="308" width="380" height="200" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#5f5e5a" x="52" y="324" text-anchor="start" font-family="sans-serif">ha-card</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="52" y="338" text-anchor="start" font-family="sans-serif">.bubble-button-card-container.large</text>
+<rect x="52" y="330" width="356" height="168" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5" opacity="0.25"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="62" y="344" text-anchor="start" font-family="sans-serif">.bubble-background  (absolute fill)</text>
+<rect x="52" y="330" width="356" height="168" rx="8" fill="none" stroke="#a89fd8" stroke-width="1.5"/>
+<rect x="64" y="356" width="120" height="130" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="124" y="372" text-anchor="middle" font-family="sans-serif">grid area i</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="124" y="386" text-anchor="middle" font-family="sans-serif">.bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="124" y="400" text-anchor="middle" font-family="sans-serif">(larger, centered)</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="124" y="414" text-anchor="middle" font-family="sans-serif">.icon-with-state</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="124" y="428" text-anchor="middle" font-family="sans-serif">.bubble-icon</text>
+<rect x="192" y="356" width="150" height="60" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="267" y="372" text-anchor="middle" font-family="sans-serif">grid area n</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="267" y="386" text-anchor="middle" font-family="sans-serif">.bubble-name-container</text>
+<rect x="192" y="424" width="150" height="62" rx="6" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="267" y="440" text-anchor="middle" font-family="sans-serif">.bubble-state</text>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="267" y="454" text-anchor="middle" font-family="sans-serif">.bubble-name</text>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="267" y="468" text-anchor="middle" font-family="sans-serif">(or sub-buttons below)</text>
+<rect x="350" y="356" width="50" height="130" rx="6" fill="#eaf3de" stroke="#639922" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#3b6d11" x="375" y="424" text-anchor="middle" font-family="sans-serif">sub-btns</text>
+<line x1="64" y1="498" x2="64" y2="514" stroke="#888" stroke-width="0.5"/>
+<line x1="184" y1="498" x2="184" y2="514" stroke="#888" stroke-width="0.5"/>
+<line x1="192" y1="498" x2="192" y2="514" stroke="#888" stroke-width="0.5"/>
+<line x1="342" y1="498" x2="342" y2="514" stroke="#888" stroke-width="0.5"/>
+<line x1="350" y1="498" x2="350" y2="514" stroke="#888" stroke-width="0.5"/>
+<line x1="408" y1="498" x2="408" y2="514" stroke="#888" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="124" y="526" text-anchor="middle" font-family="sans-serif">auto</text>
+<text font-size="10" font-weight="normal" fill="#666" x="124" y="540" text-anchor="middle" font-family="sans-serif">(icon — bigger)</text>
+<text font-size="11" font-weight="normal" fill="#333" x="267" y="526" text-anchor="middle" font-family="sans-serif">1fr</text>
+<text font-size="10" font-weight="normal" fill="#666" x="267" y="540" text-anchor="middle" font-family="sans-serif">(name + state)</text>
+<text font-size="11" font-weight="normal" fill="#333" x="379" y="526" text-anchor="middle" font-family="sans-serif">auto</text>
+<text font-size="10" font-weight="normal" fill="#666" x="379" y="540" text-anchor="middle" font-family="sans-serif">(sub-buttons)</text>
+<line x1="40" y1="558" x2="680" y2="558" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="582" text-anchor="start" font-family="sans-serif">DOM hierarchy (base structure — button, media-player, climate, cover, select)</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="602" text-anchor="start" font-family="monospace">ha-card</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="620" text-anchor="start" font-family="monospace">  └─ .bubble-button-card-container  (outer size/overflow boundary)</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="638" text-anchor="start" font-family="monospace">      ├─ .bubble-button-background  (abs. positioned color/image fill)</text>
+<text font-size="12" font-weight="normal" fill="#534ab7" x="40" y="656" text-anchor="start" font-family="monospace">      └─ .bubble-button-card  (grid root → areas: i  n  a)</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="674" text-anchor="start" font-family="monospace">          ├─ .bubble-icon-container  [grid-area: i]</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="692" text-anchor="start" font-family="monospace">          │   └─ .icon-with-state  →  .bubble-icon  (&lt;ha-icon&gt;)</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="710" text-anchor="start" font-family="monospace">          ├─ .bubble-name-container  [grid-area: n]</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="728" text-anchor="start" font-family="monospace">          │   ├─ .bubble-name  ·  .bubble-state</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="746" text-anchor="start" font-family="monospace">          └─ .bubble-sub-button-container  [grid-area: a]</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="764" text-anchor="start" font-family="monospace">              └─ .bubble-sub-button ×N  →  icon  ·  name-container</text>
+<text font-size="10" font-weight="normal" fill="#666" x="40" y="790" text-anchor="start" font-family="sans-serif">v3.1+ sub-button groups: .bubble-sub-button-container (top) + .bubble-sub-button-bottom-container (bottom)</text>
+<rect x="40" y="800" width="600" height="20" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#555" x="46" y="813" text-anchor="start" font-family="sans-serif">State classes on .bubble-button-card-container:   .is-on   /   .is-off   /   .is-unavailable   /   .large   /   .with-bottom-buttons</text>
+<text font-size="10" font-weight="normal" fill="#888" x="40" y="840" text-anchor="start" font-family="sans-serif">button_type: slider → also adds .bubble-range-slider inside mainContainer (absolute, full-card overlay for drag-to-set)</text>
+</svg>

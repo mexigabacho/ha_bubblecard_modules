@@ -1,0 +1,87 @@
+<svg width="680" viewBox="0 0 680 880" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Media Player Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Media Player card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="180" y="32" text-anchor="start" font-family="sans-serif">(card_type: media-player)</text>
+<rect x="40" y="44" width="580" height="200" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#5f5e5a" x="52" y="60" text-anchor="start" font-family="sans-serif">ha-card</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="52" y="74" text-anchor="start" font-family="sans-serif">.bubble-media-player-container  [.with-bottom-buttons]  [.large]</text>
+<rect x="52" y="70" width="556" height="164" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5" opacity="0.25"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="62" y="84" text-anchor="start" font-family="sans-serif">.bubble-background  .bubble-cover-background  (filter: blur(50px) opacity:0.5 when cover_background:true)</text>
+<rect x="52" y="70" width="556" height="164" rx="8" fill="none" stroke="#a89fd8" stroke-width="1.5"/>
+<rect x="64" y="84" width="100" height="140" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="100" text-anchor="middle" font-family="sans-serif">.bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="114" text-anchor="middle" font-family="sans-serif">.bubble-entity-picture</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="128" text-anchor="middle" font-family="sans-serif">(art thumbnail)</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="142" text-anchor="middle" font-family="sans-serif">.bubble-mute-button</text>
+<rect x="172" y="84" width="200" height="60" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="272" y="100" text-anchor="middle" font-family="sans-serif">.bubble-name-container</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="272" y="114" text-anchor="middle" font-family="sans-serif">(shown when idle)</text>
+<rect x="172" y="152" width="200" height="60" rx="6" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#7a1fad" x="272" y="172" text-anchor="middle" font-family="sans-serif">.bubble-media-info-container</text>
+<text font-size="10" font-weight="normal" fill="#7a1fad" x="272" y="186" text-anchor="middle" font-family="sans-serif">(title + artist, shown playing)</text>
+<text font-size="10" font-weight="normal" fill="#7a1fad" x="272" y="200" text-anchor="middle" font-family="sans-serif">.bubble-title  +  .bubble-artist</text>
+<rect x="380" y="84" width="220" height="60" rx="6" fill="#eaf3de" stroke="#639922" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#3b6d11" x="490" y="100" text-anchor="middle" font-family="sans-serif">.bubble-buttons-container</text>
+<rect x="386" y="108" width="36" height="28" rx="4" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#7a1fad" x="404" y="124" text-anchor="middle" font-family="sans-serif">power</text>
+<rect x="428" y="108" width="36" height="28" rx="4" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#7a1fad" x="446" y="124" text-anchor="middle" font-family="sans-serif">prev</text>
+<rect x="470" y="108" width="36" height="28" rx="4" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#7a1fad" x="488" y="124" text-anchor="middle" font-family="sans-serif">next</text>
+<rect x="512" y="108" width="36" height="28" rx="4" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#7a1fad" x="530" y="124" text-anchor="middle" font-family="sans-serif">vol</text>
+<rect x="554" y="108" width="36" height="28" rx="4" fill="#f0e6fb" stroke="#a855d8" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#7a1fad" x="572" y="124" text-anchor="middle" font-family="sans-serif">play/pause</text>
+<rect x="380" y="152" width="220" height="44" rx="6" fill="#fffbe6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="490" y="166" text-anchor="middle" font-family="sans-serif">.bubble-volume-slider-wrapper</text>
+<text font-size="9" font-weight="normal" fill="#7a6010" x="490" y="178" text-anchor="middle" font-family="sans-serif">[.is-hidden when closed]</text>
+<text font-size="9" font-weight="normal" fill="#7a6010" x="490" y="190" text-anchor="middle" font-family="sans-serif">mute-btn  ·  slider  ·  close-btn</text>
+<line x1="40" y1="260" x2="638" y2="260" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="286" text-anchor="start" font-family="sans-serif">Cover art crossfade system</text>
+<text font-size="12" font-weight="normal" fill="#666" x="252" y="286" text-anchor="start" font-family="sans-serif">(key for module CSS)</text>
+<rect x="40" y="298" width="290" height="200" rx="8" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="12" font-weight="500" fill="#993c1d" x="185" y="318" text-anchor="middle" font-family="sans-serif">Icon scope</text>
+<text font-size="11" font-weight="normal" fill="#993c1d" x="185" y="334" text-anchor="middle" font-family="sans-serif">.bubble-entity-picture</text>
+<text font-size="10" font-weight="normal" fill="#888" x="185" y="350" text-anchor="middle" font-family="sans-serif">[.bubble-cover-icon-crossfade]</text>
+<rect x="52" y="360" width="120" height="48" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555555" x="112" y="376" text-anchor="middle" font-family="sans-serif">layer A</text>
+<text font-size="9" font-weight="normal" fill="#639922" x="112" y="390" text-anchor="middle" font-family="sans-serif">.is-visible</text>
+<rect x="180" y="360" width="120" height="48" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555555" x="240" y="376" text-anchor="middle" font-family="sans-serif">layer B</text>
+<text font-size="9" font-weight="normal" fill="#888" x="240" y="390" text-anchor="middle" font-family="sans-serif">(inactive)</text>
+<text font-size="10" font-weight="normal" fill="#555" x="52" y="420" text-anchor="start" font-family="sans-serif">2s CSS opacity crossfade between layers</text>
+<text font-size="10" font-weight="normal" fill="#c0392b" x="52" y="435" text-anchor="start" font-family="sans-serif">Do NOT set background-image directly on</text>
+<text font-size="10" font-weight="normal" fill="#c0392b" x="52" y="449" text-anchor="start" font-family="sans-serif">.bubble-entity-picture after first art load</text>
+<text font-size="9" font-weight="normal" fill="#888" x="52" y="463" text-anchor="start" font-family="sans-serif">(the element is mutated to a crossfade host)</text>
+<rect x="340" y="298" width="290" height="200" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="12" font-weight="500" fill="#0f6e56" x="485" y="318" text-anchor="middle" font-family="sans-serif">Background scope</text>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="485" y="334" text-anchor="middle" font-family="sans-serif">.bubble-background.bubble-cover-background</text>
+<text font-size="10" font-weight="normal" fill="#888" x="485" y="350" text-anchor="middle" font-family="sans-serif">[.bubble-cover-background-crossfade]</text>
+<text font-size="10" font-weight="normal" fill="#888" x="485" y="366" text-anchor="middle" font-family="sans-serif">requires cover_background: true</text>
+<rect x="352" y="378" width="120" height="48" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555555" x="412" y="394" text-anchor="middle" font-family="sans-serif">layer A</text>
+<rect x="480" y="378" width="120" height="48" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555555" x="540" y="394" text-anchor="middle" font-family="sans-serif">layer B</text>
+<text font-size="10" font-weight="normal" fill="#555" x="352" y="440" text-anchor="start" font-family="sans-serif">filter: blur(50px) on container →</text>
+<text font-size="10" font-weight="normal" fill="#555" x="352" y="454" text-anchor="start" font-family="sans-serif">blurs entire element incl. layers</text>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="352" y="468" text-anchor="start" font-family="sans-serif">Use ::after pseudo for unblurred overlay</text>
+<text font-size="9" font-weight="normal" fill="#888" x="352" y="482" text-anchor="start" font-family="sans-serif">e.g. logo at z-index:1 on .bubble-media-player</text>
+<line x1="40" y1="510" x2="638" y2="510" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="536" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="556" text-anchor="start" font-family="monospace">ha-card</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="574" text-anchor="start" font-family="monospace">  └─ .bubble-media-player-container</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="592" text-anchor="start" font-family="monospace">      ├─ .bubble-background  .bubble-cover-background  (blurred bg)</text>
+<text font-size="12" font-weight="normal" fill="#534ab7" x="40" y="610" text-anchor="start" font-family="monospace">      └─ .bubble-media-player  .bubble-wrapper</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="628" text-anchor="start" font-family="monospace">          ├─ .bubble-icon-container</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="646" text-anchor="start" font-family="monospace">          │   ├─ .bubble-entity-picture  (art thumbnail + crossfade host)</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="664" text-anchor="start" font-family="monospace">          │   └─ .bubble-mute-button  [.is-hidden]</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="682" text-anchor="start" font-family="monospace">          ├─ .bubble-name-container  (shown when idle)</text>
+<text font-size="12" font-weight="normal" fill="#7a1fad" x="40" y="700" text-anchor="start" font-family="monospace">          ├─ .bubble-media-info-container  (shown when playing)</text>
+<text font-size="12" font-weight="normal" fill="#7a1fad" x="40" y="718" text-anchor="start" font-family="monospace">          │   ├─ .bubble-title  ·  .bubble-artist</text>
+<text font-size="12" font-weight="normal" fill="#3b6d11" x="40" y="736" text-anchor="start" font-family="monospace">          ├─ .bubble-buttons-container  (.bubble-button-container alias)</text>
+<text font-size="12" font-weight="normal" fill="#3b6d11" x="40" y="754" text-anchor="start" font-family="monospace">          │   ├─ .bubble-power-button  .bubble-previous-button  .bubble-next-button</text>
+<text font-size="12" font-weight="normal" fill="#3b6d11" x="40" y="772" text-anchor="start" font-family="monospace">          │   └─ .bubble-volume-button  .bubble-play-pause-button</text>
+<text font-size="12" font-weight="normal" fill="#c8a020" x="40" y="790" text-anchor="start" font-family="monospace">          └─ .bubble-volume-slider-wrapper  [.is-hidden when closed]  ← dynamic</text>
+<rect x="40" y="818" width="600" height="20" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#555" x="46" y="831" text-anchor="start" font-family="sans-serif">State: playing→show art  |  idle→2s delay→fade  |  off/unavailable/standby→clear immediately</text>
+</svg>

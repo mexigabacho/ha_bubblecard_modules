@@ -1,15 +1,18 @@
 room_card_plus_customstyle:
   name: Room Card Plus Styling
-  version: '1.0'
+  version: '1.1'
   creator: Christopher Young
   supported:
     - button
-  description: Add custom styling to Room Card Plus cards.
+  description: |
+    Adds bold name styling and a dynamic colour-fill background to button cards. The fill tracks the light entity's RGB colour and brightness level.
+
+    Configurable options: fill height, fill intensity, brightness percentage overlay.
   code: |-
     .bubble-name {
       font-weight: bold;
-      text-shadow: 
-        -1px -1px 0 #000,  
+      text-shadow:
+        -1px -1px 0 #000,
          1px -1px 0 #000,
         -1px  1px 0 #000,
          1px  1px 0 #000;
@@ -21,28 +24,28 @@ room_card_plus_customstyle:
         --brightness-raw: ${hass.states[entity]?.attributes?.brightness || 0};
         --has-rgb: ${hass.states[entity]?.attributes?.rgb_color ? 1 : 0};
         --fill-range: ${hass.states[entity]?.attributes?.rgb_color
-          ? `calc((${hass.states[entity]?.attributes?.brightness || 0} / 255) * 90)`
-          : state === 'on' ? '90' : '0'};
+          ? `calc((${hass.states[entity]?.attributes?.brightness || 0} / 255) * ${this.config.room_card_plus_customstyle?.max_fill ?? 90})`
+          : state === 'on' ? `${this.config.room_card_plus_customstyle?.max_fill ?? 90}` : '0'};
         --glow-band: 0;
         --fill-offset: 0;
         --status-text-size: 20px;
-        background: ${state === 'on' 
+        background: ${state === 'on'
           ? `linear-gradient(
-              0deg, 
-              rgba(var(--fill-rgb), 0.2) calc(var(--fill-offset) * 1%), 
-              rgba(var(--fill-rgb), 0.4) calc(var(--fill-range) * 1% - var(--glow-band) * 1%), 
-              rgba(var(--fill-rgb), 0.4) calc(var(--fill-range) * 1% - var(--glow-band) * 1%), 
-              rgba(var(--glow-color), 0.4) calc(var(--fill-range) * 1%), 
+              0deg,
+              rgba(var(--fill-rgb), ${(this.config.room_card_plus_customstyle?.fill_opacity ?? 0.4) / 2}) calc(var(--fill-offset) * 1%),
+              rgba(var(--fill-rgb), ${this.config.room_card_plus_customstyle?.fill_opacity ?? 0.4}) calc(var(--fill-range) * 1% - var(--glow-band) * 1%),
+              rgba(var(--fill-rgb), ${this.config.room_card_plus_customstyle?.fill_opacity ?? 0.4}) calc(var(--fill-range) * 1% - var(--glow-band) * 1%),
+              rgba(var(--glow-color), ${this.config.room_card_plus_customstyle?.fill_opacity ?? 0.4}) calc(var(--fill-range) * 1%),
               transparent calc(var(--fill-range) * 1%)
-            )` 
-          : '' 
+            )`
+          : ''
         } !important;
         transition: background 0.4s ease-out !important;
       }
 
     .bubble-button-background::after {
-        content: '${hass.states[entity]?.attributes?.brightness 
-          ? Math.round(hass.states[entity].attributes.brightness / 255 * 100) + "%" 
+        content: '${(this.config.room_card_plus_customstyle?.show_brightness_text ?? true) && hass.states[entity]?.attributes?.brightness
+          ? Math.round(hass.states[entity].attributes.brightness / 255 * 100) + "%"
           : ""}';
         position: absolute;
         top: 38%;
@@ -50,6 +53,33 @@ room_card_plus_customstyle:
         transform: translate(-50%, -50%);
         font-size: var(--status-text-size);
         font-weight: bold;
-        color: rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, ${this.config.room_card_plus_customstyle?.brightness_text_opacity ?? 0.15});
         pointer-events: none;
       }
+  editor:
+    - type: grid
+      column_min_width: 150px
+      schema:
+        - name: max_fill
+          label: Max fill height
+          default: 90
+          selector:
+            number: { min: 20, max: 100, step: 1, mode: slider, unit_of_measurement: "%" }
+        - name: fill_opacity
+          label: Fill intensity
+          default: 0.4
+          selector:
+            number: { min: 0.05, max: 1.0, step: 0.05, mode: slider }
+    - type: grid
+      column_min_width: 150px
+      schema:
+        - name: show_brightness_text
+          label: Show brightness %
+          default: true
+          selector:
+            boolean: {}
+        - name: brightness_text_opacity
+          label: Brightness text opacity
+          default: 0.15
+          selector:
+            number: { min: 0.05, max: 1.0, step: 0.05, mode: slider }

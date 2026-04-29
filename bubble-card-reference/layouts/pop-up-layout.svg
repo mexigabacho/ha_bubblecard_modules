@@ -1,0 +1,49 @@
+<svg width="680" viewBox="0 0 680 780" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Pop-up Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Pop-up card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="132" y="32" text-anchor="start" font-family="sans-serif">(card_type: pop-up — unique structure; modifies #root of vertical-stack)</text>
+<rect x="40" y="48" width="580" height="70" rx="8" fill="#f8f0e8" stroke="#c89060" stroke-width="1"/>
+<text font-size="11" font-weight="500" fill="#7a5020" x="50" y="64" text-anchor="start" font-family="sans-serif">document.body  (global singleton)</text>
+<rect x="50" y="72" width="560" height="38" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#7a5020" x="60" y="86" text-anchor="start" font-family="sans-serif">div.bubble-backdrop-host  (shadow DOM host) → .bubble-backdrop  .backdrop</text>
+<text font-size="10" font-weight="normal" fill="#888" x="60" y="100" text-anchor="start" font-family="sans-serif">[.is-hidden | .is-visible]  [.has-blur]  — style via CSS vars, NOT direct selectors</text>
+<rect x="40" y="126" width="580" height="16" rx="3" fill="#fff8e6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="50" y="137" text-anchor="start" font-family="sans-serif">Backdrop is shadow DOM — use --bubble-backdrop-background-color and --bubble-backdrop-filter CSS variables</text>
+<rect x="40" y="152" width="580" height="300" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="12" font-weight="500" fill="#534ab7" x="50" y="170" text-anchor="start" font-family="sans-serif">#root  →  .bubble-pop-up  .pop-up</text>
+<text font-size="10" font-weight="normal" fill="#888" x="50" y="184" text-anchor="start" font-family="sans-serif">[.is-popup-closed | .is-popup-opened | .is-opening | .is-closing]  [.no-header]  [.large]</text>
+<rect x="52" y="192" width="556" height="24" rx="4" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="330" y="208" text-anchor="middle" font-family="sans-serif">.bubble-pop-up-background  (the visible panel surface; rounded top corners)</text>
+<rect x="52" y="224" width="556" height="90" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="330" y="240" text-anchor="middle" font-family="sans-serif">.bubble-header-container  [.is-unavailable]</text>
+<rect x="60" y="252" width="280" height="52" rx="4" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="200" y="268" text-anchor="middle" font-family="sans-serif">.bubble-header</text>
+<text font-size="9" font-weight="normal" fill="#888" x="200" y="282" text-anchor="middle" font-family="sans-serif">(entity button renders here as</text>
+<text font-size="9" font-weight="normal" fill="#888" x="200" y="294" text-anchor="middle" font-family="sans-serif">full bubble-button DOM)</text>
+<rect x="348" y="252" width="252" height="52" rx="4" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="474" y="268" text-anchor="middle" font-family="sans-serif">.bubble-close-button  .close-pop-up</text>
+<text font-size="9" font-weight="normal" fill="#888" x="474" y="282" text-anchor="middle" font-family="sans-serif">ha-icon.bubble-close-icon  +  ha-ripple</text>
+<rect x="52" y="322" width="556" height="120" rx="6" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="330" y="338" text-anchor="middle" font-family="sans-serif">.bubble-pop-up-container  (scrollable — child cards live here)</text>
+<text font-size="10" font-weight="normal" fill="#888" x="330" y="352" text-anchor="middle" font-family="sans-serif">gap: var(--bubble-pop-up-gap, 14px)</text>
+<rect x="60" y="360" width="170" height="70" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#888" x="145" y="400" text-anchor="middle" font-family="sans-serif">[child card 1]</text>
+<rect x="240" y="360" width="170" height="70" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#888" x="325" y="400" text-anchor="middle" font-family="sans-serif">[child card 2]</text>
+<rect x="420" y="360" width="170" height="70" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#888" x="505" y="400" text-anchor="middle" font-family="sans-serif">[child card 3]</text>
+<line x1="40" y1="470" x2="638" y2="470" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="496" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#7a5020" x="40" y="516" text-anchor="start" font-family="monospace">document.body → div.bubble-backdrop-host (shadow DOM host)</text>
+<text font-size="12" font-weight="normal" fill="#7a5020" x="40" y="534" text-anchor="start" font-family="monospace">   └─ (shadow root) → .bubble-backdrop .backdrop [.is-hidden/.is-visible] [.has-blur]</text>
+<text font-size="12" font-weight="normal" fill="#888" x="40" y="552" text-anchor="start" font-family="monospace"></text>
+<text font-size="12" font-weight="normal" fill="#534ab7" x="40" y="570" text-anchor="start" font-family="monospace">#root → .bubble-pop-up  .pop-up  [state classes]  [.no-header]  [.large]</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="588" text-anchor="start" font-family="monospace">    ├─ .bubble-pop-up-background  (panel surface)</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="606" text-anchor="start" font-family="monospace">    ├─ .bubble-header-container  [.is-unavailable]</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="624" text-anchor="start" font-family="monospace">    │   ├─ .bubble-header  →  .bubble-button-container  (full button card DOM)</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="642" text-anchor="start" font-family="monospace">    │   └─ .bubble-close-button  .close-pop-up  →  ha-icon.bubble-close-icon</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="660" text-anchor="start" font-family="monospace">    └─ .bubble-pop-up-container  (scrollable; child cards rendered by HA)</text>
+<rect x="40" y="690" width="580" height="40" rx="6" fill="#fff5f5" stroke="#f87171" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#c0392b" x="50" y="706" text-anchor="start" font-family="sans-serif">Pop-up cards do NOT support module sub-buttons.</text>
+<text font-size="11" font-weight="normal" fill="#c0392b" x="50" y="720" text-anchor="start" font-family="sans-serif">The header entity button is a full bubble-button — its inner DOM can be targeted by button-scoped selectors.</text>
+</svg>

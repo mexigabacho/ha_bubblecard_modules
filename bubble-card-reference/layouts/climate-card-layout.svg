@@ -1,0 +1,62 @@
+<svg width="680" viewBox="0 0 680 760" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Climate Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Climate card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="140" y="32" text-anchor="start" font-family="sans-serif">(card_type: climate)</text>
+<rect x="40" y="44" width="580" height="180" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#5f5e5a" x="52" y="60" text-anchor="start" font-family="sans-serif">ha-card</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="52" y="74" text-anchor="start" font-family="sans-serif">.bubble-climate-container  [.is-on / .is-off]  [.large]</text>
+<rect x="52" y="70" width="556" height="144" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5" opacity="0.25"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="62" y="84" text-anchor="start" font-family="sans-serif">.bubble-background  .bubble-color-background  (bg-color driven by JS per HVAC mode)</text>
+<rect x="52" y="70" width="556" height="144" rx="8" fill="none" stroke="#a89fd8" stroke-width="1.5"/>
+<rect x="64" y="84" width="100" height="120" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="100" text-anchor="middle" font-family="sans-serif">.bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="114" text-anchor="middle" font-family="sans-serif">.bubble-icon</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="128" text-anchor="middle" font-family="sans-serif">(color = HVAC mode)</text>
+<rect x="172" y="84" width="160" height="60" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="252" y="100" text-anchor="middle" font-family="sans-serif">.bubble-name-container</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="252" y="114" text-anchor="middle" font-family="sans-serif">.bubble-name  /  .bubble-state</text>
+<rect x="340" y="84" width="256" height="120" rx="6" fill="#fde9d8" stroke="#e07030" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#9a4510" x="468" y="100" text-anchor="middle" font-family="sans-serif">.bubble-buttons-container</text>
+<rect x="348" y="108" width="110" height="44" rx="4" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#993c1d" x="403" y="122" text-anchor="middle" font-family="sans-serif">.bubble-temperature-container</text>
+<text font-size="9" font-weight="normal" fill="#993c1d" x="403" y="134" text-anchor="middle" font-family="sans-serif">minus · display · plus</text>
+<rect x="464" y="108" width="120" height="44" rx="4" fill="#fffbe6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#c8a020" x="524" y="122" text-anchor="middle" font-family="sans-serif">.bubble-target-temp-container</text>
+<text font-size="9" font-weight="normal" fill="#c8a020" x="524" y="134" text-anchor="middle" font-family="sans-serif">(heat_cool mode only)</text>
+<rect x="348" y="160" width="110" height="32" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#c0392b" x="403" y="174" text-anchor="middle" font-family="sans-serif">low-temp-container</text>
+<text font-size="9" font-weight="normal" fill="#c0392b" x="403" y="186" text-anchor="middle" font-family="sans-serif">(heat color)</text>
+<rect x="464" y="160" width="120" height="32" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#1a6e9a" x="524" y="174" text-anchor="middle" font-family="sans-serif">high-temp-container</text>
+<text font-size="9" font-weight="normal" fill="#1a6e9a" x="524" y="186" text-anchor="middle" font-family="sans-serif">(cool color)</text>
+<line x1="40" y1="242" x2="638" y2="242" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="268" text-anchor="start" font-family="sans-serif">HVAC mode → background color</text>
+<rect x="40" y="280" width="12" height="12" rx="2" fill="#e07030" stroke="#e07030" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="56" y="290" text-anchor="start" font-family="sans-serif">heat  →  var(--state-climate-heat-color)</text>
+<rect x="340" y="280" width="12" height="12" rx="2" fill="#1a6e9a" stroke="#1a6e9a" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="356" y="290" text-anchor="start" font-family="sans-serif">cool  →  var(--state-climate-cool-color)</text>
+<rect x="40" y="306" width="12" height="12" rx="2" fill="#7a1fad" stroke="#7a1fad" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="56" y="316" text-anchor="start" font-family="sans-serif">heat_cool / auto  →  var(--state-climate-auto-color)</text>
+<rect x="340" y="306" width="12" height="12" rx="2" fill="#ba7517" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="356" y="316" text-anchor="start" font-family="sans-serif">dry  →  var(--state-climate-dry-color)</text>
+<rect x="40" y="332" width="12" height="12" rx="2" fill="#3b6d11" stroke="#3b6d11" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="56" y="342" text-anchor="start" font-family="sans-serif">fan_only  →  var(--state-climate-fan_only-color)</text>
+<rect x="340" y="332" width="12" height="12" rx="2" fill="#888888" stroke="#888888" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#333" x="356" y="342" text-anchor="start" font-family="sans-serif">off  →  transparent / none</text>
+<line x1="40" y1="370" x2="638" y2="370" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="396" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="416" text-anchor="start" font-family="monospace">ha-card</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="434" text-anchor="start" font-family="monospace">  └─ .bubble-climate-container</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="452" text-anchor="start" font-family="monospace">      ├─ .bubble-background  .bubble-color-background  (HVAC-mode bg color)</text>
+<text font-size="12" font-weight="normal" fill="#534ab7" x="40" y="470" text-anchor="start" font-family="monospace">      └─ .bubble-climate  .bubble-wrapper</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="488" text-anchor="start" font-family="monospace">          ├─ .bubble-icon-container → .bubble-icon  (color = HVAC mode)</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="506" text-anchor="start" font-family="monospace">          ├─ .bubble-name-container → .bubble-name  ·  .bubble-state</text>
+<text font-size="12" font-weight="normal" fill="#9a4510" x="40" y="524" text-anchor="start" font-family="monospace">          └─ .bubble-buttons-container</text>
+<text font-size="12" font-weight="normal" fill="#9a4510" x="40" y="542" text-anchor="start" font-family="monospace">              ├─ .bubble-temperature-container  [.hidden when hide_temperature]</text>
+<text font-size="12" font-weight="normal" fill="#9a4510" x="40" y="560" text-anchor="start" font-family="monospace">              │   └─ .bubble-climate-minus-button  ·  .bubble-temperature-display  ·  .bubble-climate-plus-button</text>
+<text font-size="12" font-weight="normal" fill="#c8a020" x="40" y="578" text-anchor="start" font-family="monospace">              └─ .bubble-target-temperature-container  [only in heat_cool mode]</text>
+<text font-size="12" font-weight="normal" fill="#c8a020" x="40" y="596" text-anchor="start" font-family="monospace">                  ├─ .bubble-low-temp-container  (heat color)</text>
+<text font-size="12" font-weight="normal" fill="#c8a020" x="40" y="614" text-anchor="start" font-family="monospace">                  └─ .bubble-high-temp-container  (cool color)</text>
+<rect x="40" y="640" width="600" height="18" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#555" x="46" y="651" text-anchor="start" font-family="sans-serif">tap-warning animation (shake) fires on mainContainer when user taps +/- at temperature limit</text>
+</svg>

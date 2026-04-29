@@ -1,0 +1,38 @@
+<svg width="680" viewBox="0 0 680 540" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Select Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Select card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="132" y="32" text-anchor="start" font-family="sans-serif">(card_type: select — identical to button DOM plus dropdown)</text>
+<rect x="40" y="44" width="580" height="160" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#5f5e5a" x="52" y="60" text-anchor="start" font-family="sans-serif">ha-card</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="52" y="74" text-anchor="start" font-family="sans-serif">.bubble-select-container  .bubble-select-card-container  [overflow:inherit ← dropdown needs this]</text>
+<rect x="52" y="70" width="556" height="124" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5" opacity="0.25"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="62" y="84" text-anchor="start" font-family="sans-serif">.bubble-background  (cursor:pointer; single tap forced to none — dropdown handles open)</text>
+<rect x="52" y="70" width="556" height="124" rx="8" fill="none" stroke="#a89fd8" stroke-width="1.5"/>
+<rect x="64" y="84" width="100" height="100" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="100" text-anchor="middle" font-family="sans-serif">.bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="114" y="114" text-anchor="middle" font-family="sans-serif">.bubble-icon</text>
+<rect x="172" y="84" width="300" height="60" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="322" y="100" text-anchor="middle" font-family="sans-serif">.bubble-name-container</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="322" y="114" text-anchor="middle" font-family="sans-serif">.bubble-name  +  .bubble-state</text>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="322" y="128" text-anchor="middle" font-family="sans-serif">(current option shown in state)</text>
+<rect x="480" y="84" width="120" height="100" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="540" y="100" text-anchor="middle" font-family="sans-serif">.bubble-buttons-container</text>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="540" y="114" text-anchor="middle" font-family="sans-serif">(dropdown arrow</text>
+<text font-size="10" font-weight="normal" fill="#854f0b" x="540" y="128" text-anchor="middle" font-family="sans-serif">appended here)</text>
+<rect x="52" y="152" width="556" height="42" rx="4" fill="#fffbe6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="330" y="166" text-anchor="middle" font-family="sans-serif">.bubble-dropdown  (rendered as absolute overlay by dropdown component when open)</text>
+<text font-size="10" font-weight="normal" fill="#888" x="330" y="180" text-anchor="middle" font-family="sans-serif">NOT a child of the card DOM — escapes via overflow:inherit on .bubble-select-container</text>
+<line x1="40" y1="222" x2="638" y2="222" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="248" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="268" text-anchor="start" font-family="monospace">ha-card</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="286" text-anchor="start" font-family="monospace">  └─ .bubble-select-container  .bubble-select-card-container</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="304" text-anchor="start" font-family="monospace">      ├─ .bubble-background  (cursor:pointer; tap_action forced to none)</text>
+<text font-size="12" font-weight="normal" fill="#534ab7" x="40" y="322" text-anchor="start" font-family="monospace">      └─ .bubble-select  .bubble-wrapper</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="340" text-anchor="start" font-family="monospace">          ├─ .bubble-icon-container → .bubble-icon</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="358" text-anchor="start" font-family="monospace">          ├─ .bubble-name-container → .bubble-name  ·  .bubble-state  (selected option)</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="376" text-anchor="start" font-family="monospace">          └─ .bubble-buttons-container  (dropdown arrow appended here)</text>
+<text font-size="12" font-weight="normal" fill="#c8a020" x="40" y="394" text-anchor="start" font-family="monospace">   [dropdown overlay appended outside card via absolute positioning when open]</text>
+<rect x="40" y="440" width="580" height="36" rx="6" fill="#fff8e6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#7a6010" x="50" y="454" text-anchor="start" font-family="sans-serif">Key difference from button: overflow:inherit on container (not overflow:hidden).</text>
+<text font-size="11" font-weight="normal" fill="#7a6010" x="50" y="468" text-anchor="start" font-family="sans-serif">This allows the dropdown option list to escape the card boundary and render above other cards.</text>
+</svg>

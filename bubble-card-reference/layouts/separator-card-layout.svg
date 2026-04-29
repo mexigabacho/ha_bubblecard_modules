@@ -1,0 +1,30 @@
+<svg width="680" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Separator Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Separator card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="156" y="32" text-anchor="start" font-family="sans-serif">(card_type: separator — does NOT use base elements)</text>
+<rect x="40" y="44" width="580" height="70" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555" x="52" y="62" text-anchor="start" font-family="sans-serif">.bubble-separator-container  (background:none; overflow:visible; height:40px)</text>
+<rect x="52" y="70" width="52" height="36" rx="6" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#993c1d" x="78" y="84" text-anchor="middle" font-family="sans-serif">ha-icon</text>
+<text font-size="9" font-weight="normal" fill="#993c1d" x="78" y="97" text-anchor="middle" font-family="sans-serif">.bubble-icon</text>
+<rect x="112" y="70" width="100" height="36" rx="6" fill="#e6f1fb" stroke="#378add" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="162" y="84" text-anchor="middle" font-family="sans-serif">h4.bubble-name</text>
+<rect x="220" y="78" width="380" height="18" rx="4" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#0f6e56" x="410" y="90" text-anchor="middle" font-family="sans-serif">.bubble-line  (flex-grow:1; height:6px; opacity:0.6)</text>
+<line x1="40" y1="134" x2="638" y2="134" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<rect x="40" y="144" width="580" height="60" rx="6" fill="#fff8e6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="12" font-weight="500" fill="#7a6010" x="50" y="162" text-anchor="start" font-family="sans-serif">Key differences from all other card types:</text>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="50" y="178" text-anchor="start" font-family="sans-serif">• ha-icon.bubble-icon is a direct child of mainContainer — NOT inside .bubble-icon-container</text>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="50" y="192" text-anchor="start" font-family="sans-serif">• No .bubble-background  ·  No .bubble-content-container  ·  No .bubble-buttons-container</text>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="50" y="206" text-anchor="start" font-family="sans-serif">• Name element is h4, not div  ·  Card background is none  ·  overflow: visible (not hidden)</text>
+<text font-size="10" font-weight="normal" fill="#7a6010" x="50" y="220" text-anchor="start" font-family="sans-serif">• Sub-button container has position:sticky; top:0  (unique — sticks to scroll container)</text>
+<line x1="40" y1="224" x2="638" y2="224" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="250" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="270" text-anchor="start" font-family="monospace">ha-card</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="288" text-anchor="start" font-family="monospace">  └─ .bubble-separator-container  .bubble-separator  (background:none; overflow:visible)</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="306" text-anchor="start" font-family="monospace">      ├─ ha-icon.bubble-icon  ← direct child (no .bubble-icon-container wrapper)</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="324" text-anchor="start" font-family="monospace">      ├─ h4.bubble-name  (.bubble-name:empty → display:none)</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="342" text-anchor="start" font-family="monospace">      ├─ .bubble-line  (flex-grow:1; the horizontal rule)</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="360" text-anchor="start" font-family="monospace">      └─ .bubble-sub-button-container  (position:sticky; top:0)</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="378" text-anchor="start" font-family="monospace">          └─ [sub-button groups / .bubble-sub-button ×N]</text>
+</svg>

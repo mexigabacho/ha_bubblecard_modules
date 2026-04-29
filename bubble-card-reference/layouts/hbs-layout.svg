@@ -1,0 +1,74 @@
+<svg width="680" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Horizontal Buttons Stack Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Horizontal Buttons Stack</text>
+<text font-size="12" font-weight="normal" fill="#666" x="236" y="32" text-anchor="start" font-family="sans-serif">(card_type: horizontal-buttons-stack)</text>
+<text font-size="11" font-weight="normal" fill="#666" x="40" y="50" text-anchor="start" font-family="sans-serif">Fixed-position navigation bar. No sub-button support.</text>
+<rect x="40" y="62" width="580" height="30" rx="8" fill="#f1f5e8" stroke="#9ab450" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#3b6d11" x="50" y="80" text-anchor="start" font-family="sans-serif">ha-card  .horizontal-buttons-stack-card  [.has-gradient]</text>
+<text font-size="9" font-weight="normal" fill="#888" x="460" y="80" text-anchor="start" font-family="sans-serif">position:fixed; bottom:16px; z-index:6</text>
+<rect x="40" y="96" width="580" height="12" rx="3" fill="#e8fce8" stroke="#639922" stroke-width="0.5" opacity="0.5"/>
+<text font-size="9" font-weight="normal" fill="#3b6d11" x="330" y="105" text-anchor="middle" font-family="sans-serif">::before — gradient fade above bar (when .has-gradient)</text>
+<rect x="40" y="112" width="580" height="18" rx="4" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#555" x="330" y="125" text-anchor="middle" font-family="sans-serif">.card-content  (HA scroll wrapper)  [.is-scrolled]  [.is-maxed-scroll]  — mask-image gradient fades edges</text>
+<rect x="40" y="134" width="580" height="130" rx="6" fill="#e6f1fb" stroke="#85b7eb" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#185fa5" x="50" y="150" text-anchor="start" font-family="sans-serif">.bubble-horizontal-buttons-stack-card-container  .horizontal-buttons-stack-container</text>
+<rect x="48" y="158" width="130" height="96" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="113" y="172" text-anchor="middle" font-family="sans-serif">.bubble-button  .bubble-button-1</text>
+<text font-size="9" font-weight="normal" fill="#888" x="113" y="184" text-anchor="middle" font-family="sans-serif">.button  .&lt;link-hash&gt;</text>
+<text font-size="8" font-weight="normal" fill="#639922" x="113" y="196" text-anchor="middle" font-family="sans-serif">[.highlight when URL matches]</text>
+<text font-size="8" font-weight="normal" fill="#888" x="113" y="208" text-anchor="middle" font-family="sans-serif">position:absolute</text>
+<text font-size="8" font-weight="normal" fill="#888" x="113" y="220" text-anchor="middle" font-family="sans-serif">transform:translateX(10px)</text>
+<rect x="52" y="226" width="56" height="20" rx="3" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#993c1d" x="80" y="239" text-anchor="middle" font-family="sans-serif">ha-icon.bubble-icon</text>
+<rect x="114" y="226" width="56" height="20" rx="3" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#0f6e56" x="142" y="239" text-anchor="middle" font-family="sans-serif">.bubble-background</text>
+<rect x="190" y="158" width="130" height="96" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="255" y="172" text-anchor="middle" font-family="sans-serif">.bubble-button  .bubble-button-2</text>
+<text font-size="9" font-weight="normal" fill="#888" x="255" y="184" text-anchor="middle" font-family="sans-serif">.button  .&lt;link-hash&gt;</text>
+<text font-size="8" font-weight="normal" fill="#639922" x="255" y="196" text-anchor="middle" font-family="sans-serif">[.highlight when URL matches]</text>
+<text font-size="8" font-weight="normal" fill="#888" x="255" y="208" text-anchor="middle" font-family="sans-serif">position:absolute</text>
+<text font-size="8" font-weight="normal" fill="#888" x="255" y="220" text-anchor="middle" font-family="sans-serif">transform:translateX(152px)</text>
+<rect x="194" y="226" width="56" height="20" rx="3" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#993c1d" x="222" y="239" text-anchor="middle" font-family="sans-serif">ha-icon.bubble-icon</text>
+<rect x="256" y="226" width="56" height="20" rx="3" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#0f6e56" x="284" y="239" text-anchor="middle" font-family="sans-serif">.bubble-background</text>
+<rect x="332" y="158" width="130" height="96" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="397" y="172" text-anchor="middle" font-family="sans-serif">.bubble-button  .bubble-button-3</text>
+<text font-size="9" font-weight="normal" fill="#888" x="397" y="184" text-anchor="middle" font-family="sans-serif">.button  .&lt;link-hash&gt;</text>
+<text font-size="8" font-weight="normal" fill="#639922" x="397" y="196" text-anchor="middle" font-family="sans-serif">[.highlight when URL matches]</text>
+<text font-size="8" font-weight="normal" fill="#888" x="397" y="208" text-anchor="middle" font-family="sans-serif">position:absolute</text>
+<text font-size="8" font-weight="normal" fill="#888" x="397" y="220" text-anchor="middle" font-family="sans-serif">transform:translateX(294px)</text>
+<rect x="336" y="226" width="56" height="20" rx="3" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#993c1d" x="364" y="239" text-anchor="middle" font-family="sans-serif">ha-icon.bubble-icon</text>
+<rect x="398" y="226" width="56" height="20" rx="3" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#0f6e56" x="426" y="239" text-anchor="middle" font-family="sans-serif">.bubble-background</text>
+<rect x="474" y="158" width="130" height="96" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="539" y="172" text-anchor="middle" font-family="sans-serif">.bubble-button  .bubble-button-4</text>
+<text font-size="9" font-weight="normal" fill="#888" x="539" y="184" text-anchor="middle" font-family="sans-serif">.button  .&lt;link-hash&gt;</text>
+<text font-size="8" font-weight="normal" fill="#639922" x="539" y="196" text-anchor="middle" font-family="sans-serif">[.highlight when URL matches]</text>
+<text font-size="8" font-weight="normal" fill="#888" x="539" y="208" text-anchor="middle" font-family="sans-serif">position:absolute</text>
+<text font-size="8" font-weight="normal" fill="#888" x="539" y="220" text-anchor="middle" font-family="sans-serif">transform:translateX(436px)</text>
+<rect x="478" y="226" width="56" height="20" rx="3" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#993c1d" x="506" y="239" text-anchor="middle" font-family="sans-serif">ha-icon.bubble-icon</text>
+<rect x="540" y="226" width="56" height="20" rx="3" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="0.5"/>
+<text font-size="7" font-weight="normal" fill="#0f6e56" x="568" y="239" text-anchor="middle" font-family="sans-serif">.bubble-background</text>
+<line x1="40" y1="284" x2="638" y2="284" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<rect x="40" y="294" width="580" height="50" rx="6" fill="#fff8e6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#7a6010" x="50" y="312" text-anchor="start" font-family="sans-serif">Buttons use absolute positioning + transform:translateX, NOT flexbox/grid.</text>
+<text font-size="11" font-weight="normal" fill="#7a6010" x="50" y="328" text-anchor="start" font-family="sans-serif">placeButtons() measures offsetWidth, accumulates positions, caches widths in localStorage per link hash.</text>
+<line x1="40" y1="360" x2="638" y2="360" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="386" text-anchor="start" font-family="sans-serif">DOM hierarchy</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="406" text-anchor="start" font-family="monospace">ha-card  .horizontal-buttons-stack-card  [.has-gradient]</text>
+<text font-size="12" font-weight="normal" fill="#222" x="40" y="424" text-anchor="start" font-family="monospace">  └─ .card-content  (HA scroll wrapper — .is-scrolled  .is-maxed-scroll)</text>
+<text font-size="12" font-weight="normal" fill="#3b6d11" x="40" y="442" text-anchor="start" font-family="monospace">      └─ .bubble-horizontal-buttons-stack-card-container</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="460" text-anchor="start" font-family="monospace">          ├─ .bubble-button  .bubble-button-1  .button  .&lt;link-hash&gt;  [.highlight]</text>
+<text font-size="12" font-weight="normal" fill="#993c1d" x="40" y="478" text-anchor="start" font-family="monospace">          │   ├─ ha-icon.bubble-icon  .icon</text>
+<text font-size="12" font-weight="normal" fill="#185fa5" x="40" y="496" text-anchor="start" font-family="monospace">          │   ├─ .bubble-name  .name</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="514" text-anchor="start" font-family="monospace">         │   ├─ .bubble-background-color  .background-color  (border + light tint)</text>
+<text font-size="12" font-weight="normal" fill="#0f6e56" x="40" y="532" text-anchor="start" font-family="monospace">         │   └─ .bubble-background  .background  (fill)</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="550" text-anchor="start" font-family="monospace">          ├─ .bubble-button  .bubble-button-2  ...</text>
+<text font-size="12" font-weight="normal" fill="#854f0b" x="40" y="568" text-anchor="start" font-family="monospace">          └─ .bubble-button  .bubble-button-N  ...</text>
+<rect x="40" y="594" width="580" height="36" rx="6" fill="#fff5f5" stroke="#f87171" stroke-width="0.5"/>
+<text font-size="11" font-weight="normal" fill="#c0392b" x="50" y="610" text-anchor="start" font-family="sans-serif">sub_button config is NOT supported on horizontal-buttons-stack cards.</text>
+<text font-size="11" font-weight="normal" fill="#c0392b" x="50" y="624" text-anchor="start" font-family="sans-serif">Target specific buttons by .bubble-button-1 (index) or .&lt;link-hash&gt; (e.g. .living-room from #living-room).</text>
+</svg>

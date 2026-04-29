@@ -1,0 +1,71 @@
+<svg width="680" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff;font-family:sans-serif;">
+<!-- Calendar Card Layout -->
+<text font-size="15" font-weight="500" fill="#1a1a1a" x="40" y="32" text-anchor="start" font-family="sans-serif">Calendar card</text>
+<text font-size="12" font-weight="normal" fill="#666" x="148" y="32" text-anchor="start" font-family="sans-serif">(card_type: calendar — withBaseElements:false)</text>
+<rect x="40" y="44" width="580" height="220" rx="12" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555" x="52" y="62" text-anchor="start" font-family="sans-serif">.bubble-calendar-container  (height = var(--bubble-calendar-height, rows×56px))</text>
+<rect x="52" y="70" width="490" height="184" rx="6" fill="#f5f0fb" stroke="#9070c0" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="297" y="86" text-anchor="middle" font-family="sans-serif">.bubble-calendar-content  [.can-scroll-top]  [.can-scroll-bottom]  (overflow:scroll)</text>
+<rect x="60" y="96" width="470" height="146" rx="4" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#555" x="295" y="112" text-anchor="middle" font-family="sans-serif">.bubble-day-wrapper  (+ ::before for separator line between days)</text>
+<rect x="68" y="118" width="46" height="46" rx="23" fill="#faece7" stroke="#d85a30" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#993c1d" x="91" y="134" text-anchor="middle" font-family="sans-serif">.bubble-day-chip</text>
+<text font-size="9" font-weight="normal" fill="#639922" x="91" y="146" text-anchor="middle" font-family="sans-serif">[.is-active]</text>
+<text font-size="9" font-weight="normal" fill="#888" x="91" y="158" text-anchor="middle" font-family="sans-serif">(today)</text>
+<rect x="122" y="118" width="398" height="118" rx="4" fill="#f5f0fb" stroke="#9070c0" stroke-width="0.5"/>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="321" y="134" text-anchor="middle" font-family="sans-serif">.bubble-day-events</text>
+<rect x="130" y="142" width="382" height="22" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<rect x="136" y="146" width="50" height="14" rx="2" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#0f6e56" x="161" y="156" text-anchor="middle" font-family="sans-serif">.event-time</text>
+<rect x="192" y="146" width="16" height="14" rx="7" fill="#f5f0fb" stroke="#9070c0" stroke-width="0.5"/>
+<rect x="214" y="146" width="290" height="14" rx="2" fill="#fffbe6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#c8a020" x="359" y="156" text-anchor="middle" font-family="sans-serif">.bubble-event-name  +  .bubble-event-place</text>
+<rect x="130" y="170" width="382" height="22" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<rect x="136" y="174" width="50" height="14" rx="2" fill="#e1f5ee" stroke="#1d9e75" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#0f6e56" x="161" y="184" text-anchor="middle" font-family="sans-serif">.event-time</text>
+<rect x="192" y="174" width="16" height="14" rx="7" fill="#f5f0fb" stroke="#9070c0" stroke-width="0.5"/>
+<rect x="214" y="174" width="290" height="14" rx="2" fill="#fffbe6" stroke="#c8a020" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#c8a020" x="359" y="184" text-anchor="middle" font-family="sans-serif">.bubble-event-name  +  .bubble-event-place</text>
+<rect x="130" y="198" width="382" height="22" rx="3" fill="#f5f5f0" stroke="#aaaaaa" stroke-width="0.5"/>
+<text font-size="8" font-weight="normal" fill="#888" x="321" y="212" text-anchor="middle" font-family="sans-serif">(.bubble-event rows continue...)</text>
+<rect x="550" y="70" width="60" height="184" rx="6" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="580" y="130" text-anchor="middle" font-family="sans-serif">.bubble-sub-</text>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="580" y="143" text-anchor="middle" font-family="sans-serif">button-</text>
+<text font-size="9" font-weight="normal" fill="#854f0b" x="580" y="156" text-anchor="middle" font-family="sans-serif">container</text>
+<text font-size="9" font-weight="normal" fill="#639922" x="580" y="170" text-anchor="middle" font-family="sans-serif">(sticky)</text>
+<text font-size="9" font-weight="normal" fill="#639922" x="580" y="183" text-anchor="middle" font-family="sans-serif">top:0</text>
+<line x1="40" y1="282" x2="638" y2="282" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="308" text-anchor="start" font-family="sans-serif">Event element classes</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="40" y="326" text-anchor="start" font-family="sans-serif">.bubble-day-wrapper</text>
+<text font-size="10" font-weight="normal" fill="#555" x="210" y="326" text-anchor="start" font-family="sans-serif">— flex row containing day chip + day events</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="340" y="326" text-anchor="start" font-family="sans-serif">.bubble-day-chip</text>
+<text font-size="10" font-weight="normal" fill="#555" x="510" y="326" text-anchor="start" font-family="sans-serif">— 42×42px circle; .is-active added for today</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="40" y="344" text-anchor="start" font-family="sans-serif">.bubble-day-number</text>
+<text font-size="10" font-weight="normal" fill="#555" x="210" y="344" text-anchor="start" font-family="sans-serif">— large date number  (e.g. 29)</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="340" y="344" text-anchor="start" font-family="sans-serif">.bubble-day-month</text>
+<text font-size="10" font-weight="normal" fill="#555" x="510" y="344" text-anchor="start" font-family="sans-serif">— short month label  (e.g. Apr)</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="40" y="362" text-anchor="start" font-family="sans-serif">.bubble-day-events</text>
+<text font-size="10" font-weight="normal" fill="#555" x="210" y="362" text-anchor="start" font-family="sans-serif">— column of .bubble-event rows</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="340" y="362" text-anchor="start" font-family="sans-serif">.bubble-event</text>
+<text font-size="10" font-weight="normal" fill="#555" x="510" y="362" text-anchor="start" font-family="sans-serif">— single event row — time · color-dot · name · place</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="40" y="380" text-anchor="start" font-family="sans-serif">.bubble-event-time</text>
+<text font-size="10" font-weight="normal" fill="#555" x="210" y="380" text-anchor="start" font-family="sans-serif">— formatted start time or 'All day'</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="340" y="380" text-anchor="start" font-family="sans-serif">.bubble-event-color</text>
+<text font-size="10" font-weight="normal" fill="#555" x="510" y="380" text-anchor="start" font-family="sans-serif">— 12×12px colored circle dot</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="40" y="398" text-anchor="start" font-family="sans-serif">.bubble-event-name</text>
+<text font-size="10" font-weight="normal" fill="#555" x="210" y="398" text-anchor="start" font-family="sans-serif">— event title (truncated, font-weight:600)</text>
+<text font-size="11" font-weight="normal" fill="#5a3090" x="340" y="398" text-anchor="start" font-family="sans-serif">.bubble-event-place</text>
+<text font-size="10" font-weight="normal" fill="#555" x="510" y="398" text-anchor="start" font-family="sans-serif">— location text + icon (optional)</text>
+<line x1="40" y1="432" x2="638" y2="432" stroke="#ccc" stroke-width="0.5" stroke-dasharray="4 4"/>
+<text font-size="13" font-weight="500" fill="#1a1a1a" x="40" y="458" text-anchor="start" font-family="sans-serif">Key CSS variables</text>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="40" y="476" text-anchor="start" font-family="sans-serif">--bubble-calendar-height</text>
+<text font-size="10" font-weight="normal" fill="#555" x="290" y="476" text-anchor="start" font-family="sans-serif">— card height (set by JS: rows × 56px)</text>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="40" y="492" text-anchor="start" font-family="sans-serif">--bubble-calendar-mask-size</text>
+<text font-size="10" font-weight="normal" fill="#555" x="290" y="492" text-anchor="start" font-family="sans-serif">— scroll fade height (default 16px)</text>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="40" y="508" text-anchor="start" font-family="sans-serif">--bubble-calendar-border-radius</text>
+<text font-size="10" font-weight="normal" fill="#555" x="290" y="508" text-anchor="start" font-family="sans-serif">— event + chip corner radius</text>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="40" y="524" text-anchor="start" font-family="sans-serif">--bubble-event-background-color</text>
+<text font-size="10" font-weight="normal" fill="#555" x="290" y="524" text-anchor="start" font-family="sans-serif">— event row background</text>
+<text font-size="10" font-weight="normal" fill="#5a3090" x="40" y="540" text-anchor="start" font-family="sans-serif">--bubble-button-icon-background-color</text>
+<text font-size="10" font-weight="normal" fill="#555" x="290" y="540" text-anchor="start" font-family="sans-serif">— day chip background</text>
+</svg>
