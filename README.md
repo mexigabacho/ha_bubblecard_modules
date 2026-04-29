@@ -1,6 +1,6 @@
 # HA Bubble Card Modules
 
-Custom modules for [Bubble Card](https://github.com/Clooos/Bubble-Card) — a minimalist card collection for Home Assistant.
+Custom modules for [Bubble Card](https://github.com/Clooos/Bubble-Card) (v3.1.6+) — a minimalist card collection for Home Assistant.
 
 Each module is a self-contained YAML file that extends Bubble Card cards with custom CSS styling or JavaScript behaviour, without forking the card itself.
 
@@ -10,7 +10,7 @@ Each module is a self-contained YAML file that extends Bubble Card cards with cu
 
 ### Bubble Card Tools (recommended, requires v3.1.0+)
 
-1. Install [Bubble Card Tools](https://github.com/Clooos/Bubble-Card-Tools) — available in HACS or manually.
+1. Install [Bubble Card Tools](https://github.com/Clooos/Bubble-Card-Tools) — available via HACS or manually.
 2. Add the integration: **Settings → Devices & Services → Add Integration → Bubble Card Tools**.
 3. Copy the YAML file(s) from this repo to `/config/bubble_card/modules/` on your HA host.
 4. The module is immediately available in the **Modules** tab of any compatible Bubble Card.
@@ -29,13 +29,11 @@ Each module is a self-contained YAML file that extends Bubble Card cards with cu
 
 **File:** [device_large_icon.yaml](device_large_icon.yaml)
 
-Enlarges the icon section so the icon is visually dominant. Creates a flush-left panel effect where the icon container bleeds into the left card edge — left corners are clipped by the card's overflow. Only the right-side corners are independently radiused.
+Enlarges the icon section so the icon is visually dominant. Creates a flush-left panel effect where the icon container bleeds into the left card edge — left corners are clipped by the card's `overflow: hidden`. Only the right-side corners are independently radiused.
 
-The icon cell width is locked so it cannot shift when state text, attributes, or sub-buttons change.
+The icon cell width is locked (`min-width` = `max-width`) so it cannot shift when state text, attributes, or sub-buttons change.
 
-**Supported card types:** button, calendar, climate, cover, horizontal-buttons-stack, media-player, pop-up, select
-
-**Options:**
+**Supported:** button, calendar, climate, cover, horizontal-buttons-stack, media-player, pop-up, select
 
 | Option | Default | Range | Description |
 |--------|---------|-------|-------------|
@@ -47,8 +45,6 @@ The icon cell width is locked so it cannot shift when state text, attributes, or
 | `radius_tr` | 5 % | 0–50 | Top-right corner radius |
 | `radius_br` | 25 % | 0–50 | Bottom-right corner radius |
 
-**Example card YAML:**
-
 ```yaml
 type: custom:bubble-card
 card_type: button
@@ -59,12 +55,100 @@ modules:
     panel_width: 120
     left_bleed: 12
     opacity: 70
-    radius_tr: 5
     radius_br: 30
 ```
 
 ---
 
+### `device_state_theme`
+
+**File:** [device_state_theme.yaml](device_state_theme.yaml)
+
+Applies state-driven background gradients, icon colours, and looping animations to cards based on device type presets. Each preset maps entity states to visual effects driven by the card's entity state. Media player cards are excluded to preserve Bubble Card's native album-art background.
+
+**Supported:** button, climate, cover, select, calendar
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `device_type` | `none` | Preset to apply (see table below) |
+| `enable_gradient` | `false` | Fade gradient on the background instead of solid fill |
+| `animations_enabled` | `true` | Enable looping icon animations |
+| `animation_speed` | `1.0x` | Speed multiplier (0.25–3.0) |
+
+**Device type presets:**
+
+| Preset | States handled | Effects |
+|--------|---------------|---------|
+| `vacuum` | cleaning, returning, paused, error | rotation, float, shake |
+| `mop` | cleaning, returning, paused, error | pulse, float, shake |
+| `washer_dryer` | Running, Starting, Finished, Off, Unknown | shake, pulse, icon colour |
+| `ceiling_fan` | on, off | spin-360 |
+| `coffee_maker` | Cleaning, Brewing, Ready, Off | glow |
+| `light` | on, off | subtle warm background |
+| `light_warm` | on, off | warm gradient wash |
+| `network_connection` | on, primary, backup, off, unavailable | pulse on backup |
+
+```yaml
+type: custom:bubble-card
+card_type: button
+entity: vacuum.roomba
+modules:
+  device_state_theme:
+    device_type: vacuum
+    enable_gradient: true
+    animations_enabled: true
+    animation_speed: 1.0
+```
+
+---
+
+### `room_card_plus_customstyle`
+
+**File:** [room_card_plus_customstyle.yaml](room_card_plus_customstyle.yaml)
+
+Adds bold text-shadow styling to the card name and a dynamic background fill on the `.bubble-button-background` that reflects the light entity's RGB colour and brightness. The fill height tracks brightness as a percentage; the colour tracks the entity's `rgb_color` attribute.
+
+**Supported:** button
+
+No configurable options — edit the YAML directly to adjust colours or thresholds.
+
+---
+
+### `media_app_background`
+
+**File:** [media_app_background.yaml](media_app_background.yaml)
+
+Shows a branded ambient background on a media player card when the integration cannot provide cover art — typically DRM-protected content on an Android TV / Nvidia Shield where the ADB integration can't capture a screenshot. When the entity does have a live `entity_picture` (e.g. YouTube), the module steps aside automatically and Bubble Card's native cover-art system takes over.
+
+Built-in brand-coloured gradient backgrounds (SVG, zero deployment) are included for Netflix, Prime Video, Disney+, Max, Apple TV+, Hulu, Peacock, ESPN, NBA, and Plex. Any service can be overridden with a custom local image path.
+
+**Supported:** media-player
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `source_entity` | _(card entity)_ | Entity to read the app name from |
+| `source_attribute` | `app_id` | Attribute to match against — `app_id` (package name), `app_name`, or `source` |
+| `show_when_paused` | `true` | Also show the background when the player is paused |
+| `netflix_image` … `plex_image` | _(built-in)_ | Override path for a specific service (e.g. `/local/bubble_media_bg/netflix.jpg`) |
+| `default_image` | — | Shown for any unrecognized app while in an active state |
+
+> **Tip:** Enable `cover_background: true` on the card for best results. When real cover art arrives it overlays the module background automatically, then fades back to the module background when art disappears.
+
+```yaml
+type: custom:bubble-card
+card_type: media-player
+entity: media_player.office_shieldtv
+cover_background: true
+modules:
+  media_app_background:
+    source_attribute: app_id
+    show_when_paused: true
+```
+
+**SVG source files** (for custom editing or separate HA deployment) are in [device_state_media_images/](device_state_media_images/). To use them as external files instead of the built-in data URIs, copy them to `/config/www/bubble_media_bg/` on your HA host and reference them as `/local/bubble_media_bg/netflix.svg` in the override fields.
+
+---
+
 ## Contributing
 
-Each module lives in its own YAML file. See [CLAUDE.md](CLAUDE.md) for the full module format, CSS DOM reference for every card type, editor schema options, and coding conventions.
+Each module lives in its own YAML file. See [CLAUDE.md](CLAUDE.md) for the full module format, CSS DOM reference for every card type (including complete sub-button group structure), editor schema options, and coding conventions.

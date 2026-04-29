@@ -1,0 +1,168 @@
+media_app_background:
+  name: Media App Background
+  version: '1.0'
+  creator: Christopher Young
+  supported:
+    - media-player
+  description: |
+    Shows a branded ambient background on a media player card when the
+    integration cannot provide cover art (e.g. DRM-protected content on
+    an Android TV / Nvidia Shield).
+
+    When the entity has a live entity_picture (e.g. YouTube), the module
+    steps aside and Bubble Card's native cover-art system takes over.
+
+    Built-in gradient backgrounds are included for: Netflix, Prime Video,
+    Disney+, Max, Apple TV+, Hulu, Peacock, ESPN, NBA, and Plex.
+    Any service can be overridden with a custom image path.
+
+    Configure via the editor below, or directly in YAML:
+
+    <code-block><pre>
+    media_app_background:
+        source_attribute: app_id
+        show_when_paused: true
+        netflix_image: /local/bubble_media_bg/netflix.jpg
+    </pre></code-block>
+
+    Note: enable cover_background on the media player card for best
+    results — when real cover art is available it will automatically
+    overlay and hide this module's background.
+  code: |-
+    ${(() => {
+      const cfg = this.config?.media_app_background ?? {};
+
+      /* ── Active-state gate ───────────────────────────────── */
+      const activeStates = ['playing'];
+      if (cfg.show_when_paused !== false) activeStates.push('paused');
+      if (!activeStates.includes(state)) return '';
+
+      /* ── Skip when native cover art is available ─────────── */
+      const entityAttrs = hass.states[entity]?.attributes ?? {};
+      const hasNativeArt = !!(entityAttrs.entity_picture_local || entityAttrs.entity_picture);
+      if (hasNativeArt) return '';
+
+      /* ── Read configured source attribute ────────────────── */
+      const srcEntity = cfg.source_entity || entity;
+      const srcAttr   = cfg.source_attribute || 'app_id';
+      const srcValue  = String(hass.states[srcEntity]?.attributes?.[srcAttr] ?? '').toLowerCase();
+      if (!srcValue) return '';
+
+      /* ── Built-in SVG data URIs (brand gradients) ─────────
+         Source SVGs live in device_state_media_images/ in the repo.
+         These are their base64-encoded equivalents.           */
+      const BUILTIN = {
+        netflix: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzE0MTQxNCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNTA5MTQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0MTQxNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        prime:   'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBGMTExMSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMEE4RTEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBGMTExMSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        disney:  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzA0MDcxNCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMTNDQ0YiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzA0MDcxNCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        max:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMTAyMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM1MjAwRkYiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMTAyMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        appletv: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMDAwMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDQ0NDQ0MiIHN0b3Atb3BhY2l0eT0iLjUiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        hulu:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBEMEQwRCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxQ0U3ODMiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBEMEQwRCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        peacock: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAwMDUwNSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMEQ3RjEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDUwNSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        espn:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFBMDAwMCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDQzAwMDAiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFBMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+        nba:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBBMEYxQSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iYiIgY3g9IjMwJSIgY3k9IjUwJSIgcj0iNjAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxNzQwOEIiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBBMEYxQSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNiKSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iciIgY3g9IjcwJSIgY3k9IjUwJSIgcj0iNjAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNDOTA4MkEiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBBMEYxQSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNyKSIvPgo8L3N2Zz4K',
+        plex:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFGMUYxRiIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNUEwMEQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFGMUYxRiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
+      };
+
+      /* ── App keyword → service mapping ───────────────────── */
+      const APPS = [
+        { keys: ['netflix'],                        id: 'netflix',  field: 'netflix_image'  },
+        { keys: ['amazon', 'primevideo', 'prime'],  id: 'prime',    field: 'prime_image'    },
+        { keys: ['disney'],                         id: 'disney',   field: 'disney_image'   },
+        { keys: ['hbo', 'wbd.max'],                 id: 'max',      field: 'max_image'      },
+        { keys: ['apple', 'atve'],                  id: 'appletv',  field: 'appletv_image'  },
+        { keys: ['hulu'],                           id: 'hulu',     field: 'hulu_image'     },
+        { keys: ['peacock', 'nbcuni'],              id: 'peacock',  field: 'peacock_image'  },
+        { keys: ['espn'],                           id: 'espn',     field: 'espn_image'     },
+        { keys: ['nbaimd'],                         id: 'nba',      field: 'nba_image'      },
+        { keys: ['plex'],                           id: 'plex',     field: 'plex_image'     },
+      ];
+
+      /* ── Match source value against keywords ─────────────── */
+      let imageUrl = '';
+      for (const app of APPS) {
+        if (app.keys.some(function(k) { return srcValue.indexOf(k) !== -1; })) {
+          imageUrl = cfg[app.field] || BUILTIN[app.id] || '';
+          break;
+        }
+      }
+
+      /* ── Fallback for unrecognized apps ──────────────────── */
+      if (!imageUrl) imageUrl = cfg.default_image || '';
+      if (!imageUrl) return '';
+
+      return '.bubble-background{background-image:url(\'' + imageUrl + '\') !important;}';
+    })()}
+  editor:
+    - name: source_entity
+      label: App source entity (blank = use card entity)
+      selector:
+        entity: {}
+    - name: source_attribute
+      label: Attribute to match app name against
+      default: app_id
+      selector:
+        select:
+          custom_value: true
+          options:
+            - label: app_id — package name, most reliable (default)
+              value: app_id
+            - label: app_name — human-readable app name
+              value: app_name
+            - label: source — matches source_list entry
+              value: source
+    - name: show_when_paused
+      label: Show background when paused
+      default: true
+      selector:
+        boolean: {}
+    - type: expandable
+      title: Custom image overrides
+      icon: mdi:image
+      schema:
+        - type: grid
+          schema:
+            - name: netflix_image
+              label: Netflix
+              selector:
+                text: {}
+            - name: prime_image
+              label: Prime Video
+              selector:
+                text: {}
+            - name: disney_image
+              label: Disney+
+              selector:
+                text: {}
+            - name: max_image
+              label: Max
+              selector:
+                text: {}
+            - name: appletv_image
+              label: Apple TV+
+              selector:
+                text: {}
+            - name: hulu_image
+              label: Hulu
+              selector:
+                text: {}
+            - name: peacock_image
+              label: Peacock
+              selector:
+                text: {}
+            - name: espn_image
+              label: ESPN
+              selector:
+                text: {}
+            - name: nba_image
+              label: NBA
+              selector:
+                text: {}
+            - name: plex_image
+              label: Plex
+              selector:
+                text: {}
+        - name: default_image
+          label: Default (unrecognized apps)
+          selector:
+            text: {}
