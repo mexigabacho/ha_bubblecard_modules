@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl *)",
+      "Bash(.venv/bin/ecs-daemon-update validate-image *)",
+      "Bash(.venv/bin/ecs-daemon-update find-services *)",
+      "Bash(.venv/bin/ecs-daemon-update list-services *)",
+      "Bash(.venv/bin/ecs-daemon-update list-environments *)",
+      "Bash(.venv/bin/ecs-daemon-update compare-templates *)",
+      "Bash(.venv/bin/ecs-daemon-update list-images *)",
+      "Bash(.venv/bin/ecs-daemon-update status *)",
+      "Bash(.venv/bin/ecs-daemon-update describe-service *)",
+      "Bash(.venv/bin/ecs-daemon-update list-updates *)"
+    ]
+  }
+}

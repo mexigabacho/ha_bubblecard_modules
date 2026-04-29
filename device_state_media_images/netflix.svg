@@ -5,4 +5,5 @@
     <stop offset="100%" stop-color="#141414" stop-opacity="0"/>
   </radialGradient>
   <rect width="400" height="225" fill="url(#g)"/>
+
 </svg>

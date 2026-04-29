@@ -90,7 +90,7 @@ device_state_theme:
       /* ── Config ───────────────────────────────────────────── */
       const cfg      = this.config?.device_state_theme ?? {};
       const dtype    = cfg.device_type ?? 'none';
-      const gradient = cfg.enable_gradient !== false;
+      const gradient = cfg.enable_gradient ?? false;
       const animate  = cfg.animations_enabled !== false;
       const speed    = cfg.animation_speed ?? 1.0;
 

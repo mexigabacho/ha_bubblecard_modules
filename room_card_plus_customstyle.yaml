@@ -53,4 +53,3 @@ room_card_plus_customstyle:
         color: rgba(255, 255, 255, 0.15);
         pointer-events: none;
       }
-  editor: ''

@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '1.0'
+  version: '1.2'
   creator: Christopher Young
   supported:
     - media-player
@@ -37,11 +37,6 @@ media_app_background:
       if (cfg.show_when_paused !== false) activeStates.push('paused');
       if (!activeStates.includes(state)) return '';
 
-      /* ── Skip when native cover art is available ─────────── */
-      const entityAttrs = hass.states[entity]?.attributes ?? {};
-      const hasNativeArt = !!(entityAttrs.entity_picture_local || entityAttrs.entity_picture);
-      if (hasNativeArt) return '';
-
       /* ── Read configured source attribute ────────────────── */
       const srcEntity = cfg.source_entity || entity;
       const srcAttr   = cfg.source_attribute || 'app_id';
@@ -64,6 +59,13 @@ media_app_background:
         plex:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFGMUYxRiIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNUEwMEQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFGMUYxRiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
       };
 
+      /* ── Logo-only SVGs (transparent bg, white icon, tight viewBox)
+         Applied via ::after on .bubble-media-player so they render
+         sharp and unblurred, outside cover_background's blur scope. */
+      const LOGOS = {
+        netflix: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjYuNSAyIDExIDIwIj48cGF0aCBkPSJNNi41LDJIMTAuNUwxMy40NCwxMC44M0wxMy41LDJIMTcuNVYyMkMxNi4yNSwyMS43OCAxNC44NywyMS42NCAxMy40MSwyMS41OEwxMC41LDEzTDEwLjQzLDIxLjU5QzkuMDMsMjEuNjUgNy43LDIxLjc5IDYuNSwyMlYyWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=',
+      };
+
       /* ── App keyword → service mapping ───────────────────── */
       const APPS = [
         { keys: ['netflix'],                        id: 'netflix',  field: 'netflix_image'  },
@@ -80,18 +82,41 @@ media_app_background:
 
       /* ── Match source value against keywords ─────────────── */
       let imageUrl = '';
+      let matchedId = '';
       for (const app of APPS) {
         if (app.keys.some(function(k) { return srcValue.indexOf(k) !== -1; })) {
           imageUrl = cfg[app.field] || BUILTIN[app.id] || '';
+          matchedId = app.id;
           break;
         }
       }
 
-      /* ── Fallback for unrecognized apps ──────────────────── */
-      if (!imageUrl) imageUrl = cfg.default_image || '';
+      /* ── Recognized app: show our background directly.
+         Bubble Card's crossfade system layers real art on top when
+         cover_background: true — no conflict with our background.     */
+      const bgCss = (bgUrl, logoUrl) => {
+        let css = '.bubble-background{background-image:url(\'' + bgUrl + '\') !important;' +
+          'background-size:cover !important;background-position:center !important;}';
+        if (logoUrl) {
+          /* Logo lives on ::after — outside .bubble-background's blur scope */
+          css += '.bubble-media-player::after{content:\'\' !important;position:absolute !important;' +
+            'inset:0 !important;background-image:url(\'' + logoUrl + '\') !important;' +
+            'background-size:auto 70% !important;background-position:center !important;' +
+            'background-repeat:no-repeat !important;opacity:0.25 !important;pointer-events:none !important;}';
+        }
+        return css;
+      };
+
+      if (imageUrl) return bgCss(imageUrl, LOGOS[matchedId] || '');
+
+      /* ── Unrecognized app: step aside when native art is present ─── */
+      const entityAttrs = hass.states[entity]?.attributes ?? {};
+      if (entityAttrs.entity_picture_local || entityAttrs.entity_picture) return '';
+
+      imageUrl = cfg.default_image || '';
       if (!imageUrl) return '';
 
-      return '.bubble-background{background-image:url(\'' + imageUrl + '\') !important;}';
+      return bgCss(imageUrl);
     })()}
   editor:
     - name: source_entity
