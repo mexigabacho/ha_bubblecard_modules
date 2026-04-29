@@ -1,0 +1,183 @@
+device_large_icon:
+  name: Large Device Icon
+  version: '0.16'
+  creator: Christopher Young
+  supported:
+    - button
+    - calendar
+    - climate
+    - cover
+    - horizontal-buttons-stack
+    - media-player
+    - pop-up
+    - select
+  description: |
+    Enlarges the icon section of a card so the icon is visually dominant.
+    Creates a flush-left panel effect where the icon container bleeds into
+    the left card edge — left corners are clipped by the card overflow.
+    Only the bottom-right corner shows a radius by default.
+
+    Locks the icon cell width so it cannot shift when state text,
+    attributes, or sub-buttons change.
+
+    Configure via the editor below, or directly in YAML, for example:
+
+    <code-block><pre>
+    device_large_icon:
+        icon_size: 82
+        icon_padding: 10
+        panel_width: 110
+        left_bleed: 16
+        opacity: 60
+        radius_tr: 5
+        radius_br: 25
+    </pre></code-block>
+  code: |-
+    .bubble-button-card-container {
+      overflow: hidden !important;
+    }
+
+    .bubble-icon-container {
+      /* Corner radii — left side always 0 (hidden by bleed),
+         right corners independently controlled */
+      border-top-left-radius:    0% !important;
+      border-bottom-left-radius: 0% !important;
+      border-top-right-radius:    ${this.config.device_large_icon?.radius_tr ?? 5}% !important;
+      border-bottom-right-radius: ${this.config.device_large_icon?.radius_br ?? 25}% !important;
+
+      /* Lock panel width — min = max prevents any reflow */
+      min-width: ${this.config.device_large_icon?.panel_width ?? 110}px !important;
+      max-width: ${this.config.device_large_icon?.panel_width ?? 110}px !important;
+
+      /* Fill full card height for the flush panel effect */
+      align-self: stretch !important;
+      height:     100% !important;
+      min-height: unset !important;
+      max-height: unset !important;
+
+      /* Bleed past the left card edge, clipped by overflow: hidden */
+      margin: 0 6px 0 -${this.config.device_large_icon?.left_bleed ?? 16}px !important;
+
+      /* Padding pushes the icon away from the panel edges */
+      padding: ${this.config.device_large_icon?.icon_padding ?? 10}px !important;
+
+      opacity: ${(this.config.device_large_icon?.opacity ?? 60) / 100} !important;
+    }
+
+    /* Top-align name/state on button-type cards.
+       .bubble-button-card only exists on button cards — media player
+       uses .bubble-media-player, so these two rules are mutually exclusive. */
+    .bubble-button-card .bubble-name-container {
+      justify-self: start !important;
+      align-self:   start !important;
+      padding: 10px 5px 5px 5px;
+    }
+
+    /* Top-align name/state on media player cards.
+       Investigation notes (Apr 2026):
+       - On button cards, .bubble-content-container is display:contents so
+         its children become direct flex children of .bubble-wrapper; our
+         .bubble-button-card .bubble-name-container { align-self:start }
+         rule works there without touching the container.
+       - On media player cards in fixed-top mode (bottom sub-buttons present,
+         or main_buttons_position:bottom), .bubble-content-container switches
+         to display:flex and becomes a real flex box inside .bubble-wrapper.
+         In this mode it is auto-height and vertically centered in the wrapper,
+         which is why the name/media-info text appears lower than expected.
+       - align-self:stretch on the container fixed the text but stretched the
+         icon panel to full card height (undesirable side effect).
+       - align-self:flex-start fixes the text by pinning the container to the
+         top of the wrapper without changing its auto height, so the icon panel
+         stays the same size as without this module while the text moves up. */
+    .bubble-media-player .bubble-content-container {
+      align-self: flex-start !important;
+    }
+
+    .bubble-media-player .bubble-name-container,
+    .bubble-media-player .bubble-media-info-container {
+      align-self: start !important;
+      padding: 10px 5px 5px 5px;
+    }
+
+    /* Note: unscoped .bubble-icon is intentional here — the rules
+       (position, margin, opacity, icon-size) are safe to apply broadly
+       as sub-button icons have their own overrides. Scoping to
+       .bubble-icon-container increased specificity and caused the icon
+       to appear larger by overriding Bubble Card's own size rules. */
+    .bubble-icon {
+      position: relative !important;
+      margin: 0 !important;
+      --mdc-icon-size: ${this.config.device_large_icon?.icon_size ?? 82}px !important;
+      opacity: 1 !important;
+    }
+  editor:
+    - name: icon_size
+      label: Icon size (px)
+      default: 82
+      selector:
+        number:
+          min: 40
+          max: 160
+          step: 2
+          mode: slider
+          unit_of_measurement: px
+    - name: icon_padding
+      label: Icon padding (px)
+      default: 10
+      selector:
+        number:
+          min: 0
+          max: 40
+          step: 1
+          mode: slider
+          unit_of_measurement: px
+    - name: panel_width
+      label: Panel width (px)
+      default: 110
+      selector:
+        number:
+          min: 60
+          max: 200
+          step: 2
+          mode: slider
+          unit_of_measurement: px
+    - name: left_bleed
+      label: Left edge bleed (px)
+      default: 16
+      selector:
+        number:
+          min: 0
+          max: 40
+          step: 1
+          mode: slider
+          unit_of_measurement: px
+    - name: opacity
+      label: Icon opacity
+      default: 60
+      selector:
+        number:
+          min: 10
+          max: 100
+          step: 5
+          mode: slider
+          unit_of_measurement: '%'
+    - name: radius_tr
+      label: Top-right corner radius
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 50
+          step: 1
+          mode: slider
+          unit_of_measurement: '%'
+    - name: radius_br
+      label: Bottom-right corner radius
+      default: 25
+      selector:
+        number:
+          min: 0
+          max: 50
+          step: 1
+          mode: slider
+          unit_of_measurement: '%'
