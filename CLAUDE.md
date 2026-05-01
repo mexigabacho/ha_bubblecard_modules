@@ -627,6 +627,8 @@ Prefix with `data:image/svg+xml;base64,` to get the full data URI.
 | nfl      | `nfl`      | ✅ | ✅ | ✅ | Geometric (football ellipse + stitch lines) | keys: nfl, nflnetwork; gradient blue/red |
 | plex     | `plex`     | ✅ | ✅ | ✅ | MDI `mdi:plex` | |
 | fandango | `fandango` | ✅ | ✅ | ✅ | Wikimedia Commons Fandango at Home logo (F-mark only, cropped viewBox) | keys: fandango, vudu; multi-colour F icon |
+| youtubetv | `youtubetv` | ✅ | ✅ | ✅ | Simple Icons YouTube icon (24×24 viewBox, white fill) | keys: youtube.tv, youtubetv — listed before tv to prevent collision |
+| tv       | `tv`       | ✅ | ✅ | ✅ | MDI `mdi:television` (24×24 viewBox, white fill) | keys: livetv, live_tv, tv — white-glow gradient; youtubetv entry above catches YouTube TV first |
 
 ---
 

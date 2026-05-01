@@ -1,6 +1,6 @@
 device_large_icon:
   name: Large Device Icon
-  version: '0.15'
+  version: '0.16'
   creator: Christopher Young
   supported:
     - button
@@ -64,14 +64,38 @@ device_large_icon:
       opacity: ${(this.config.device_large_icon?.opacity ?? 60) / 100} !important;
     }
 
-    /* Apply top-aligned name positioning on button/state cards.
-       Scoped via .bubble-button-card which only exists on button-type
-       cards, confirmed from DOM inspection. Media player cards use
-       .bubble-media-player on the wrapper instead, so this rule
-       won't match them at all. */
+    /* Top-align name/state on button-type cards.
+       .bubble-button-card only exists on button cards — media player
+       uses .bubble-media-player, so these two rules are mutually exclusive. */
     .bubble-button-card .bubble-name-container {
       justify-self: start !important;
       align-self:   start !important;
+      padding: 10px 5px 5px 5px;
+    }
+
+    /* Top-align name/state on media player cards.
+       Investigation notes (Apr 2026):
+       - On button cards, .bubble-content-container is display:contents so
+         its children become direct flex children of .bubble-wrapper; our
+         .bubble-button-card .bubble-name-container { align-self:start }
+         rule works there without touching the container.
+       - On media player cards in fixed-top mode (bottom sub-buttons present,
+         or main_buttons_position:bottom), .bubble-content-container switches
+         to display:flex and becomes a real flex box inside .bubble-wrapper.
+         In this mode it is auto-height and vertically centered in the wrapper,
+         which is why the name/media-info text appears lower than expected.
+       - align-self:stretch on the container fixed the text but stretched the
+         icon panel to full card height (undesirable side effect).
+       - align-self:flex-start fixes the text by pinning the container to the
+         top of the wrapper without changing its auto height, so the icon panel
+         stays the same size as without this module while the text moves up. */
+    .bubble-media-player .bubble-content-container {
+      align-self: flex-start !important;
+    }
+
+    .bubble-media-player .bubble-name-container,
+    .bubble-media-player .bubble-media-info-container {
+      align-self: start !important;
       padding: 10px 5px 5px 5px;
     }
 

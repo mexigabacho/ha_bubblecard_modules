@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '2.2'
+  version: '1.9'
   creator: Christopher Young
   supported:
     - media-player
@@ -14,7 +14,7 @@ media_app_background:
 
     Built-in gradient backgrounds and logos are included for: Netflix,
     Prime Video, Disney+, HBO/Max, Apple TV+, Hulu, Peacock, ESPN, NBA,
-    NFL, Plex, Fandango at Home (Vudu), YouTube TV, and Live TV.
+    NFL, Plex, and Fandango at Home (Vudu).
 
     Configure via the editor below, or directly in YAML:
 
@@ -28,24 +28,21 @@ media_app_background:
     Note: enable cover_background on the media player card for best
     results — when real cover art is available it will automatically
     overlay and hide this module's background.
-
-    When no brand is recognised (or when the player is off or idle),
-    a configurable state-indicator colour tints the card background
-    instead: dim when off, neutral when idle, subtle blue when active
-    but unrecognised. Colours and defaults are in the editor below.
   code: |-
     ${(() => {
       const cfg = this.config?.media_app_background ?? {};
 
-      /* ── Brand-display gate ──────────────────────────────── */
+      /* ── Active-state gate ───────────────────────────────── */
       const activeStates = ['playing'];
       if (cfg.show_when_paused !== false) activeStates.push('paused');
       if (cfg.show_when_idle === true) activeStates.push('idle');
+      if (!activeStates.includes(state)) return '';
 
       /* ── Read configured source attribute ────────────────── */
       const srcEntity = cfg.source_entity || entity;
       const srcAttr   = cfg.source_attribute || 'app_id';
       const srcValue  = String(hass.states[srcEntity]?.attributes?.[srcAttr] ?? '').toLowerCase();
+      if (!srcValue) return '';
 
       /* ── Built-in SVG data URIs (brand gradients) ─────────
          Source SVGs live in device_state_media_images/ in the repo.
@@ -63,8 +60,6 @@ media_app_background:
         plex:    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFGMUYxRiIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFNUEwMEQiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFGMUYxRiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         nfl:      'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzAxMzM2OSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNENTBBMEEiIHN0b3Atb3BhY2l0eT0iLjgiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAxMzM2OSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
         fandango: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBEMEQwRCIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjY2MDAiIHN0b3Atb3BhY2l0eT0iLjkiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBEMEQwRCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9yYWRpYWxHcmFkaWVudD4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0idXJsKCNnKSIvPgo8L3N2Zz4K',
-        youtubetv: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzBGMEYwRiIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjAwMDAiIHN0b3Atb3BhY2l0eT0iLjg1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwRjBGMEYiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvcmFkaWFsR3JhZGllbnQ+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMjUiIGZpbGw9InVybCgjZykiLz4KPC9zdmc+Cg==',
-        tv:        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMjI1Ij4KICA8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIyNSIgZmlsbD0iIzFBMUExQSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNjUlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkZGRkYiIHN0b3Atb3BhY2l0eT0iLjU1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxQTFBMUEiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvcmFkaWFsR3JhZGllbnQ+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyMjUiIGZpbGw9InVybCgjZykiLz4KPC9zdmc+Cg==',
       };
 
       /* ── Logo-only SVGs (transparent bg, applied via ::after on
@@ -82,8 +77,6 @@ media_app_background:
         nfl:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPGVsbGlwc2UgY3g9IjEyIiBjeT0iMTIiIHJ4PSI5IiByeT0iNiIgZmlsbD0id2hpdGUiLz4KICA8bGluZSB4MT0iMyIgeTE9IjEyIiB4Mj0iMjEiIHkyPSIxMiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuOCIvPgogIDxsaW5lIHgxPSIxMiIgeTE9IjYuMiIgeDI9IjEyIiB5Mj0iMTcuOCIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNyIvPgogIDxsaW5lIHgxPSI5IiB5MT0iOC44IiB4Mj0iOSIgeTI9IjE1LjIiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICA8bGluZSB4MT0iMTUiIHkxPSI4LjgiIHgyPSIxNSIgeTI9IjE1LjIiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICA8bGluZSB4MT0iOSIgeTE9IjEwLjUiIHgyPSIxNSIgeTI9IjEwLjUiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KICA8bGluZSB4MT0iOSIgeTE9IjEyIiB4Mj0iMTUiIHkyPSIxMiIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogIDxsaW5lIHgxPSI5IiB5MT0iMTMuNSIgeDI9IjE1IiB5Mj0iMTMuNSIgc3Ryb2tlPSIjMzMzIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8L3N2Zz4K',
         plex:     'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTQsMkMyLjg5LDIgMiwyLjg5IDIsNFYyMEMyLDIxLjExIDIuODksMjIgNCwyMkgyMEMyMS4xMSwyMiAyMiwyMS4xMSAyMiwyMFY0QzIyLDIuODkgMjEuMTEsMiAyMCwySDRNOC41Niw2SDEyLjA2TDE1LjUsMTJMMTIuMDYsMThIOC41NkwxMiwxMkw4LjU2LDZaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPgo=',
         fandango: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAuMjcgMC4wMiAyOC4wNiAyNy45NiI+CjxwYXRoIGQ9Ik0yNC41MTM3IDcuODY0MTFMMjIuNDA0IDAuMDE5Mjg3MUwwLjI2OTUzMSA1LjkyODI1TDIuMzc5MTkgMTMuNzc3OVYxMy43ODI3QzMuNzAxOTUgMTQuMDUzMSA0LjgyNjc3IDE1LjAzNzkgNS4yMDMzMiAxNi40MjgzQzUuNTc1MDUgMTcuODE4NiA1LjA5NzEyIDE5LjIzMzEgNC4wODgxNSAyMC4xMjYyVjIwLjEzMUw2LjE5NzgxIDI3Ljk4MDdMMjguMzMyMyAyMi4wNzE3TDI2LjIyMjYgMTQuMjIyQzI0Ljg5MDIgMTMuOTU2NSAyMy43NjA2IDEyLjk2NjkgMjMuMzg0IDExLjU3MTdDMjMuMDEyMyAxMC4xODE0IDIzLjQ5NSA4Ljc1NzIyIDI0LjUxMzcgNy44NjQxMVoiIGZpbGw9IiNGRjczMDAiLz4KPHBhdGggZD0iTTE2LjI1ODQgOC4xMzkyM0w5LjY2ODc2IDkuODk2NDdMMTAuOTkxNSAxNC44MjA2TDE3LjU4MTIgMTMuMDYzNEwxOC45MDM5IDE3Ljk4NzVMMTIuMzE5MSAxOS43NDQ3TDEzLjY0MTkgMjQuNjY4OUw3LjA1MjIxIDI2LjQyNjFMNS40NTQyOCAyMC40Njg5QzYuNDE0OTcgMTkuMjkxIDYuODE1NjYgMTcuNjg4MiA2LjM5MDgzIDE2LjEwOTZDNS45NjYgMTQuNTMxIDQuODEyMjEgMTMuMzQzNCAzLjM4ODA3IDEyLjgwMjdMMS43NTYzNSA2LjczNDRMMTQuOTMwOCAzLjIxNTA5TDE2LjI1ODQgOC4xMzkyM1oiIGZpbGw9IiMzNDc4QzEiLz4KPHBhdGggZD0iTTE2LjI5NzMgOC4xOTcyTDkuNzE3MjcgOS45NTQ0NEwxMS4wNCAxNC44Njg5TDE3LjYyIDEzLjExMTdMMTguOTQyOCAxOC4wMjYyTDEyLjM2MjggMTkuNzgzNEwxMy42ODU1IDI0LjY5NzlMNy4xMDU1NCAyNi40Nkw1LjUwNzYxIDIwLjUxMjRDNi40NjgzIDE5LjMzOTMgNi44Njg5OSAxNy43MzY1IDYuNDQ0MTYgMTYuMTU3OUM2LjAxOTM0IDE0LjU4NDEgNC44NzAzNyAxMy4zOTE3IDMuNDQ2MjMgMTIuODU1OEwxLjgxOTM0IDYuNzkyMzdMMTQuOTc0NSAzLjI4MjcxTDE2LjI5NzMgOC4xOTcyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==',
-        youtubetv: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPHBhdGggZD0iTTIzLjQ5OCA2LjE4NmEzLjAxNiAzLjAxNiAwIDAgMC0yLjEyMi0yLjEzNkMxOS41MDUgMy41NDUgMTIgMy41NDUgMTIgMy41NDVzLTcuNTA1IDAtOS4zNzcuNTA1QTMuMDE3IDMuMDE3IDAgMCAwIC41MDIgNi4xODZDMCA4LjA3IDAgMTIgMCAxMnMwIDMuOTMuNTAyIDUuODE0YTMuMDE2IDMuMDE2IDAgMCAwIDIuMTIyIDIuMTM2YzEuODcxLjUwNSA5LjM3Ni41MDUgOS4zNzYuNTA1czcuNTA1IDAgOS4zNzctLjUwNWEzLjAxNSAzLjAxNSAwIDAgMCAyLjEyMi0yLjEzNkMyNCAxNS45MyAyNCAxMiAyNCAxMnMwLTMuOTMtLjUwMi01LjgxNHpNOS41NDUgMTUuNTY4VjguNDMyTDE1LjgxOCAxMmwtNi4yNzMgMy41Njh6IiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K',
-        tv:        'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgPHBhdGggZD0iTTIxIDNIM2MtMS4xIDAtMiAuOS0yIDJ2MTJjMCAxLjEuOSAyIDIgMmg1djJoOHYtMmg1YzEuMSAwIDItLjkgMi0yVjVjMC0xLjEtLjktMi0yLTJ6bTAgMTRIM1Y1aDE4djEyeiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==',
       };
 
       /* ── Brand icon colours (applied to main icon when playing) */
@@ -99,9 +92,7 @@ media_app_background:
         nba:      '#7499C4',
         nfl:      '#E56C6C',
         plex:     '#F0C46C',
-        fandango:   '#FFA36B',
-        youtubetv:  '#FF6666',
-        tv:         '#CCCCCC',
+        fandango: '#FFA36B',
       };
 
       /* ── App keyword → service mapping ───────────────────── */
@@ -118,12 +109,7 @@ media_app_background:
         { keys: ['plex'],                          id: 'plex',     field: 'plex_image',     toggle: 'plex_enabled'     },
         { keys: ['nfl', 'nflnetwork'],             id: 'nfl',      field: 'nfl_image',      toggle: 'nfl_enabled'      },
         { keys: ['fandango', 'vudu'],              id: 'fandango', field: 'fandango_image', toggle: 'fandango_enabled' },
-        { keys: ['youtube.tv', 'youtubetv'],       id: 'youtubetv', field: 'youtubetv_image', toggle: 'youtubetv_enabled' },
-        { keys: ['livetv', 'live_tv', 'tv'],      id: 'tv',        field: 'tv_image',        toggle: 'tv_enabled'        },
       ];
-
-      /* ── Brand matching — gated on active state + attribute present ── */
-      if (activeStates.includes(state) && srcValue) {
 
       /* ── Match source value against keywords ─────────────── */
       let imageUrl = '';
@@ -137,7 +123,7 @@ media_app_background:
         }
       }
 
-      /* ── Render brand background via ::before on the card wrapper.
+      /* ── Render background via ::before on the card wrapper.
          .bubble-background has filter:blur(50px);opacity:0.5 applied by
          Bubble Card's cover art system — setting background-image on it
          directly makes our gradient look dark and washed out. ::before
@@ -175,35 +161,10 @@ media_app_background:
       const entityAttrs = hass.states[entity]?.attributes ?? {};
       if (entityAttrs.entity_picture_local || entityAttrs.entity_picture) return '';
 
-      const defaultImage = cfg.default_image || '';
-      if (defaultImage) return bgCss(defaultImage);
+      imageUrl = cfg.default_image || '';
+      if (!imageUrl) return '';
 
-      } /* end brand matching gate */
-
-      /* ── State-colour fallback ─────────────────────────────────────────────
-         Reached when: state is off/standby/unavailable, or active but no brand
-         matched and no entity picture and no default image.
-         Uses ::before (same element as brand gradient) — the two are mutually
-         exclusive: brand only renders above when activeStates includes state,
-         srcValue is present, and a match is found.                           */
-      if (cfg.state_color_enabled !== false) {
-        const stateBgCss = (color) =>
-          '.bubble-media-player::before{content:\'\' !important;position:absolute !important;' +
-          'inset:0 !important;background-color:' + color + ' !important;' +
-          'z-index:0 !important;pointer-events:none !important;}';
-
-        let color;
-        if (state === 'playing' || state === 'paused')
-          color = cfg.color_active || 'rgba(255,255,255,0.15)';
-        else if (state === 'idle')
-          color = cfg.color_idle || 'rgba(100,110,120,0.18)';
-        else
-          color = cfg.color_off || '';
-
-        return color ? stateBgCss(color) : '';
-      }
-
-      return '';
+      return bgCss(imageUrl);
     })()}
   editor:
     - name: source_entity
@@ -305,40 +266,6 @@ media_app_background:
               default: true
               selector:
                 boolean: {}
-            - name: youtubetv_enabled
-              label: YouTube TV
-              default: true
-              selector:
-                boolean: {}
-            - name: tv_enabled
-              label: Live TV
-              default: true
-              selector:
-                boolean: {}
-    - type: expandable
-      title: State indicator colour
-      icon: mdi:palette
-      schema:
-        - name: state_color_enabled
-          label: Show state colour when no brand is active
-          default: true
-          selector:
-            boolean: {}
-        - type: grid
-          column_min_width: 150px
-          schema:
-            - name: color_active
-              label: Active (playing / paused)
-              selector:
-                text: {}
-            - name: color_idle
-              label: Idle
-              selector:
-                text: {}
-            - name: color_off
-              label: Off / standby
-              selector:
-                text: {}
     - name: default_image
       label: Default background (unrecognized apps)
       selector:
