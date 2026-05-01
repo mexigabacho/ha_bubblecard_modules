@@ -105,6 +105,7 @@ device_state_theme:
         pink:   'rgba(244,114,182,0.32)',
         lgreen: 'rgba(74,222,128,0.32)',
         lblue:  'rgba(125,211,252,0.32)',
+        white: 'rgba(255,255,255,0.20)',
       };
 
       /* ── Gradient builder ────────────────────────────────── */
@@ -185,7 +186,7 @@ device_state_theme:
         },
 
         light: {
-          on:  { bgOverride:'linear-gradient(to right,rgba(255,253,230,0.12),rgba(255,253,230,0) 85%)', effect:null },
+          on:  { bg:'white', effect:null },
           off: null,
         },
 
