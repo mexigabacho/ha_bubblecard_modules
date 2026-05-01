@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '2.2'
+  version: '2.3'
   creator: Christopher Young
   supported:
     - media-player
