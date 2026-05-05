@@ -14,7 +14,22 @@
       "WebSearch",
       "WebFetch(domain:logosdown.com)",
       "Bash(python3 scripts/build_media_assets.py --service peacock --blur 0.3)",
-      "Bash(open device_state_media_images/peacock_combined.svg)"
+      "Bash(open device_state_media_images/peacock_combined.svg)",
+      "WebFetch(domain:play.google.com)",
+      "WebFetch(domain:apkpure.com)",
+      "WebFetch(domain:community.home-assistant.io)",
+      "WebFetch(domain:www.home-assistant.io)",
+      "WebFetch(domain:noodlemctwoodle.github.io)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:www.apkmirror.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.aftvnews.com)",
+      "Bash(python3 scripts/fetch_appids.py --list)",
+      "Bash(python3 scripts/fetch_appids.py netflix)",
+      "Bash(python3 scripts/fetch_appids.py max)",
+      "Bash(cat /dev/null > /Users/christopheryoung/Documents/git/ha_bubblecard_modules/scripts/manage_appids.py)",
+      "Read(//dev/**)",
+      "Bash(python3 scripts/manage_appids.py --check-module)"
     ]
   }
 }

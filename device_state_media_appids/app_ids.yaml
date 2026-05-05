@@ -1,0 +1,197 @@
+# Android TV / Google TV app_id values for media_app_background module
+#
+# These are the Android package names reported by the HA androidtv / androidtv_remote
+# integrations in the media_player entity's app_id attribute.
+#
+# Each entry lists:
+#   packages:      confirmed package IDs, primary first
+#   keys:          substrings used in the module's APPS matching array that match package names
+#   friendly_keys: extra keys that match app_name / source attribute values (not package names)
+#                  these will not produce dead-key warnings from --check-module
+#   skip:          true if the app is in the SKIP list (module returns '' immediately)
+#   notes:         quirks, Fire TV variants, confidence level
+#
+# Run scripts/manage_appids.py to work with this file:
+#   --list            show all services and packages
+#   --check-module    cross-check packages + keys against the module's APPS/SKIP arrays
+#   --verify-store    verify packages exist on the Google Play Store (network required)
+
+netflix:
+  packages:
+    - com.netflix.ninja
+  keys:
+    - netflix
+  notes: >
+    Single package across Android TV, Google TV, and Fire TV.
+    Confidence: very high.
+
+prime:
+  packages:
+    - com.amazon.amazonvideo.livingroom   # Android TV / Google TV
+    - com.amazon.firebat                  # Fire TV (system app on Fire OS)
+  keys:
+    - amazon
+  friendly_keys:
+    - avod          # app_name / source value variants
+    - primevideo
+    - prime
+  notes: >
+    Fire TV devices report com.amazon.firebat; Android TV / Google TV report
+    com.amazon.amazonvideo.livingroom. The substring 'amazon' catches both.
+    Confidence: high.
+
+disney:
+  packages:
+    - com.disney.disneyplus
+  keys:
+    - disney
+  notes: >
+    Same package across Android TV, Google TV, and Fire TV.
+    Confidence: very high.
+
+max:
+  packages:
+    - com.wbd.stream                      # current canonical package (Max rebrand)
+    - com.wbd.hbomax                      # transitional WBD rebranded app (still on Play Store)
+    # com.wbd.stream.tv — delisted from Play Store
+    # com.hbo.hbonow — legacy HBO Now app; delisted from Play Store (HTTP 404), kept for reference only
+  keys:
+    - hbo
+    - wbd.stream
+  friendly_keys:
+    - wbd.max       # app_name / source value variant
+  notes: >
+    com.wbd.stream is the current package on all platforms since the Max rebrand.
+    com.hbo.hbonow is fully delisted from the Play Store but the key 'hbo' would
+    still match it on devices that never updated. 'wbd.stream' catches current installs.
+    Confidence: high.
+
+appletv:
+  packages:
+    - com.apple.atve.androidtv.appletv    # Android TV / Google TV / Chromecast
+    - com.apple.atve.sony.appletv         # Sony Android TV / Google TV devices
+  keys:
+    - atve
+  notes: >
+    Sony distributes a manufacturer-specific APK under a separate package ID.
+    The substring 'atve' catches all known variants including any Fire TV variant
+    (com.apple.atve.amazon.appletv, not confirmed but structurally likely).
+    Confidence: high.
+
+hulu:
+  packages:
+    - com.hulu.livingroomplus
+  keys:
+    - hulu
+  notes: >
+    Single package across Android TV, Google TV, and Fire TV.
+    Confidence: high.
+
+peacock:
+  packages:
+    - com.peacocktv.peacockandroid
+  keys:
+    - peacock
+  friendly_keys:
+    - nbcuni        # speculative forward-compat: would match if NBC Universal repackages
+  notes: >
+    Single package across all platforms. 'nbcuni' is not in the current package
+    name but kept as a forward-compat key in case NBC Universal ever repackages.
+    Confidence: high.
+
+espn:
+  packages:
+    - com.espn.score_center
+  keys:
+    - espn
+  notes: >
+    ESPN uses a single package for mobile and Android TV (multi-APK / form-factor
+    variants under the same package ID). Same on Fire TV.
+    Confidence: high.
+
+nba:
+  packages:
+    - com.nbaimd.gametime.nba2011
+  keys:
+    - nbaimd
+  notes: >
+    The '2011' suffix is a historical artifact from the original release year;
+    the package ID has not changed. Same on Fire TV.
+    Confidence: very high.
+
+nfl:
+  packages:
+    - com.gotv.nflgamecenter.us.lite      # main NFL app (gotv = legacy developer partner)
+    - com.neulion.android.tablet.nfl.wnfln  # NFL Network app (neulion = legacy streaming vendor)
+  keys:
+    - nfl
+  friendly_keys:
+    - nflnetwork    # app_name / source value variant for NFL Network
+  notes: >
+    Both packages contain the substring 'nfl' so the single key covers both.
+    gotv and neulion are legacy third-party prefixes from before Disney/NFL
+    brought development in-house. The NFL Network standalone app is largely
+    superseded by NFL+ within the main app but may still appear on older devices.
+    Confidence: high.
+
+plex:
+  packages:
+    - com.plexapp.android
+  keys:
+    - plex
+  notes: >
+    Single package across all platforms.
+    Confidence: very high.
+
+fandango:
+  packages:
+    - air.com.vudu.air.DownloaderTablet
+  keys:
+    - vudu
+  friendly_keys:
+    - fandango      # app_name / source value variant (post-rebrand display name)
+  notes: >
+    Built with Adobe AIR (hence the 'air.' prefix). Despite the rebrand from
+    Vudu to Fandango at Home, the package ID retains the original Vudu name.
+    Same on Fire TV.
+    Confidence: high.
+
+youtube:
+  packages:
+    - com.google.android.youtube.tv          # Android TV / Google TV
+  skip: true
+  notes: >
+    Regular YouTube provides entity_picture reliably, so the module returns ''
+    immediately (SKIP list) and lets Bubble Card handle the card natively.
+    The key 'youtube.tv' is used in SKIP — it matches this package and does not
+    match any youtubetv package (both youtubetv packages contain 'unplugged', not
+    'youtube.tv').
+    Confidence: very high.
+
+youtubetv:
+  packages:
+    - com.google.android.youtube.tvunplugged   # Android TV / Google TV leanback build
+    - com.google.android.apps.youtube.unplugged  # mobile build (may appear on some devices)
+  keys:
+    - unplugged
+  notes: >
+    Two package IDs exist: the leanback TV build and the mobile/phone build.
+    The substring 'unplugged' matches both cleanly. Neither package contains
+    'youtube.tv' as a substring so there is no collision with the youtube SKIP entry.
+    Confidence: high.
+
+tv:
+  packages:
+    - com.google.android.tv                # Android TV Live Channels app
+    - googletv.livechannels.launcher       # Google TV Live Channels launcher
+  keys:
+    - tv
+  friendly_keys:
+    - livetv        # app_name / source value variants for live TV inputs
+    - live_tv
+  notes: >
+    'tv' is intentionally broad — it matches any app_id containing 'tv'.
+    This entry must remain last in the APPS array so more-specific entries
+    (e.g. youtubetv) match first. com.google.android.youtube.tv (regular YouTube)
+    is intercepted earlier by the SKIP list and never reaches this entry.
+    Confidence: medium (by design broad).

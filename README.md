@@ -132,7 +132,7 @@ All backgrounds and logos are embedded as SVG data URIs — zero file deployment
 | Netflix | `netflix` |
 | Prime Video | `amazon`, `avod`, `primevideo`, `prime` |
 | Disney+ | `disney` |
-| HBO / Max | `hbo`, `wbd.max` |
+| HBO / Max | `hbo`, `wbd.stream`, `wbd.max` |
 | Apple TV+ | `apple`, `atve` |
 | Hulu | `hulu` |
 | Peacock | `peacock`, `nbcuni` |
@@ -141,6 +141,10 @@ All backgrounds and logos are embedded as SVG data URIs — zero file deployment
 | NFL Network | `nfl`, `nflnetwork` |
 | Plex | `plex` |
 | Fandango at Home (Vudu) | `fandango`, `vudu` |
+| YouTube TV | `unplugged` |
+| Live TV | `livetv`, `live_tv`, `tv` |
+
+YouTube (regular) is **skipped** — it provides cover art natively so the module steps aside completely.
 
 **Supported:** media-player
 
@@ -182,7 +186,19 @@ The [bubble-card-reference/](bubble-card-reference/) directory contains source-v
 
 ### Build scripts
 
-Both scripts require only the Python standard library.
+All scripts require only the Python standard library.
+
+**`scripts/manage_appids.py`** — manages Android TV package names in [`device_state_media_appids/app_ids.yaml`](device_state_media_appids/app_ids.yaml). The YAML file is the canonical app ID reference — consult it before researching package names.
+
+```bash
+python3 scripts/manage_appids.py --list                          # list all services and packages
+python3 scripts/manage_appids.py --check-module                  # cross-check packages against module APPS/SKIP keys
+python3 scripts/manage_appids.py --verify-store                  # verify packages on Play Store (network)
+python3 scripts/manage_appids.py --verify-store max              # verify one service
+python3 scripts/manage_appids.py --add-service paramountplus     # scaffold a new service entry (interactive)
+python3 scripts/manage_appids.py --add-package max com.wbd.x     # append a package variant to a service
+python3 scripts/manage_appids.py --mark-delisted max com.hbo.x   # comment-out a delisted package
+```
 
 **`scripts/generate_layout_diagrams.py`** — regenerates the SVG layout diagrams in `bubble-card-reference/layouts/` from the reference docs. Run this after updating the reference docs to reflect Bubble Card DOM changes, or after editing the script itself.
 
@@ -200,4 +216,4 @@ python3 scripts/build_media_assets.py --verify       # check YAML is in sync wit
 python3 scripts/build_media_assets.py --service netflix  # one service only
 ```
 
-Full workflow details for both scripts are in [CLAUDE.md](CLAUDE.md).
+Full workflow details for all scripts are in [CLAUDE.md](CLAUDE.md).

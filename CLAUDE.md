@@ -74,7 +74,56 @@ The sectioned schema is cleaner, supports top/bottom positioning, alignment lane
 
 ## Scripts
 
-Two Python scripts in `scripts/` maintain generated files. Both require only the Python standard library — no `pip install` needed.
+Three Python scripts in `scripts/` maintain generated files. All require only the Python standard library — no `pip install` needed.
+
+### `scripts/manage_appids.py` — Android TV app ID reference
+
+**Do not re-research app package names from scratch.** The canonical list is already in [`device_state_media_appids/app_ids.yaml`](device_state_media_appids/app_ids.yaml). Read that file first. It contains every confirmed package name, the substring keys used in the module's APPS/SKIP arrays, friendly keys (app_name/source variants), Fire TV variants, and confidence notes.
+
+`manage_appids.py` has three commands:
+
+```bash
+# ── Read-only (no network) ──────────────────────────────────────────────────
+# List all services and packages
+python3 scripts/manage_appids.py --list
+
+# Cross-check every package in app_ids.yaml against the module's APPS/SKIP keys
+# Run after editing app_ids.yaml or changing keys in the module
+python3 scripts/manage_appids.py --check-module
+
+# ── Read-only (network required) ───────────────────────────────────────────
+# Verify packages exist on the Google Play Store
+python3 scripts/manage_appids.py --verify-store
+python3 scripts/manage_appids.py --verify-store max
+
+# ── Write: edit app_ids.yaml in place ──────────────────────────────────────
+# Scaffold a new service entry (interactive prompts for packages, keys, notes)
+python3 scripts/manage_appids.py --add-service paramountplus
+
+# Append a new package variant to an existing service
+python3 scripts/manage_appids.py --add-package max com.wbd.stream.tv
+
+# Comment-out a package that has been removed from the Play Store
+python3 scripts/manage_appids.py --mark-delisted max com.hbo.hbonow
+```
+
+**`--check-module` output key:**
+- ✅ package matched by a module key
+- ❌ package with no matching key — action required
+- ℹ️  friendly key — intentional key matching `app_name`/`source` values, not a package name
+- ⚠️  unexpected dead key — module key matching neither a package nor a known friendly key
+
+**Use the write commands instead of editing `app_ids.yaml` by hand** — they handle insertion position and formatting correctly.
+
+**When to update `app_ids.yaml`:**
+- Adding a new service: run `--add-service`, wire up APPS/SKIP in the module, run `--check-module`
+- New package variant discovered: run `--add-package`, update keys in module if needed, run `--check-module`
+- `--verify-store` reports a 404: run `--mark-delisted` to demote the package to a comment
+- Never re-research package names already documented here — read the file first
+
+**When NOT to re-research:** The `app_ids.yaml` file is the single source of truth. Do not re-fetch or re-search package names that are already documented there.
+
+---
 
 ### `scripts/generate_layout_diagrams.py` — SVG layout diagrams
 
@@ -126,10 +175,20 @@ python3 scripts/build_media_assets.py --service netflix  # process one service o
 
 ```
 ha_bubblecard_modules/
-└── <module_id>.yaml      # one file per module
+├── <module_id>.yaml                        # one file per module
+├── device_state_media_images/              # SVG source assets for media_app_background
+│   ├── <service>.svg                       # gradient background (400×225)
+│   ├── <service>_logo.svg                  # logo overlay (transparent bg)
+│   └── <service>_combined.svg             # preview composite (generated)
+├── device_state_media_appids/
+│   └── app_ids.yaml                        # canonical Android TV package names — read this before researching app IDs
+└── scripts/
+    ├── manage_appids.py                     # verify package names against Play Store
+    ├── build_media_assets.py               # rebuild base64 data URIs in media_app_background.yaml
+    └── generate_layout_diagrams.py         # rebuild SVG layout diagrams in bubble-card-reference/layouts/
 ```
 
-Each file is a standalone module, top-level key = module ID (snake_case). Deploy to `/config/bubble_card/modules/` on the HA host.
+Each module file is standalone, top-level key = module ID (snake_case). Deploy to `/config/bubble_card/modules/` on the HA host.
 
 ---
 
@@ -524,23 +583,32 @@ This same technique applies to any wide wordmark. The numbers change; the method
 
 ### Adding a new service — complete checklist
 
-1. **Create gradient SVG** → `device_state_media_images/<service>.svg` (400×225 format above)
-2. **Create logo SVG** → `device_state_media_images/<service>_logo.svg`
+1. **Add an entry to `device_state_media_appids/app_ids.yaml`** using the write command — do not hand-edit:
+   ```bash
+   python3 scripts/manage_appids.py --add-service <id>
+   ```
+   Then optionally verify the package exists on the Play Store:
+   ```bash
+   python3 scripts/manage_appids.py --verify-store <id>
+   ```
+   Do this first — `app_ids.yaml` is the source of truth for keys used in the next steps.
+3. **Create gradient SVG** → `device_state_media_images/<service>.svg` (400×225 format above)
+4. **Create logo SVG** → `device_state_media_images/<service>_logo.svg`
    - Transparent background, white or brand-coloured fill, no background rect.
    - **If the logo is a wide wordmark** (aspect ratio > ~2.5:1), add viewBox padding before saving — see **Logo sizing and viewBox padding** above for the step-by-step and the ESPN worked example.
-3. **Run the build script** to generate the combined preview and print updated YAML blocks:
+5. **Run the build script** to generate the combined preview and print updated YAML blocks:
    ```bash
    python3 scripts/build_media_assets.py --service <service>
    ```
-4. **Paste the printed base64 lines** into `media_app_background.yaml` — one line into `BUILTIN`, one into `LOGOS`
-5. **Add to `APPS` array** in the module code:
+6. **Paste the printed base64 lines** into `media_app_background.yaml` — one line into `BUILTIN`, one into `LOGOS`
+7. **Add to `APPS` array** in the module code:
    ```js
    { keys: ['keyword1', 'keyword2'], id: '<service>', field: '<service>_image', toggle: '<service>_enabled' },
    ```
-   - `keys` — substrings matched (case-insensitive) against the source attribute value. Use `app_id` package name fragments as primary keys.
+   - `keys` — substrings matched (case-insensitive) against the source attribute value. Derive from the package names in `app_ids.yaml`.
    - `field` — allows YAML-level override of the background image (`cfg[field]` is checked before `BUILTIN`). No editor UI exposed for this; it's a power-user escape hatch.
    - `toggle` — maps to a boolean editor field; `=== false` skips the service (unset = enabled by default).
-6. **Add one boolean toggle** to the "Enabled services" expandable grid in the editor:
+8. **Add one boolean toggle** to the "Enabled services" expandable grid in the editor:
    ```yaml
    - name: <service>_enabled
      label: Service Name
@@ -548,13 +616,13 @@ This same technique applies to any wide wordmark. The numbers change; the method
      selector:
        boolean: {}
    ```
-7. **Update the description** string at the top of the module to mention the new service
-8. **Bump the version** string (e.g. `'1.6'` → `'1.7'`)
-9. **Run verify** to confirm everything is in sync:
-   ```bash
-   python3 scripts/build_media_assets.py --verify
-   ```
-10. **Update the inventory table** below
+9. **Update the description** string at the top of the module to mention the new service
+10. **Bump the version** string (e.g. `'1.6'` → `'1.7'`)
+11. **Run verify** to confirm everything is in sync:
+    ```bash
+    python3 scripts/build_media_assets.py --verify
+    ```
+12. **Update the inventory table** below
 
 ---
 
@@ -613,12 +681,22 @@ Prefix with `data:image/svg+xml;base64,` to get the full data URI.
 
 ### Current file inventory
 
+For confirmed Android TV package names for each service, see [`device_state_media_appids/app_ids.yaml`](device_state_media_appids/app_ids.yaml). Do not re-research package names that are already documented there.
+
+**SKIP list** — services where the module returns `''` immediately (no styling applied):
+
+| Service | Skip key | Reason |
+|---------|----------|--------|
+| YouTube (regular) | `youtube.tv` | Provides `entity_picture` reliably; Bubble Card handles it natively |
+
+**Service inventory** — services with branded backgrounds/logos:
+
 | Service | id | Gradient | Logo | Combined | Logo source | Notes |
 |---------|-----|----------|------|----------|-------------|-------|
 | netflix  | `netflix`  | ✅ | ✅ | ✅ | MDI `mdi:netflix` | viewBox `6.5 2 11 20` (tight crop on N) |
 | prime    | `prime`    | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `amazon.svg` | keys: amazon, avod, primevideo, prime |
 | disney   | `disney`   | ✅ | ✅ | ✅ | Geometric (3-circle Mickey silhouette) | |
-| max      | `max`      | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `hbo.svg` | keys: hbo, wbd.max; gradient indigo/black |
+| max      | `max`      | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `hbo.svg` | keys: hbo, wbd.stream, wbd.max; gradient indigo/black |
 | appletv  | `appletv`  | ✅ | ✅ | ✅ | MDI `mdi:apple` | keys: apple, atve |
 | hulu     | `hulu`     | ✅ | ✅ | ✅ | MDI `mdi:hulu` | |
 | peacock  | `peacock`  | ✅ | ✅ | ✅ | Wikimedia Commons NBC Peacock (2022) | Multi-colour feather; keys: peacock, nbcuni |
@@ -627,8 +705,8 @@ Prefix with `data:image/svg+xml;base64,` to get the full data URI.
 | nfl      | `nfl`      | ✅ | ✅ | ✅ | Geometric (football ellipse + stitch lines) | keys: nfl, nflnetwork; gradient blue/red |
 | plex     | `plex`     | ✅ | ✅ | ✅ | MDI `mdi:plex` | |
 | fandango | `fandango` | ✅ | ✅ | ✅ | Wikimedia Commons Fandango at Home logo (F-mark only, cropped viewBox) | keys: fandango, vudu; multi-colour F icon |
-| youtubetv | `youtubetv` | ✅ | ✅ | ✅ | Simple Icons YouTube icon (24×24 viewBox, white fill) | keys: youtube.tv, youtubetv — listed before tv to prevent collision |
-| tv       | `tv`       | ✅ | ✅ | ✅ | MDI `mdi:television` (24×24 viewBox, white fill) | keys: livetv, live_tv, tv — white-glow gradient; youtubetv entry above catches YouTube TV first |
+| youtubetv | `youtubetv` | ✅ | ✅ | ✅ | Simple Icons YouTube icon (24×24 viewBox, white fill) | keys: unplugged — matches `com.google.android.apps.youtube.unplugged` (YouTube TV live service) |
+| tv       | `tv`       | ✅ | ✅ | ✅ | MDI `mdi:television` (24×24 viewBox, white fill) | keys: livetv, live_tv, tv — white-glow gradient |
 
 ---
 

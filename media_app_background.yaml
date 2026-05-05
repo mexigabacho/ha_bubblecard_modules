@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '2.3'
+  version: '2.4'
   creator: Christopher Young
   supported:
     - media-player
@@ -104,12 +104,17 @@ media_app_background:
         tv:         '#CCCCCC',
       };
 
+      /* ── Apps to skip entirely — let Bubble Card handle natively ── */
+      const SKIP = [
+        'youtube.tv',    // com.google.android.youtube.tv — provides entity_picture reliably
+      ];
+
       /* ── App keyword → service mapping ───────────────────── */
       const APPS = [
         { keys: ['netflix'],                       id: 'netflix',  field: 'netflix_image',  toggle: 'netflix_enabled'  },
         { keys: ['amazon', 'avod', 'primevideo', 'prime'], id: 'prime', field: 'prime_image', toggle: 'prime_enabled' },
         { keys: ['disney'],                        id: 'disney',   field: 'disney_image',   toggle: 'disney_enabled'   },
-        { keys: ['hbo', 'wbd.max'],                id: 'max',      field: 'max_image',      toggle: 'max_enabled'      },
+        { keys: ['hbo', 'wbd.stream', 'wbd.max'],  id: 'max',      field: 'max_image',      toggle: 'max_enabled'      },
         { keys: ['apple', 'atve'],                 id: 'appletv',  field: 'appletv_image',  toggle: 'appletv_enabled'  },
         { keys: ['hulu'],                          id: 'hulu',     field: 'hulu_image',     toggle: 'hulu_enabled'     },
         { keys: ['peacock', 'nbcuni'],             id: 'peacock',  field: 'peacock_image',  toggle: 'peacock_enabled'  },
@@ -118,9 +123,12 @@ media_app_background:
         { keys: ['plex'],                          id: 'plex',     field: 'plex_image',     toggle: 'plex_enabled'     },
         { keys: ['nfl', 'nflnetwork'],             id: 'nfl',      field: 'nfl_image',      toggle: 'nfl_enabled'      },
         { keys: ['fandango', 'vudu'],              id: 'fandango', field: 'fandango_image', toggle: 'fandango_enabled' },
-        { keys: ['youtube.tv', 'youtubetv'],       id: 'youtubetv', field: 'youtubetv_image', toggle: 'youtubetv_enabled' },
+        { keys: ['unplugged'],                     id: 'youtubetv', field: 'youtubetv_image', toggle: 'youtubetv_enabled' },
         { keys: ['livetv', 'live_tv', 'tv'],      id: 'tv',        field: 'tv_image',        toggle: 'tv_enabled'        },
       ];
+
+      /* ── Skip list — return early for apps that handle their own visuals ── */
+      if (srcValue && SKIP.some(function(k) { return srcValue.indexOf(k) !== -1; })) return '';
 
       /* ── Brand matching — gated on active state + attribute present ── */
       if (activeStates.includes(state) && srcValue) {
