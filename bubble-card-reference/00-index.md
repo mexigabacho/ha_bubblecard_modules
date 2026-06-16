@@ -1,7 +1,8 @@
 # Bubble Card — Developer Reference Index
 
-> Source-verified against Bubble Card v3.1.6 (`src/` directory).  
-> All class names come directly from `create.js` and `styles.css` for each card type.
+> Source-verified against Bubble Card v3.2.3 (`src/` directory).  
+> All class names come directly from `create.js` and `styles.css` for each card type.  
+> Pop-up reference updated for v3.2.x DOM changes (new mode/style classes, header-actions structure, standalone pop-up support). All other card types verified unchanged from v3.1.6.
 
 ---
 

@@ -1,6 +1,6 @@
 media_app_background:
   name: Media App Background
-  version: '2.5'
+  version: '2.4'
   creator: Christopher Young
   supported:
     - media-player
@@ -106,7 +106,7 @@ media_app_background:
 
       /* ── Apps to skip entirely — let Bubble Card handle natively ── */
       const SKIP = [
-        { key: 'android.youtube.tv', exact_suffix: true },  // com.google.android.youtube.tv only — not tvunplugged
+        'youtube.tv',    // com.google.android.youtube.tv — provides entity_picture reliably
       ];
 
       /* ── App keyword → service mapping ───────────────────── */
@@ -123,14 +123,12 @@ media_app_background:
         { keys: ['plex'],                          id: 'plex',     field: 'plex_image',     toggle: 'plex_enabled'     },
         { keys: ['nfl', 'nflnetwork'],             id: 'nfl',      field: 'nfl_image',      toggle: 'nfl_enabled'      },
         { keys: ['fandango', 'vudu'],              id: 'fandango', field: 'fandango_image', toggle: 'fandango_enabled' },
-        { keys: ['unplugged'],                     id: 'youtubetv', field: 'youtubetv_image', toggle: 'youtubetv_enabled', ignore_entity_picture: true },
+        { keys: ['unplugged'],                     id: 'youtubetv', field: 'youtubetv_image', toggle: 'youtubetv_enabled' },
         { keys: ['livetv', 'live_tv', 'tv'],      id: 'tv',        field: 'tv_image',        toggle: 'tv_enabled'        },
       ];
 
       /* ── Skip list — return early for apps that handle their own visuals ── */
-      if (srcValue && SKIP.some(function(s) {
-        return s.exact_suffix ? srcValue.endsWith(s.key) : srcValue.indexOf(s.key) !== -1;
-      })) return '';
+      if (srcValue && SKIP.some(function(k) { return srcValue.indexOf(k) !== -1; })) return '';
 
       /* ── Brand matching — gated on active state + attribute present ── */
       if (activeStates.includes(state) && srcValue) {
@@ -138,13 +136,11 @@ media_app_background:
       /* ── Match source value against keywords ─────────────── */
       let imageUrl = '';
       let matchedId = '';
-      let matchedApp = null;
       for (const app of APPS) {
         if (app.keys.some(function(k) { return srcValue.indexOf(k) !== -1; })) {
           if (cfg[app.toggle] === false) continue;
           imageUrl = cfg[app.field] || BUILTIN[app.id] || '';
           matchedId = app.id;
-          matchedApp = app;
           break;
         }
       }
@@ -172,12 +168,6 @@ media_app_background:
       };
 
       if (imageUrl) {
-        /* Step aside for real cover art unless this service is known to provide
-           only blank/black frames (ignore_entity_picture: true on the APPS entry) */
-        if (!matchedApp.ignore_entity_picture) {
-          const entityAttrs = hass.states[entity]?.attributes ?? {};
-          if (entityAttrs.entity_picture_local || entityAttrs.entity_picture) return '';
-        }
         let css = bgCss(imageUrl, LOGOS[matchedId] || '');
         if (state === 'playing' && cfg.icon_color_enabled !== false) {
           const iconColor = ICON_COLORS[matchedId];

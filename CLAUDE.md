@@ -1,6 +1,6 @@
 # CLAUDE.md — Bubble Card Modules Development Reference
 
-Authoritative development reference for this repository. All modules are YAML files targeting [Bubble Card](https://github.com/Clooos/Bubble-Card) **v3.1.6** (stable as of Apr 2026; v3.2.0 in beta).
+Authoritative development reference for this repository. All modules are YAML files targeting [Bubble Card](https://github.com/Clooos/Bubble-Card) **v3.2.3** (latest stable as of Jun 2026). Bubble Card source is cloned at `~/Documents/git/Bubble-Card` for local reference.
 
 ---
 
