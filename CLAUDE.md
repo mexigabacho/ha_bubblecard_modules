@@ -689,12 +689,41 @@ For confirmed Android TV package names for each service, see [`device_state_medi
 |---------|----------|--------|
 | YouTube (regular) | `youtube.tv` | Provides `entity_picture` reliably; Bubble Card handles it natively |
 
+---
+
+### `ignore_entity_picture` flag
+
+By default, when a matched service has an `entity_picture` on the ADB/main entity, the module steps aside and lets Bubble Card display that native art instead of the branded background. This is the right behavior for services that return real poster/cover art.
+
+However, some services return a proxy URL or DRM-blank frame that looks non-empty but displays nothing useful. For these, set `ignore_entity_picture: true` on the APPS entry in `media_player_enhanced.yaml` (the `APPS` array in `SECTION 2 — BACKGROUND`):
+
+```js
+{ keys: ['amazon', ...], id: 'prime', field: 'prime_image', toggle: 'prime_enabled', ignore_entity_picture: true },
+```
+
+**How to diagnose:** while the app is playing, run in HA Developer Tools → Template:
+```
+{{ states.media_player.<your_entity>.attributes.entity_picture }}
+```
+If it returns a proxy path like `/api/media_player_proxy/...` instead of a real album art URL, add `ignore_entity_picture: true` for that service.
+
+**Known services requiring this flag (confirmed on Shield TV / Android TV ADB):**
+
+| Service | Reason |
+|---------|--------|
+| `youtubetv` | Returns a proxy URL; no real art |
+| `prime` | Returns a proxy URL (`/api/media_player_proxy/...`); no real art |
+
+Other services (Disney+, Max, Hulu, etc.) may also need this flag depending on your device and integration — test each one.
+
+---
+
 **Service inventory** — services with branded backgrounds/logos:
 
 | Service | id | Gradient | Logo | Combined | Logo source | Notes |
 |---------|-----|----------|------|----------|-------------|-------|
 | netflix  | `netflix`  | ✅ | ✅ | ✅ | MDI `mdi:netflix` | viewBox `6.5 2 11 20` (tight crop on N) |
-| prime    | `prime`    | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `amazon.svg` | keys: amazon, avod, primevideo, prime |
+| prime    | `prime`    | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `amazon.svg` | keys: amazon, avod, primevideo, prime; `ignore_entity_picture: true` (proxy URL) |
 | disney   | `disney`   | ✅ | ✅ | ✅ | Geometric (3-circle Mickey silhouette) | |
 | max      | `max`      | ✅ | ✅ | ✅ | Simple Icons 8.6.0 `hbo.svg` | keys: hbo, wbd.stream, wbd.max; gradient indigo/black |
 | appletv  | `appletv`  | ✅ | ✅ | ✅ | MDI `mdi:apple` | keys: apple, atve |
@@ -705,7 +734,7 @@ For confirmed Android TV package names for each service, see [`device_state_medi
 | nfl      | `nfl`      | ✅ | ✅ | ✅ | Geometric (football ellipse + stitch lines) | keys: nfl, nflnetwork; gradient blue/red |
 | plex     | `plex`     | ✅ | ✅ | ✅ | MDI `mdi:plex` | |
 | fandango | `fandango` | ✅ | ✅ | ✅ | Wikimedia Commons Fandango at Home logo (F-mark only, cropped viewBox) | keys: fandango, vudu; multi-colour F icon |
-| youtubetv | `youtubetv` | ✅ | ✅ | ✅ | Simple Icons YouTube icon (24×24 viewBox, white fill) | keys: unplugged — matches `com.google.android.apps.youtube.unplugged` (YouTube TV live service) |
+| youtubetv | `youtubetv` | ✅ | ✅ | ✅ | Simple Icons YouTube icon (24×24 viewBox, white fill) | keys: unplugged — matches `com.google.android.apps.youtube.unplugged` (YouTube TV live service); `ignore_entity_picture: true` (proxy URL) |
 | tv       | `tv`       | ✅ | ✅ | ✅ | MDI `mdi:television` (24×24 viewBox, white fill) | keys: livetv, live_tv, tv — white-glow gradient |
 
 ---
