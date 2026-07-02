@@ -1,6 +1,6 @@
 device_state_theme:
   name: Device State Theme
-  version: '0.8'
+  version: '0.9'
   creator: Christopher Young
   supported:
     - button
@@ -103,9 +103,10 @@ device_state_theme:
         orange: 'rgba(249,115,22,0.30)',
         green:  'rgba(34,197,94,0.30)',
         pink:   'rgba(244,114,182,0.32)',
-        lgreen: 'rgba(74,222,128,0.32)',
-        lblue:  'rgba(125,211,252,0.32)',
-        white: 'rgba(255,255,255,0.20)',
+        lgreen:  'rgba(74,222,128,0.32)',
+        lblue:   'rgba(125,211,252,0.32)',
+        lpurple: 'rgba(192,132,252,0.45)',
+        white:   'rgba(255,255,255,0.20)',
       };
 
       /* ── Gradient builder ────────────────────────────────── */
@@ -203,6 +204,14 @@ device_state_theme:
           unavailable: { bg:'red',    effect:null    },
           unknown:     { bg:'red',    effect:null    },
         },
+
+        blind: {
+          open:    { bg:'lpurple', effect:null,    fillColor:'rgba(192,132,252,0.7)' },
+          opening: { bg:'lpurple', effect:'pulse', fillColor:'rgba(192,132,252,0.7)' },
+          closing: { bg:'grey',    effect:'pulse' },
+          stopped: { bg:'grey',    effect:null    },
+          closed:  null,
+        },
       };
 
       /* ── Bail out if disabled or unknown preset ───────────── */
@@ -235,14 +244,19 @@ device_state_theme:
         out.push(`.bubble-button-background{background:${grad(C[entry.bg])} !important;}`);
       }
 
-      /* 2. Icon container background (washer_dryer only)
+      /* 2. Slider fill color */
+      if (entry.fillColor) {
+        out.push(`.bubble-range-fill{background-color:${entry.fillColor} !important;}`);
+      }
+
+      /* 4. Icon container background (washer_dryer only)
             Scoped via .bubble-button-card to target only the main
             icon container, not sub-button containers */
       if (entry.containerBg) {
         out.push(`.bubble-button-card > .bubble-icon-container{background-color:${entry.containerBg} !important;opacity:0.8 !important;}`);
       }
 
-      /* 3. Icon colour
+      /* 5. Icon colour
             Scoped to main icon only — excludes sub-button icons
             which live inside .bubble-sub-button, not direct children
             of .bubble-button-card */
@@ -255,7 +269,7 @@ device_state_theme:
         out.push(`.bubble-sub-button .bubble-icon{color:unset !important;opacity:unset !important;}`);
       }
 
-      /* 4. Animation
+      /* 6. Animation
             Two rules emitted:
             a) Scoped — works on button_type: state via grid structure
             b) Unscoped fallback — catches slider and other card types
@@ -307,6 +321,8 @@ device_state_theme:
               value: light_warm
             - label: 🌐 Network Connection
               value: network_connection
+            - label: 🪟 Blind / Curtain
+              value: blind
     - name: enable_gradient
       label: Enable gradient background
       default: false
